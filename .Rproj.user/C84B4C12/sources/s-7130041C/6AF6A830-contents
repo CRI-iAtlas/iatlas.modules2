@@ -1,0 +1,12 @@
+Imports:
+    magrittr,
+    rlang,
+    dplyr,
+    tidyr,
+    shiny,
+    plotly,
+    readr,
+    shinycssloaders,
+    stringr,
+    tidyselect,
+    viridis

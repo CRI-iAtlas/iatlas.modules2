@@ -1,0 +1,68 @@
+plotly_bar <- function(
+  data,
+  x_col = "x",
+  y_col = "y",
+  error_col = NA,
+  color_col = x_col,
+  key_col = x_col,
+  text_col = x_col,
+  xlab = "",
+  ylab = "",
+  title = "",
+  source_name = NULL,
+  bar_colors = NULL,
+  format_func = format_plotly
+) {
+
+  select_cols <- c(
+    "x"     = x_col,
+    "y"     = y_col,
+    "color" = color_col,
+    "key"   = key_col,
+    "text"  = text_col
+  )
+
+  if(is.na(error_col)){
+    error_y_list <- NULL
+  } else {
+    select_cols <- c(select_cols, "error" = error_col)
+    error_y_list <- list(
+      array = ~error,
+      color = "black",
+      thickness = 1
+    )
+  }
+
+  data <- dplyr::select(data, select_cols)
+
+  if (is.null(bar_colors)) {
+    bar_colors <- data %>%
+      dplyr::select(color_col) %>%
+      dplyr::n_distinct() %>%
+      viridis::viridis_pal(option = "D")()
+  }
+
+  p <- plotly::plot_ly(
+    data,
+    x = ~x,
+    y = ~y,
+    color = ~color,
+    text = ~text,
+    key = ~key,
+    type = "bar",
+    source = source_name,
+    colors = bar_colors,
+    error_y = error_y_list,
+    hoverinfo = "text"
+  ) %>%
+    plotly::layout(
+      legend = list(orientation = "h", x = 0, y = 1),
+      title = title,
+      xaxis = list(title = xlab),
+      yaxis = list(title = ylab)
+    )
+  if(!is.null(format_func)){
+    p <- format_func(p)
+  }
+  return(p)
+}
