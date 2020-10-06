@@ -1,48 +1,14 @@
 
 server <- function(input, output) {
 
-  # example data ----
-  starwars_data <- shiny::reactive({
-    dplyr::select(
-      dplyr::starwars,
-      "sample" = "name",
-      "x" = "species",
-      "color" = "gender",
-      "y" = "height"
-    )
-  })
+  # # example data ----
 
-  starwars_group_data <- shiny::reactive({
-    starwars_data() %>%
-      dplyr::select("group" = "x") %>%
-      dplyr::distinct() %>%
-      dplyr::mutate("description" = stringr::str_c("Species: ", .data$group))
-  })
+  starwars_data <- shiny::reactive(example_starwars_data())
+  starwars_group_data <- shiny::reactive(example_starwars_group_data())
 
-  iris_data <- shiny::reactive({
-    iris %>%
-      dplyr::as_tibble() %>%
-      dplyr::mutate("sample" = as.character(1:dplyr::n())) %>%
-      tidyr::pivot_longer(!c("Species", "sample"), names_to = "color", values_to = "y") %>%
-      dplyr::rename("x" = "Species")
-  })
-
-  iris_group_data <- shiny::reactive({
-    iris_data() %>%
-      dplyr::select("group" = "x") %>%
-      dplyr::distinct() %>%
-      dplyr::mutate("description" = stringr::str_c("Species: ", .data$group))
-  })
-
-  iris_feature_data <- shiny::reactive({
-    dplyr::tribble(
-      ~class,   ~feature,
-      "Length", "Sepal.Length",
-      "Width",  "Sepal.Width",
-      "Length", "Petal.Length",
-      "Width",  "Petal.Width"
-    )
-  })
+  iris_data <- shiny::reactive(example_iris_data())
+  iris_group_data <- shiny::reactive(example_iris_group_data())
+  iris_feature_data <- shiny::reactive(examplre_iris_feature_data())
 
   # examples ----
 

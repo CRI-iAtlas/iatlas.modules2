@@ -6,7 +6,6 @@ test_that("plotly_server", {
       "y" = "height"
     ) %>%
     tidyr::drop_na() %>%
-    tidyr::drop_na() %>%
     dplyr::group_by(.data$x, .data$color) %>%
     dplyr::summarise(
       "y" = mean(.data$y),

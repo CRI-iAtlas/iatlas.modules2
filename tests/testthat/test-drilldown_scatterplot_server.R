@@ -1,18 +1,10 @@
 
 test_that("drilldown_scatterplot_server", {
 
-  iris_data <- shiny::reactive({
-    iris %>%
-      dplyr::as_tibble() %>%
-      dplyr::mutate("sample" = as.character(1:dplyr::n())) %>%
-      tidyr::pivot_longer(!c("Species", "sample"), names_to = "color", values_to = "y") %>%
-      dplyr::rename("x" = "Species")
-  })
-
   shiny::testServer(
     drilldown_scatterplot_server,
     args = list(
-      "data" = iris_data,
+      "data" = shiny::reactive(example_iris_data()),
       "eventdata" = shiny::reactive(dplyr::tibble("x" = c("setosa", "setosa")))
     ),
     {

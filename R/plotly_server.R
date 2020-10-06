@@ -5,7 +5,7 @@
 #' @param group_data A shiny::reactive that returns NULL or a dataframe
 #' @param eventdata A shiny::reactive that returns NULL or a dataframe
 #'
-#' @examples
+#' @export
 plotly_server <- function(
   id,
   plot_data,

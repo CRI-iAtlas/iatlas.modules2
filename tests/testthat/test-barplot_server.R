@@ -1,25 +1,10 @@
 test_that("barplot_server_starwars", {
-  starwars_data <- shiny::reactive({
-    dplyr::select(
-      dplyr::starwars,
-      "sample" = "name",
-      "x" = "species",
-      "color" = "gender",
-      "y" = "height"
-    )
-  })
-
-  starwars_group_data <- shiny::reactive({
-    starwars_data() %>%
-      dplyr::select("group" = "x") %>%
-      dplyr::distinct() %>%
-      dplyr::mutate("description" = stringr::str_c("Species: ", .data$group))
-  })
 
   shiny::testServer(
     barplot_server,
     args = list(
-      "plot_data" = starwars_data, "group_data" = starwars_group_data
+      "plot_data" = shiny::reactive(example_starwars_data()),
+      "group_data" = shiny::reactive(example_starwars_group_data())
     ),
     {
       expect_equal(barplot_source_name(), "proxy1-barplot")
@@ -39,37 +24,12 @@ test_that("barplot_server_starwars", {
 
 test_that("barplot_server_iris", {
 
-  iris_data <- shiny::reactive({
-    iris %>%
-      dplyr::as_tibble() %>%
-      dplyr::mutate("sample" = as.character(1:dplyr::n())) %>%
-      tidyr::pivot_longer(!c("Species", "sample"), names_to = "color", values_to = "y") %>%
-      dplyr::rename("x" = "Species")
-  })
-
-  iris_group_data <- shiny::reactive({
-    iris_data() %>%
-      dplyr::select("group" = "x") %>%
-      dplyr::distinct() %>%
-      dplyr::mutate("description" = stringr::str_c("Species: ", .data$group))
-  })
-
-  iris_feature_data <- shiny::reactive({
-    dplyr::tribble(
-      ~class,   ~feature,
-      "Length", "Sepal.Length",
-      "Width",  "Sepal.Width",
-      "Length", "Petal.Length",
-      "Width",  "Petal.Width"
-    )
-  })
-
   shiny::testServer(
     barplot_server,
     args = list(
-      "plot_data" = iris_data,
-      "group_data" = iris_group_data,
-      "feature_data" = iris_feature_data,
+      "plot_data" = shiny::reactive(example_iris_data()),
+      "group_data" = shiny::reactive(example_iris_group_data()),
+      "feature_data" = shiny::reactive(examplre_iris_feature_data()),
       "drilldown" = shiny::reactive(T)
     ),
     {
