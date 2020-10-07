@@ -32,25 +32,28 @@ drilldown_scatterplot_server <- function(
           tidyr::pivot_wider(., values_from = "y", names_from = "color")
       })
 
-      output$x_feature_selection_ui <- shiny::renderUI({
+      output$feature_selection_ui <- shiny::renderUI({
         shiny::req(scatterplot_data())
         choices <- colnames(scatterplot_data())[-1]
         shiny::req(length(choices) > 1)
-        shiny::selectInput(
-          inputId  = ns("x_feature_choice"),
-          label    = "Select X Feature",
-          choices  = choices
-        )
-      })
-
-      output$y_feature_selection_ui <- shiny::renderUI({
-        shiny::req(scatterplot_data())
-        choices <- colnames(scatterplot_data())[-1]
-        shiny::req(length(choices) > 1)
-        shiny::selectInput(
-          inputId  = ns("y_feature_choice"),
-          label    = "Select Y Feature",
-          choices  = choices
+        optionsBox(
+          width = 12,
+          shiny::column(
+            width = 6,
+            shiny::selectInput(
+              inputId  = ns("x_feature_choice"),
+              label    = "Select X Feature",
+              choices  = choices
+            )
+          ),
+          shiny::column(
+            width = 6,
+            shiny::selectInput(
+              inputId  = ns("y_feature_choice"),
+              label    = "Select Y Feature",
+              choices  = choices
+            )
+          )
         )
       })
 

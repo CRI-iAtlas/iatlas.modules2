@@ -5,7 +5,7 @@
 #' @param plot_data A shiny::reactive that returns a dataframe with columns
 #' "sample", "x", "y", "color"
 #' @param group_data A shiny::reactive that returns NULL or a dataframe with
-#' columns "feature", "description"
+#' columns "group", "description"
 #' @param feature_data A shiny::reactive that returns NULL or a dataframe with
 #' columns "feature", "class"
 #' @param barplot_xlab A shiny::reactive that returns a string
@@ -34,13 +34,21 @@ barplot_server <- function(
       ns <- session$ns
 
       output$feature_class_selection_ui <- shiny::renderUI({
+
         shiny::req(feature_data())
         choices <- unique(feature_data()$class)
         shiny::req(length(choices) > 1)
-        shiny::selectInput(
-          inputId  = ns("feature_class_choice"),
-          label    = "Select Feature Class",
-          choices  = choices
+
+        optionsBox(
+          width = 12,
+          shiny::column(
+            width = 12,
+            shiny::selectInput(
+              inputId  = ns("feature_class_choice"),
+              label    = "Select Feature Class",
+              choices  = choices
+            )
+          )
         )
       })
 

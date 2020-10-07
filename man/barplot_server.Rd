@@ -23,7 +23,7 @@ barplot_server(
 "sample", "x", "y", "color"}
 
 \item{group_data}{A shiny::reactive that returns NULL or a dataframe with
-columns "feature", "description"}
+columns "group", "description"}
 
 \item{feature_data}{A shiny::reactive that returns NULL or a dataframe with
 columns "feature", "class"}
