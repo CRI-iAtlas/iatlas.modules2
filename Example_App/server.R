@@ -28,4 +28,11 @@ server <- function(input, output) {
     barplot_xlab = shiny::reactive("Species"),
     drilldown = shiny::reactive(T)
   )
+
+  distributions_plot_server(
+    "distplot1",
+    iris_data,
+    group_data = iris_group_data,
+    feature_data = iris_feature_data
+  )
 }

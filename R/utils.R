@@ -97,3 +97,34 @@ create_group_text_from_eventdata <- function(eventdata, group_tbl){
     dplyr::filter(.data$group == selected_group) %>%
     dplyr::pull("description")
 }
+
+# misc ------------------------------------------------------------------------
+
+#' Create Nested Named List
+#'
+#' @param tbl A tibble with the below columns
+#' @param names_col1 A column that will be the names of the top list
+#' @param names_col2 A column that will be the names of the nested lists
+#' @param values_col A column that will be the values of the nested lists
+#' @importFrom magrittr %>%
+#' @importFrom rlang .data
+#'
+#' @export
+create_nested_named_list <- function(
+  tbl,
+  names_col1 = "class",
+  names_col2 = "display",
+  values_col = "feature"
+){
+  list <- tbl %>%
+    dplyr::select(tidyselect::all_of(c(
+      n1 = names_col1,
+      n2 = names_col2,
+      v  = values_col
+    ))) %>%
+    tidyr::drop_na() %>%
+    tidyr::nest(data = c(.data$n2, .data$v)) %>%
+    dplyr::mutate(data = purrr::map(.data$data, tibble::deframe)) %>%
+    tibble::deframe(.)
+  return(list)
+}
