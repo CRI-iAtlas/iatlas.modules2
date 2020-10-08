@@ -14,6 +14,10 @@ example_starwars_data <- function(){
     )
 }
 
+example_starwars_data_func <- function(.feature_class){
+  example_starwars_data()
+}
+
 #' Example Iris Data
 #' @importFrom magrittr %>%
 example_iris_data <- function(){
@@ -39,4 +43,10 @@ example_iris_data <- function(){
       ),
       by = "feature"
     )
+}
+
+example_iris_data_func <- function(.feature_class){
+  example_iris_data() %>%
+    dplyr::filter(.data$feature_class == .feature_class) %>%
+    dplyr::select(-"feature_class")
 }
