@@ -2,12 +2,9 @@
 #' Barplot Server
 #'
 #' @param id Module ID
-#' @param plot_data A shiny::reactive that returns a dataframe with columns
-#' "sample", "x", "y", "color"
-#' @param group_data A shiny::reactive that returns NULL or a dataframe with
-#' columns "group", "description"
-#' @param feature_data A shiny::reactive that returns NULL or a dataframe with
-#' columns "feature", "class"
+#' @param feature_data A shiny::reactive that returns a dataframe with columns
+#' "sample", "group", "feature", "feature_value", and optional columns,
+#' "group_description", and "feature_class"
 #' @param barplot_xlab A shiny::reactive that returns a string
 #' @param barplot_ylab A shiny::reactive that returns a string
 #' @param barplot_title A shiny::reactive that returns a string
@@ -18,9 +15,7 @@
 #' @importFrom magrittr %>%
 barplot_server <- function(
   id,
-  plot_data,
-  group_data    = shiny::reactive(NULL),
-  feature_data  = shiny::reactive(NULL),
+  feature_data,
   barplot_xlab  = shiny::reactive(""),
   barplot_ylab  = shiny::reactive(""),
   barplot_title = shiny::reactive(""),
@@ -35,8 +30,8 @@ barplot_server <- function(
 
       output$feature_class_selection_ui <- shiny::renderUI({
 
-        shiny::req(feature_data())
-        choices <- unique(feature_data()$class)
+        shiny::req("feature_class" %in% colnames(feature_data()))
+        choices <- unique(feature_data()$feature_class)
         shiny::req(length(choices) > 1)
 
         optionsBox(
@@ -55,20 +50,29 @@ barplot_server <- function(
       barplot_features <- shiny::reactive({
         shiny::req(input$feature_class_choice)
         feature_data() %>%
-          dplyr::filter(.data$class == input$feature_class_choice) %>%
-          dplyr::pull("feature")
+          dplyr::filter(.data$feature_class == input$feature_class_choice) %>%
+          dplyr::pull("feature") %>%
+          unique()
       })
 
       barplot_data <- shiny::reactive({
-        shiny::req(plot_data())
-        plot_data <- dplyr::select(plot_data(), "sample", "x", "y", "color")
+        shiny::req(feature_data())
 
         if(!is.null(input$feature_class_choice)){
           shiny::req(barplot_features())
-          plot_data <- plot_data %>%
-            dplyr::filter(.data$color %in% barplot_features())
+          barplot_data <- feature_data() %>%
+            dplyr::filter(.data$feature_class %in% input$feature_class_choice)
+        } else {
+          barplot_data <- feature_data()
         }
-        return(plot_data)
+
+        dplyr::select(
+          barplot_data,
+            "sample",
+            "x" = "group",
+            "y" = "feature_value",
+            "color" = "feature"
+          )
       })
 
       summarized_barplot_data <- shiny::reactive({
@@ -99,6 +103,13 @@ barplot_server <- function(
         return(eventdata)
       })
 
+      group_data <- shiny::reactive({
+        shiny::req("group_description" %in% colnames(feature_data()))
+        feature_data() %>%
+          dplyr::select("group", "description" = "group_description") %>%
+          dplyr::distinct()
+      })
+
       plotly_server(
         "barplot",
         plot_data = summarized_barplot_data,
@@ -108,7 +119,7 @@ barplot_server <- function(
 
       drilldown_scatterplot_server(
         "scatterplot",
-        data = barplot_data,
+        plot_data = barplot_data,
         eventdata = barplot_eventdata
       )
 

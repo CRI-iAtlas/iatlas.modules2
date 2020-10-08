@@ -2,7 +2,7 @@
 #' Drilldown Scatterplot Server
 #'
 #' @param id Module ID
-#' @param data A shiny::reactive that returns a dataframe with columns
+#' @param plot_data A shiny::reactive that returns a dataframe with columns
 #' "sample", "x", "y", "color"
 #' @param eventdata A shiny::reactive that returns a dataframe with column
 #' "x"
@@ -10,7 +10,7 @@
 #' @export
 drilldown_scatterplot_server <- function(
   id,
-  data,
+  plot_data,
   eventdata
 ) {
   shiny::moduleServer(
@@ -25,8 +25,8 @@ drilldown_scatterplot_server <- function(
       })
 
       scatterplot_data <- shiny::reactive({
-        shiny::req(data(), selected_group())
-        data() %>%
+        shiny::req(plot_data(), selected_group())
+        plot_data() %>%
           dplyr::filter(.data$x == selected_group()) %>%
           dplyr::select("sample", "color", "y") %>%
           tidyr::pivot_wider(., values_from = "y", names_from = "color")

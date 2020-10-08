@@ -2,22 +2,16 @@ utils::globalVariables("iris")
 
 #' Example Starwars Data
 example_starwars_data <- function(){
-  dplyr::select(
-    dplyr::starwars,
-    "sample" = "name",
-    "x" = "species",
-    "color" = "gender",
-    "y" = "height"
-  )
-}
-
-#' Example Starwars Group Data
-#' @importFrom magrittr %>%
-example_starwars_group_data <- function(){
-  example_starwars_data() %>%
-    dplyr::select("group" = "x") %>%
-    dplyr::distinct() %>%
-    dplyr::mutate("description" = stringr::str_c("Species: ", .data$group))
+  dplyr::starwars %>%
+    dplyr::select(
+      "sample" = "name",
+      "group" = "species",
+      "height",
+      "mass"
+    ) %>%
+    tidyr::pivot_longer(
+      -c("sample", "group"), names_to = "feature", values_to = "feature_value"
+    )
 }
 
 #' Example Iris Data
@@ -26,26 +20,22 @@ example_iris_data <- function(){
   iris %>%
     dplyr::as_tibble() %>%
     dplyr::mutate("sample" = as.character(1:dplyr::n())) %>%
-    tidyr::pivot_longer(!c("Species", "sample"), names_to = "color", values_to = "y") %>%
-    dplyr::rename("x" = "Species")
-}
-
-#' Example Iris Group Data
-#' @importFrom magrittr %>%
-example_iris_group_data <- function(){
-  example_iris_data() %>%
-    dplyr::select("group" = "x") %>%
-    dplyr::distinct() %>%
-    dplyr::mutate("description" = stringr::str_c("Species: ", .data$group))
-}
-
-#' Example Iris Feature Data
-examplre_iris_feature_data <- function(){
-  dplyr::tribble(
-    ~class,   ~feature,
-    "Length", "Sepal.Length",
-    "Width",  "Sepal.Width",
-    "Length", "Petal.Length",
-    "Width",  "Petal.Width"
-  )
+    tidyr::pivot_longer(
+      !c("Species", "sample"),
+      names_to = "feature",
+      values_to = "feature_value"
+    ) %>%
+    dplyr::rename("group" = "Species") %>%
+    dplyr::mutate(
+      "group_description" = stringr::str_c("Iris Species: ", .data$group),
+    ) %>%
+    dplyr::inner_join(
+      dplyr::tribble(
+        ~feature_class, ~feature,
+        "Length",       "Sepal.Length",
+        "Width",        "Sepal.Width",
+        "Length",       "Petal.Length",
+        "Width",        "Petal.Width"
+      )
+    )
 }

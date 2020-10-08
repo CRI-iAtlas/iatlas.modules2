@@ -1,10 +1,17 @@
-
 test_that("drilldown_scatterplot_server", {
 
   shiny::testServer(
     drilldown_scatterplot_server,
     args = list(
-      "data" = shiny::reactive(example_iris_data()),
+      "plot_data" = shiny::reactive(
+        dplyr::select(
+          example_iris_data(),
+          "sample",
+          "x" = "group",
+          "y" = "feature_value",
+          "color" = "feature"
+        )
+      ),
       "eventdata" = shiny::reactive(dplyr::tibble("x" = c("setosa", "setosa")))
     ),
     {

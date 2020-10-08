@@ -405,14 +405,13 @@
       "Package": "plotly",
       "Version": "4.9.2.9000",
       "Source": "GitHub",
-      "Remotes": "rstudio/thematic, ramnathv/htmlwidgets",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteRepo": "plotly",
       "RemoteUsername": "ropensci",
-      "RemoteRef": "HEAD",
+      "RemoteRepo": "plotly",
+      "RemoteRef": "master",
       "RemoteSha": "9bc585ac0d689ad22e30e086ece6073081a9c37b",
-      "Hash": "b17e9ef54fa18f324b1c79a761d0fd78"
+      "Hash": "ce0096d12f883f34bac5a0924c47c846"
     },
     "praise": {
       "Package": "praise",
