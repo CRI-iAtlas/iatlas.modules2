@@ -6,6 +6,7 @@ test_that("barplot_server_starwars", {
       "plot_data" = shiny::reactive(example_starwars_data())
     ),
     {
+      expect_false(display_feature_class_selection_ui())
       expect_type(barplot_data(), "list")
       expect_named(
         barplot_data(),
@@ -36,6 +37,7 @@ test_that("barplot_server_iris", {
       "drilldown" = shiny::reactive(T)
     ),
     {
+      expect_true(display_feature_class_selection_ui())
       expect_type(output$feature_class_selection_ui, "list")
       session$setInputs("feature_class_choice" = "Length")
       expect_type(barplot_data(), "list")

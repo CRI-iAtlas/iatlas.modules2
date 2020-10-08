@@ -11,7 +11,8 @@ barplot_server(
   barplot_ylab = shiny::reactive(""),
   barplot_title = shiny::reactive(""),
   barplot_label = shiny::reactive("Feature"),
-  drilldown = shiny::reactive(F)
+  drilldown = shiny::reactive(F),
+  ...
 )
 }
 \arguments{
@@ -30,6 +31,8 @@ barplot_server(
 \item{barplot_label}{A shiny::reactive that returns a string}
 
 \item{drilldown}{A shiny::reactive that returns True or False}
+
+\item{...}{shiny:reactives passed to drilldown_scatterplot_server}
 }
 \description{
 Barplot Server

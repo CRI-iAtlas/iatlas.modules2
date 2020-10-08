@@ -19,6 +19,7 @@ server <- function(input, output) {
     "barplot2",
     iris_data,
     barplot_xlab = shiny::reactive("Species"),
-    drilldown = shiny::reactive(T)
+    drilldown = shiny::reactive(T),
+    x_default = shiny::reactive("Petal.Length")
   )
 }

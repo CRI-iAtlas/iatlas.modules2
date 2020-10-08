@@ -21,7 +21,6 @@ test_that("plotly_bar_two_groups", {
       x_col = "group",
       y_col = "MEAN",
       color_col = "feature",
-      error_col = "SE",
       text_col = "text"
     )
   expect_type(p, "list")

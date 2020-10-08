@@ -36,6 +36,7 @@ example_iris_data <- function(){
         "Width",        "Sepal.Width",
         "Length",       "Petal.Length",
         "Width",        "Petal.Width"
-      )
+      ),
+      by = "feature"
     )
 }

@@ -12,7 +12,17 @@ barplot_ui <- function(id, title = ""){
   shiny::tagList(
     titleBox(title),
     shiny::fluidRow(
-      shiny::uiOutput(ns("feature_class_selection_ui")),
+      shiny::conditionalPanel(
+        condition = "output.display_feature_class_selection_ui",
+        optionsBox(
+          width = 12,
+          shiny::column(
+            width = 12,
+            shiny::uiOutput(ns("feature_class_selection_ui"))
+          )
+        ),
+        ns = ns
+      ),
       plotBox(
         width = 12,
         "barplot" %>%

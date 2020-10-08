@@ -10,6 +10,7 @@
 #' @param barplot_title A shiny::reactive that returns a string
 #' @param barplot_label A shiny::reactive that returns a string
 #' @param drilldown A shiny::reactive that returns True or False
+#' @param ... shiny:reactives passed to drilldown_scatterplot_server
 #'
 #' @export
 #' @importFrom magrittr %>%
@@ -20,7 +21,8 @@ barplot_server <- function(
   barplot_ylab  = shiny::reactive(""),
   barplot_title = shiny::reactive(""),
   barplot_label = shiny::reactive("Feature"),
-  drilldown     = shiny::reactive(F)
+  drilldown     = shiny::reactive(F),
+  ...
 ) {
   shiny::moduleServer(
     id,
@@ -28,51 +30,36 @@ barplot_server <- function(
 
       ns <- session$ns
 
-      output$feature_class_selection_ui <- shiny::renderUI({
-
-        shiny::req("feature_class" %in% colnames(plot_data()))
-        choices <- unique(plot_data()$feature_class)
-        shiny::req(length(choices) > 1)
-
-        optionsBox(
-          width = 12,
-          shiny::column(
-            width = 12,
-            shiny::selectInput(
-              inputId  = ns("feature_class_choice"),
-              label    = "Select Feature Class",
-              choices  = choices
-            )
-          )
-        )
+      display_feature_class_selection_ui <- shiny::reactive({
+        shiny::req(plot_data())
+        display_barplot_feature_class_selection_ui(plot_data())
       })
 
-      barplot_features <- shiny::reactive({
-        shiny::req(input$feature_class_choice)
-        plot_data() %>%
-          dplyr::filter(.data$feature_class == input$feature_class_choice) %>%
-          dplyr::pull("feature") %>%
-          unique()
+      output$display_feature_class_selection_ui <- shiny::reactive({
+        display_feature_class_selection_ui()
+      })
+
+      shiny::outputOptions(
+        output,
+        "display_feature_class_selection_ui",
+        suspendWhenHidden = FALSE
+      )
+
+      output$feature_class_selection_ui <- shiny::renderUI({
+
+        shiny::req(display_feature_class_selection_ui())
+        choices <- unique(plot_data()$feature_class)
+
+        shiny::selectInput(
+          inputId  = ns("feature_class_choice"),
+          label    = "Select Feature Class",
+          choices  = choices
+        )
       })
 
       barplot_data <- shiny::reactive({
         shiny::req(plot_data())
-
-        if(!is.null(input$feature_class_choice)){
-          shiny::req(barplot_features())
-          barplot_data <- plot_data() %>%
-            dplyr::filter(.data$feature_class %in% input$feature_class_choice)
-        } else {
-          barplot_data <- plot_data()
-        }
-
-        dplyr::select(
-          barplot_data,
-            "sample",
-            "group",
-            "feature_value",
-            "feature"
-          )
+        build_barplot_data(plot_data(), input$feature_class_choice)
       })
 
       summarized_barplot_data <- shiny::reactive({
@@ -121,7 +108,8 @@ barplot_server <- function(
       drilldown_scatterplot_server(
         "scatterplot",
         plot_data = barplot_data,
-        eventdata = barplot_eventdata
+        eventdata = barplot_eventdata,
+        ...
       )
 
       output$drilldown_ui <- shiny::renderUI({
