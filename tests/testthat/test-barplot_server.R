@@ -1,3 +1,5 @@
+test_data_dir  <- system.file("test_data", package = "iatlas.modules")
+
 test_that("barplot_server_starwars", {
 
   shiny::testServer(
@@ -40,6 +42,45 @@ test_that("barplot_server_iris", {
       expect_true(display_feature_class_selection_ui())
       expect_type(output$feature_class_selection_ui, "list")
       session$setInputs("feature_class_choice" = "Length")
+      expect_type(barplot_data(), "list")
+      expect_named(
+        barplot_data(),
+        c("sample", "group","feature_value", "feature")
+      )
+      expect_type(summarized_barplot_data(), "list")
+      expect_named(
+        summarized_barplot_data(),
+        c("group", "feature", "text", "MEAN", "SE")
+      )
+      expect_equal(barplot_source_name(), "proxy1-barplot")
+      expect_type(output$barplot, "character")
+      expect_error(
+        barplot_eventdata(),
+        regexp = "Click on above barplot.",
+        class = c("shiny.silent.error")
+      )
+      expect_type(group_data(), "list")
+      expect_named(group_data(), c("group", "description"))
+    }
+  )
+})
+
+test_that("barplot_server_pcawg", {
+
+  plot_data <- test_data_dir %>%
+    file.path("pcawg_barchart_data.tsv") %>%
+    readr::read_tsv(.)
+
+  shiny::testServer(
+    barplot_server,
+    args = list(
+      "plot_data" = shiny::reactive(plot_data),
+      "drilldown" = shiny::reactive(F)
+    ),
+    {
+      expect_true(display_feature_class_selection_ui())
+      expect_type(output$feature_class_selection_ui, "list")
+      session$setInputs("feature_class_choice" = "Immune Cell Proportion - Original")
       expect_type(barplot_data(), "list")
       expect_named(
         barplot_data(),
