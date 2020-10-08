@@ -1,21 +1,26 @@
-display_barplot_feature_class_selection_ui <- function(plot_data){
-  "feature_class" %in% colnames(plot_data) &&
-    (plot_data$feature_class %>% unique() %>% length()) > 1
+build_barplot_data <- function(plot_data_function, feature_class_choice){
+  data <-
+    plot_data_function(.feature_class = feature_class_choice) %>%
+    dplyr::select(dplyr::any_of(
+      c("sample", "feature", "feature_value", "group", "group_description")
+    ))
 }
 
-build_barplot_data <- function(plot_data, feature_class_choice){
-  if(!is.null(feature_class_choice)){
-    barplot_data <- plot_data %>%
-      dplyr::filter(.data$feature_class %in% feature_class_choice)
-  } else {
-    barplot_data <- plot_data
-  }
+summarise_barplot_se <- function(data, title){
+  data %>%
+    dplyr::select("group", "feature", "feature_value") %>%
+    tidyr::drop_na() %>%
+    dplyr::group_by_at(dplyr::vars("group", "feature")) %>%
+    dplyr::summarise(
+      "MEAN" = mean(.data$feature_value),
+      "SE" = .data$MEAN / sqrt(dplyr::n()),
+      .groups = "drop"
+    ) %>%
+    create_plotly_text(.data$feature, .data$group, c("MEAN", "SE"), title)
+}
 
-  dplyr::select(
-    barplot_data,
-    "sample",
-    "group",
-    "feature_value",
-    "feature"
-  )
+get_group_data <- function(barplot_data){
+  barplot_data %>%
+    dplyr::select("group", "description" = "group_description") %>%
+    dplyr::distinct()
 }

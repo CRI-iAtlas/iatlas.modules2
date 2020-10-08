@@ -6,7 +6,8 @@
 \usage{
 barplot_server(
   id,
-  plot_data,
+  plot_data_function,
+  feature_classes = shiny::reactive(NULL),
   barplot_xlab = shiny::reactive(""),
   barplot_ylab = shiny::reactive(""),
   barplot_title = shiny::reactive(""),
@@ -18,9 +19,13 @@ barplot_server(
 \arguments{
 \item{id}{Module ID}
 
-\item{plot_data}{A shiny::reactive that returns a dataframe with columns
-"sample", "group", "feature", "feature_value", and optional columns,
-"group_description", and "feature_class"}
+\item{plot_data_function}{A shiny::reactive that returns a function
+The function must take an argument called ".feature_class" and return a
+dataframe with columns "sample", "feature", "feature_value", "group",
+and optionally "group_description"}
+
+\item{feature_classes}{A shiny::reactive that returns a vector of strings.
+One of these strings are passed to plot_data_function}
 
 \item{barplot_xlab}{A shiny::reactive that returns a string}
 
@@ -32,7 +37,7 @@ barplot_server(
 
 \item{drilldown}{A shiny::reactive that returns True or False}
 
-\item{...}{shiny:reactives passed to drilldown_scatterplot_server}
+\item{...}{shiny::reactives passed to drilldown_scatterplot_server}
 }
 \description{
 Barplot Server
