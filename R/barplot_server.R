@@ -2,7 +2,7 @@
 #' Barplot Server
 #'
 #' @param id Module ID
-#' @param feature_data A shiny::reactive that returns a dataframe with columns
+#' @param plot_data A shiny::reactive that returns a dataframe with columns
 #' "sample", "group", "feature", "feature_value", and optional columns,
 #' "group_description", and "feature_class"
 #' @param barplot_xlab A shiny::reactive that returns a string
@@ -15,7 +15,7 @@
 #' @importFrom magrittr %>%
 barplot_server <- function(
   id,
-  feature_data,
+  plot_data,
   barplot_xlab  = shiny::reactive(""),
   barplot_ylab  = shiny::reactive(""),
   barplot_title = shiny::reactive(""),
@@ -30,8 +30,8 @@ barplot_server <- function(
 
       output$feature_class_selection_ui <- shiny::renderUI({
 
-        shiny::req("feature_class" %in% colnames(feature_data()))
-        choices <- unique(feature_data()$feature_class)
+        shiny::req("feature_class" %in% colnames(plot_data()))
+        choices <- unique(plot_data()$feature_class)
         shiny::req(length(choices) > 1)
 
         optionsBox(
@@ -49,29 +49,29 @@ barplot_server <- function(
 
       barplot_features <- shiny::reactive({
         shiny::req(input$feature_class_choice)
-        feature_data() %>%
+        plot_data() %>%
           dplyr::filter(.data$feature_class == input$feature_class_choice) %>%
           dplyr::pull("feature") %>%
           unique()
       })
 
       barplot_data <- shiny::reactive({
-        shiny::req(feature_data())
+        shiny::req(plot_data())
 
         if(!is.null(input$feature_class_choice)){
           shiny::req(barplot_features())
-          barplot_data <- feature_data() %>%
+          barplot_data <- plot_data() %>%
             dplyr::filter(.data$feature_class %in% input$feature_class_choice)
         } else {
-          barplot_data <- feature_data()
+          barplot_data <- plot_data()
         }
 
         dplyr::select(
           barplot_data,
             "sample",
-            "x" = "group",
-            "y" = "feature_value",
-            "color" = "feature"
+            "group",
+            "feature_value",
+            "feature"
           )
       })
 
@@ -87,8 +87,9 @@ barplot_server <- function(
         plotly_bar(
           summarized_barplot_data(),
           source_name = barplot_source_name(),
+          x_col = "group",
           y_col = "MEAN",
-          color_col = "color",
+          color_col = "feature",
           error_col = "SE",
           text_col = "text",
           xlab = barplot_xlab(),
@@ -104,8 +105,8 @@ barplot_server <- function(
       })
 
       group_data <- shiny::reactive({
-        shiny::req("group_description" %in% colnames(feature_data()))
-        feature_data() %>%
+        shiny::req("group_description" %in% colnames(plot_data()))
+        plot_data() %>%
           dplyr::select("group", "description" = "group_description") %>%
           dplyr::distinct()
       })

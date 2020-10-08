@@ -4,16 +4,16 @@
 \alias{drilldown_scatterplot_server}
 \title{Drilldown Scatterplot Server}
 \usage{
-drilldown_scatterplot_server(id, data, eventdata)
+drilldown_scatterplot_server(id, plot_data, eventdata)
 }
 \arguments{
 \item{id}{Module ID}
 
-\item{data}{A shiny::reactive that returns a dataframe with columns
-"sample", "x", "y", "color"}
+\item{plot_data}{A shiny::reactive that returns a dataframe with columns
+"sample", "group", "feature", "feature_value"}
 
 \item{eventdata}{A shiny::reactive that returns a dataframe with column
-"x"}
+"key"}
 }
 \description{
 Drilldown Scatterplot Server

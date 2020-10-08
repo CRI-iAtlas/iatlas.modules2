@@ -5,7 +5,7 @@
 \title{Plotly Bar}
 \usage{
 plotly_bar(
-  data,
+  plot_data,
   x_col = "x",
   y_col = "y",
   error_col = NA,
@@ -21,7 +21,7 @@ plotly_bar(
 )
 }
 \arguments{
-\item{data}{A dataframe}
+\item{plot_data}{A dataframe}
 
 \item{x_col}{A string}
 

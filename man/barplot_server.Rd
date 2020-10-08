@@ -7,8 +7,6 @@
 barplot_server(
   id,
   plot_data,
-  group_data = shiny::reactive(NULL),
-  feature_data = shiny::reactive(NULL),
   barplot_xlab = shiny::reactive(""),
   barplot_ylab = shiny::reactive(""),
   barplot_title = shiny::reactive(""),
@@ -20,13 +18,8 @@ barplot_server(
 \item{id}{Module ID}
 
 \item{plot_data}{A shiny::reactive that returns a dataframe with columns
-"sample", "x", "y", "color"}
-
-\item{group_data}{A shiny::reactive that returns NULL or a dataframe with
-columns "group", "description"}
-
-\item{feature_data}{A shiny::reactive that returns NULL or a dataframe with
-columns "feature", "class"}
+"sample", "group", "feature", "feature_value", and optional columns,
+"group_description", and "feature_class"}
 
 \item{barplot_xlab}{A shiny::reactive that returns a string}
 

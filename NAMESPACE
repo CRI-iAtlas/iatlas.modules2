@@ -3,7 +3,7 @@
 export(barplot_server)
 export(barplot_ui)
 export(create_group_text_from_eventdata)
-export(create_plotly_label)
+export(create_plotly_text)
 export(drilldown_scatterplot_server)
 export(plotly_bar)
 export(plotly_scatter)

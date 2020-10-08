@@ -7,7 +7,7 @@
 summarise_barplot_se(data, title)
 }
 \arguments{
-\item{data}{A dataframe with columns "x", "y", "color"}
+\item{data}{A dataframe with columns "group", "feature", "feature_value"}
 
 \item{title}{A string}
 }

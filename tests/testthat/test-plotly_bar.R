@@ -1,40 +1,29 @@
 test_that("plotly_bar_one_group", {
-  data <- dplyr::starwars %>%
-    dplyr::select(
-      "x" = "sex",
-      "y" = "height"
-    ) %>%
-    tidyr::drop_na() %>%
-    dplyr::group_by(.data$x) %>%
-    dplyr::summarise(
-      "y" = mean(.data$y),
-      "count" = dplyr::n(),
-      .groups = "drop"
-    )  %>%
-    dplyr::mutate("error" = .data$y / sqrt(.data$count))
-
-  p <- plotly_bar(data)
+  p <- example_starwars_data() %>%
+    summarise_barplot_se(title = "Sample") %>%
+    plotly_bar(
+      source_name = "test",
+      x_col = "group",
+      y_col = "MEAN",
+      color_col = "feature",
+      error_col = "SE",
+      text_col = "text"
+    )
   expect_type(p, "list")
   print(p)
 })
 
 test_that("plotly_bar_two_groups", {
-  data <- dplyr::starwars %>%
-    dplyr::select(
-      "x" = "eye_color",
-      "color" = "sex",
-      "y" = "height"
-    ) %>%
-    tidyr::drop_na() %>%
-    dplyr::group_by(.data$x, .data$color) %>%
-    dplyr::summarise(
-      "y" = mean(.data$y),
-      "count" = dplyr::n(),
-      .groups = "drop"
-    ) %>%
-    dplyr::mutate("error" = .data$y / sqrt(.data$count))
-
-  p <- plotly_bar(data, color_col = "color", error_col = "error")
+  p <- example_iris_data() %>%
+    summarise_barplot_se(title = "Sample") %>%
+    plotly_bar(
+      source_name = "test",
+      x_col = "group",
+      y_col = "MEAN",
+      color_col = "feature",
+      error_col = "SE",
+      text_col = "text"
+    )
   expect_type(p, "list")
   print(p)
 })

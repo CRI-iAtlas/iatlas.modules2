@@ -3,9 +3,9 @@
 #'
 #' @param id Module ID
 #' @param plot_data A shiny::reactive that returns a dataframe with columns
-#' "sample", "x", "y", "color"
+#' "sample", "group", "feature", "feature_value"
 #' @param eventdata A shiny::reactive that returns a dataframe with column
-#' "x"
+#' "key"
 #'
 #' @export
 drilldown_scatterplot_server <- function(
@@ -21,15 +21,17 @@ drilldown_scatterplot_server <- function(
 
       selected_group <- shiny::reactive({
         shiny::req(eventdata())
-        eventdata()$x[[1]]
+        eventdata()$key[[1]]
       })
 
       scatterplot_data <- shiny::reactive({
         shiny::req(plot_data(), selected_group())
         plot_data() %>%
-          dplyr::filter(.data$x == selected_group()) %>%
-          dplyr::select("sample", "color", "y") %>%
-          tidyr::pivot_wider(., values_from = "y", names_from = "color")
+          dplyr::filter(.data$group == selected_group()) %>%
+          dplyr::select("sample", "feature", "feature_value") %>%
+          tidyr::pivot_wider(
+            ., values_from = "feature_value", names_from = "feature"
+          )
       })
 
       output$feature_selection_ui <- shiny::renderUI({
@@ -69,10 +71,10 @@ drilldown_scatterplot_server <- function(
           ) %>%
           tidyr::drop_na() %>%
           dplyr::mutate("group" = selected_group()) %>%
-          create_plotly_label(
+          create_plotly_text(
             .data$sample, .data$group, c("x", "y"), "Sample"
           ) %>%
-          dplyr::select("x", "y", "text" = "label")
+          dplyr::select("x", "y", "text")
       })
 
       output$scatterplot <- plotly::renderPlotly({

@@ -7,12 +7,12 @@ test_that("drilldown_scatterplot_server", {
         dplyr::select(
           example_iris_data(),
           "sample",
-          "x" = "group",
-          "y" = "feature_value",
-          "color" = "feature"
+          "group",
+          "feature_value",
+          "feature"
         )
       ),
-      "eventdata" = shiny::reactive(dplyr::tibble("x" = c("setosa", "setosa")))
+      "eventdata" = shiny::reactive(dplyr::tibble("key" = c("setosa", "setosa")))
     ),
     {
       expect_equal(selected_group(), "setosa")
