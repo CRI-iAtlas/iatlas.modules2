@@ -97,3 +97,11 @@ create_group_text_from_eventdata <- function(eventdata, group_tbl){
     dplyr::filter(.data$group == selected_group) %>%
     dplyr::pull("description")
 }
+
+# system files ----------------------------------------------------------------
+
+get_markdown_path <- function(name, extension = ".markdown"){
+  name %>%
+    stringr::str_c(extension) %>%
+    file.path(system.file("markdown", package = "iatlas.modules"), .)
+}

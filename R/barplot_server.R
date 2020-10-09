@@ -13,6 +13,7 @@
 #' @param barplot_title A shiny::reactive that returns a string
 #' @param barplot_label A shiny::reactive that returns a string
 #' @param drilldown A shiny::reactive that returns True or False
+#' @param drilldown_ui A ui function
 #' @param ... shiny::reactives passed to drilldown_scatterplot_server
 #'
 #' @export
@@ -25,6 +26,7 @@ barplot_server <- function(
   barplot_title = shiny::reactive(""),
   barplot_label = shiny::reactive("Feature"),
   drilldown     = shiny::reactive(F),
+  drilldown_ui  = drilldown_scatterplot_ui,
   ...
 ) {
   shiny::moduleServer(
@@ -88,6 +90,7 @@ barplot_server <- function(
       })
 
       barplot_eventdata <- shiny::reactive({
+        shiny::req(barplot_source_name(), summarized_barplot_data())
         eventdata <- plotly::event_data("plotly_click", barplot_source_name())
         shiny::validate(shiny::need(eventdata, "Click on above barplot."))
         return(eventdata)
@@ -113,7 +116,7 @@ barplot_server <- function(
       )
 
       output$drilldown_ui <- shiny::renderUI({
-        if(drilldown()) drilldown_scatterplot_ui(ns("scatterplot"))
+        if(drilldown()) drilldown_ui(ns("scatterplot"))
       })
     }
   )

@@ -45,8 +45,10 @@ example_iris_data <- function(){
     )
 }
 
-example_iris_data_func <- function(.feature_class){
-  example_iris_data() %>%
-    dplyr::filter(.data$feature_class == .feature_class) %>%
-    dplyr::select(-"feature_class")
+example_iris_data_func <- function(.feature_class = NULL){
+  iris_data <- example_iris_data()
+  if (!is.null(.feature_class)){
+    iris_data <- dplyr::filter(iris_data, .data$feature_class == .feature_class)
+  }
+  dplyr::select(iris_data, -"feature_class")
 }

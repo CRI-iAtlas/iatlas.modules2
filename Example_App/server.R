@@ -15,7 +15,13 @@ server <- function(input, output) {
     shiny::reactive(example_iris_data_func),
     feature_classes = shiny::reactive(c("Length", "Width")),
     barplot_xlab = shiny::reactive("Species"),
-    drilldown = shiny::reactive(T),
-    x_default = shiny::reactive("Petal.Length")
+    drilldown = shiny::reactive(T)
+  )
+
+  barplot_server(
+    "barplot3",
+    shiny::reactive(example_iris_data_func),
+    barplot_xlab = shiny::reactive("Species"),
+    drilldown = shiny::reactive(T)
   )
 }

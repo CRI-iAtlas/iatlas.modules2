@@ -11,6 +11,12 @@ barplot_ui <- function(id, title = ""){
 
   shiny::tagList(
     titleBox(title),
+    messageBox(
+      width = 12,
+      shiny::includeMarkdown(
+        get_markdown_path("barchart1")
+      )
+    ),
     shiny::fluidRow(
       shiny::conditionalPanel(
         condition = "output.display_feature_class_selection_ui",
