@@ -10,7 +10,7 @@
 barplot_ui <- function(
   id,
   title = "",
-  barchart_html = htmltools::includeMarkdown(get_markdown_path("barchart1")),
+  barplot_html = htmltools::includeMarkdown(get_markdown_path("barchart1")),
   ...
   ){
 
@@ -20,7 +20,7 @@ barplot_ui <- function(
     titleBox(title),
     messageBox(
       width = 12,
-      barchart_html
+      barplot_html
     ),
     shiny::conditionalPanel(
       condition = "output.display_feature_class_selection_ui",
