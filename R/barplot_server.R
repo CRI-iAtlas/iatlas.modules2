@@ -26,7 +26,6 @@ barplot_server <- function(
   barplot_title = shiny::reactive(""),
   barplot_label = shiny::reactive("Feature"),
   drilldown     = shiny::reactive(F),
-  drilldown_ui  = drilldown_scatterplot_ui,
   ...
 ) {
   shiny::moduleServer(
@@ -115,9 +114,15 @@ barplot_server <- function(
         ...
       )
 
-      output$drilldown_ui <- shiny::renderUI({
-        if(drilldown()) drilldown_ui(ns("scatterplot"))
+      output$display_drilldown_ui <- shiny::reactive({
+        drilldown()
       })
+
+      shiny::outputOptions(
+        output,
+        "display_drilldown_ui",
+        suspendWhenHidden = FALSE
+      )
     }
   )
 }

@@ -17,18 +17,20 @@ barplot_ui <- function(id, title = ""){
         get_markdown_path("barchart1")
       )
     ),
-    shiny::fluidRow(
-      shiny::conditionalPanel(
-        condition = "output.display_feature_class_selection_ui",
+    shiny::conditionalPanel(
+      condition = "output.display_feature_class_selection_ui",
+      ns = ns,
+      shiny::fluidRow(
         optionsBox(
           width = 12,
           shiny::column(
             width = 12,
             shiny::uiOutput(ns("feature_class_selection_ui"))
           )
-        ),
-        ns = ns
-      ),
+        )
+      )
+    ),
+    shiny::fluidRow(
       plotBox(
         width = 12,
         "barplot" %>%
@@ -38,6 +40,10 @@ barplot_ui <- function(id, title = ""){
         plotly_ui(ns("barplot"))
       )
     ),
-    shiny::uiOutput(ns("drilldown_ui"))
+    shiny::conditionalPanel(
+      condition = "output.display_drilldown_ui",
+      ns = ns,
+      drilldown_scatterplot_ui(ns("scatterplot"))
+    )
   )
 }
