@@ -13,7 +13,6 @@
 #' @param barplot_title A shiny::reactive that returns a string
 #' @param barplot_label A shiny::reactive that returns a string
 #' @param drilldown A shiny::reactive that returns True or False
-#' @param drilldown_ui A ui function
 #' @param ... shiny::reactives passed to drilldown_scatterplot_server
 #'
 #' @export

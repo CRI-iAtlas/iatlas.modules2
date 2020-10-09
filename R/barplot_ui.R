@@ -13,7 +13,7 @@ barplot_ui <- function(id, title = ""){
     titleBox(title),
     messageBox(
       width = 12,
-      shiny::includeMarkdown(
+      htmltools::includeMarkdown(
         get_markdown_path("barchart1")
       )
     ),

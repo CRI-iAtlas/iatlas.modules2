@@ -338,6 +338,13 @@
       "Repository": "CRAN",
       "Hash": "1bb58822a20301cee84a41678e25d9b7"
     },
+    "markdown": {
+      "Package": "markdown",
+      "Version": "1.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "61e4a10781dd00d7d81dd06ca9b94e95"
+    },
     "mgcv": {
       "Package": "mgcv",
       "Version": "1.8-33",
@@ -405,13 +412,14 @@
       "Package": "plotly",
       "Version": "4.9.2.9000",
       "Source": "GitHub",
+      "Remotes": "rstudio/thematic, ramnathv/htmlwidgets",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteUsername": "ropensci",
       "RemoteRepo": "plotly",
-      "RemoteRef": "master",
+      "RemoteUsername": "ropensci",
+      "RemoteRef": "HEAD",
       "RemoteSha": "9bc585ac0d689ad22e30e086ece6073081a9c37b",
-      "Hash": "ce0096d12f883f34bac5a0924c47c846"
+      "Hash": "b17e9ef54fa18f324b1c79a761d0fd78"
     },
     "praise": {
       "Package": "praise",
@@ -608,6 +616,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "ecd17882a0b4419545691e095b74ee89"
+    },
+    "xfun": {
+      "Package": "xfun",
+      "Version": "0.17",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "5016afba2a931ac92bbb3c6feb03d2c8"
     },
     "xtable": {
       "Package": "xtable",
