@@ -1,5 +1,10 @@
 
-drilldown_scatterplot_ui <- function(id){
+drilldown_scatterplot_ui <- function(
+  id,
+  html = htmltools::includeMarkdown(
+    get_markdown_path("drilldown_scatterplot1")
+  )
+  ){
 
   ns <- shiny::NS(id)
 
@@ -7,9 +12,7 @@ drilldown_scatterplot_ui <- function(id){
     shiny::fluidRow(
       messageBox(
         width = 12,
-        htmltools::includeMarkdown(
-          get_markdown_path("drilldown_scatterplot1")
-        )
+        html
       )
     ),
     shiny::conditionalPanel(

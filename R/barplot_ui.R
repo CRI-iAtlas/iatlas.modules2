@@ -3,9 +3,16 @@
 #'
 #' @param id Module ID
 #' @param title A string
+#' @param barchart_html A string that is HTML
+#' @param ... Arguments passed to drilldown_scatterplot_ui
 #'
 #' @export
-barplot_ui <- function(id, title = ""){
+barplot_ui <- function(
+  id,
+  title = "",
+  barchart_html = htmltools::includeMarkdown(get_markdown_path("barchart1")),
+  ...
+  ){
 
   ns <- shiny::NS(id)
 
@@ -13,9 +20,7 @@ barplot_ui <- function(id, title = ""){
     titleBox(title),
     messageBox(
       width = 12,
-      htmltools::includeMarkdown(
-        get_markdown_path("barchart1")
-      )
+      barchart_html
     ),
     shiny::conditionalPanel(
       condition = "output.display_feature_class_selection_ui",
@@ -43,7 +48,7 @@ barplot_ui <- function(id, title = ""){
     shiny::conditionalPanel(
       condition = "output.display_drilldown_ui",
       ns = ns,
-      drilldown_scatterplot_ui(ns("scatterplot"))
+      drilldown_scatterplot_ui(ns("scatterplot"), ...)
     )
   )
 }
