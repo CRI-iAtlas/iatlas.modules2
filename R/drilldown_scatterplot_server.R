@@ -14,8 +14,8 @@ drilldown_scatterplot_server <- function(
   id,
   plot_data,
   eventdata,
-  x_default = shiny::reactive(NULL),
-  y_default = shiny::reactive(NULL)
+  x_feature_input = NULL,
+  y_feature_input = NULL
 ) {
   shiny::moduleServer(
     id,
@@ -29,7 +29,11 @@ drilldown_scatterplot_server <- function(
       })
 
       scatterplot_data <- shiny::reactive({
-        shiny::req(plot_data(), selected_group())
+        shiny::req(
+          plot_data(),
+          selected_group(),
+          selected_group() %in% plot_data()$group
+        )
         build_scatterplot_data(plot_data(), selected_group())
       })
 
@@ -40,7 +44,10 @@ drilldown_scatterplot_server <- function(
       })
 
       display_feature_selection_ui <- shiny::reactive({
-        length(scatterplot_feature_columns()) > 2
+        all(
+          any(is.null(x_feature_input), is.null(y_feature_input)),
+          length(scatterplot_feature_columns()) > 2
+        )
       })
 
       output$display_feature_selection_ui <- shiny::reactive({
@@ -60,8 +67,7 @@ drilldown_scatterplot_server <- function(
         shiny::selectInput(
           inputId  = ns("x_feature_choice"),
           label    = "Select X Feature",
-          choices  = choices,
-          selected = x_default()
+          choices  = choices
         )
       })
 
@@ -73,27 +79,44 @@ drilldown_scatterplot_server <- function(
         shiny::selectInput(
           inputId  = ns("y_feature_choice"),
           label    = "Select Y Feature",
-          choices  = choices,
-          selected = y_default()
+          choices  = choices
         )
       })
 
-      x_feature <- shiny::reactive({
-        get_scatterplot_x_feature(
-          input$x_feature_choice, scatterplot_feature_columns()
-        )
-      })
+      if(is.null(x_feature_input)){
+        x_feature <-
+          shiny::reactive(
+            get_scatterplot_x_feature(
+              input$x_feature_choice,
+              scatterplot_feature_columns()
+            )
+          )
+      } else {
+        x_feature <- x_feature_input
+      }
 
-      y_feature <- shiny::reactive({
-        get_scatterplot_y_feature(
-          input$y_feature_choice, scatterplot_feature_columns()
-        )
-      })
+      if(is.null(y_feature_input)){
+        y_feature <-
+          shiny::reactive(
+            get_scatterplot_y_feature(
+              input$y_feature_choice,
+              scatterplot_feature_columns()
+            )
+          )
+      } else {
+        y_feature <- y_feature_input
+      }
 
       formatted_scatterplot_data <- shiny::reactive({
         shiny::req(
-          scatterplot_data(), x_feature(), y_feature(), selected_group()
+          scatterplot_data(),
+          x_feature(),
+          y_feature(),
+          selected_group(),
+          x_feature() %in% colnames(scatterplot_data()),
+          y_feature() %in% colnames(scatterplot_data())
         )
+
         format_scatterplot_data(
           scatterplot_data(), x_feature(), y_feature(), selected_group()
         )

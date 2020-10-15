@@ -17,7 +17,12 @@ get_scatterplot_y_feature <- function(feature_choice, feature_columns){
   else return(feature_choice)
 }
 
-format_scatterplot_data <- function(plot_data, x_feature, y_feature, selected_group){
+format_scatterplot_data <- function(
+  plot_data,
+  x_feature,
+  y_feature,
+  selected_group
+){
   plot_data %>%
     dplyr::select(
       "sample",
