@@ -6,8 +6,8 @@
 #' "sample", "group", "feature", "feature_value"
 #' @param eventdata A shiny::reactive that returns a dataframe with column
 #' "key"
-#' @param x_default A shiny::reactive that returns a string
-#' @param y_default A shiny::reactive that returns a string
+#' @param x_feature_input A shiny::reactive that returns a string
+#' @param y_feature_input A shiny::reactive that returns a string
 #'
 #' @export
 drilldown_scatterplot_server <- function(

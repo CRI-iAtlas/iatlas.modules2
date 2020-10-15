@@ -8,8 +8,8 @@ drilldown_scatterplot_server(
   id,
   plot_data,
   eventdata,
-  x_default = shiny::reactive(NULL),
-  y_default = shiny::reactive(NULL)
+  x_feature_input = NULL,
+  y_feature_input = NULL
 )
 }
 \arguments{
@@ -21,9 +21,9 @@ drilldown_scatterplot_server(
 \item{eventdata}{A shiny::reactive that returns a dataframe with column
 "key"}
 
-\item{x_default}{A shiny::reactive that returns a string}
+\item{x_feature_input}{A shiny::reactive that returns a string}
 
-\item{y_default}{A shiny::reactive that returns a string}
+\item{y_feature_input}{A shiny::reactive that returns a string}
 }
 \description{
 Drilldown Scatterplot Server

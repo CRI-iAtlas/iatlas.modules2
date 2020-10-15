@@ -7,7 +7,7 @@
 barplot_ui(
   id,
   title = "",
-  barchart_html = htmltools::includeMarkdown(get_markdown_path("barchart1")),
+  barplot_html = htmltools::includeMarkdown(get_markdown_path("barchart1")),
   ...
 )
 }
@@ -16,7 +16,7 @@ barplot_ui(
 
 \item{title}{A string}
 
-\item{barchart_html}{A string that is HTML}
+\item{barplot_html}{A string that is HTML}
 
 \item{...}{Arguments passed to drilldown_scatterplot_ui}
 }

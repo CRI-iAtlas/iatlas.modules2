@@ -3,7 +3,7 @@
 #'
 #' @param id Module ID
 #' @param title A string
-#' @param barchart_html A string that is HTML
+#' @param barplot_html A string that is HTML
 #' @param ... Arguments passed to drilldown_scatterplot_ui
 #'
 #' @export
