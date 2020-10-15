@@ -96,8 +96,8 @@ test_that("drilldown_scatterplot_server_group_set_features", {
         )
       ),
       "eventdata" = shiny::reactive(dplyr::tibble("key" = c("setosa", "setosa"))),
-      "x_feature" = shiny::reactive("Sepal.Length"),
-      "y_feature" = shiny::reactive("Sepal.Width")
+      "x_feature_input" = shiny::reactive("Petal.Length"),
+      "y_feature_input" = shiny::reactive("Petal.Width")
     ),
     {
       expect_equal(selected_group(), "setosa")
@@ -110,8 +110,8 @@ test_that("drilldown_scatterplot_server_group_set_features", {
         scatterplot_feature_columns(),
         c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
       )
-      expect_equal(x_feature_input(), "Sepal.Length")
-      expect_equal(y_feature_input(), "Sepal.Width")
+      expect_equal(x_feature_input(), "Petal.Length")
+      expect_equal(y_feature_input(), "Petal.Width")
       expect_false(display_feature_selection_ui())
 
       expect_type(formatted_scatterplot_data(), "list")
