@@ -1,6 +1,6 @@
 #' Plotly Bar
 #'
-#' @param data A dataframe
+#' @param plot_data A dataframe
 #' @param x_col A string
 #' @param y_col A string
 #' @param error_col A string or NA
@@ -17,7 +17,7 @@
 #' @export
 #' @importFrom magrittr %>%
 plotly_bar <- function(
-  data,
+  plot_data,
   x_col = "x",
   y_col = "y",
   error_col = NA,
@@ -51,17 +51,17 @@ plotly_bar <- function(
     )
   }
 
-  data <- dplyr::select(data, select_cols)
+  plot_data <- dplyr::select(plot_data, select_cols)
 
   if (is.null(bar_colors)) {
-    bar_colors <- data %>%
-      dplyr::select(color_col) %>%
+    bar_colors <- plot_data %>%
+      dplyr::select("color") %>%
       dplyr::n_distinct() %>%
       viridis::viridis_pal(option = "D")()
   }
 
   p <- plotly::plot_ly(
-    data,
+    plot_data,
     x = ~x,
     y = ~y,
     color = ~color,

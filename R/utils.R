@@ -1,26 +1,26 @@
 utils::globalVariables(".")
 
-# plotly label ----------------------------------------------------------------
+# plotly text ----------------------------------------------------------------
 
-#' Add Plotly Label
+#' Add Plotly Text
 #'
 #' @param tbl A tibble
 #' @param title A string
 #' @param name Name of a column
 #' @param group Name of a column
-add_plotly_label <- function(tbl, title, name, group){
-  dplyr::mutate(tbl, label = paste0(
+add_plotly_text <- function(tbl, title, name, group){
+  dplyr::mutate(tbl, text = paste0(
     "<b>", title, ":</b> ", {{name}}, " (", {{group}}, ")"
   ))
 }
 
-#' Add Plotly Value Label
+#' Add Plotly Value Text
 #'
-#' @param tbl A tibble with column label
+#' @param tbl A tibble with column text
 #' @param cols A vector of strings that are columns in the tibble
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
-add_plotly_value_label <- function(tbl, cols){
+add_plotly_value_text <- function(tbl, cols){
   tbl %>%
     tidyr::pivot_longer(
       .,
@@ -28,14 +28,14 @@ add_plotly_value_label <- function(tbl, cols){
       names_to  = "value_name",
       values_to = "value"
     ) %>%
-    dplyr::mutate(value_label = stringr::str_glue(
+    dplyr::mutate(value_text = stringr::str_glue(
       "{name}: {value}",
       name = stringr::str_to_upper(.data$value_name),
       value = sprintf("%0.3f", .data$value)
     )) %>%
-    dplyr::group_by(.data$label) %>%
-    dplyr::mutate(value_label = paste0(
-      .data$value_label,
+    dplyr::group_by(.data$text) %>%
+    dplyr::mutate(value_text = paste0(
+      .data$value_text,
       collapse = "</br>"
     )) %>%
     dplyr::ungroup() %>%
@@ -46,7 +46,7 @@ add_plotly_value_label <- function(tbl, cols){
     )
 }
 
-#' Create Plotly Label
+#' Create Plotly Text
 #'
 #' @param tbl A tibble
 #' @param name A column
@@ -57,14 +57,14 @@ add_plotly_value_label <- function(tbl, cols){
 #' @importFrom rlang .data
 #'
 #' @export
-create_plotly_label <- function(tbl, name, group, cols, title){
+create_plotly_text <- function(tbl, name, group, cols, title){
   tbl %>%
-    add_plotly_label(title, {{name}}, {{group}}) %>%
-    add_plotly_value_label(tidyselect::all_of(cols)) %>%
+    add_plotly_text(title, {{name}}, {{group}}) %>%
+    add_plotly_value_text(tidyselect::all_of(cols)) %>%
     tidyr::unite(
-      "label",
-      .data$label,
-      .data$value_label,
+      "text",
+      .data$text,
+      .data$value_text,
       sep = "</br></br>"
     )
 }
@@ -128,3 +128,12 @@ create_nested_named_list <- function(
     tibble::deframe(.)
   return(list)
 }
+
+# system files ----------------------------------------------------------------
+
+get_markdown_path <- function(name, extension = ".markdown"){
+  name %>%
+    stringr::str_c(extension) %>%
+    file.path(system.file("markdown", package = "iatlas.modules"), .)
+}
+

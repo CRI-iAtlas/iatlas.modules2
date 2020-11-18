@@ -2,16 +2,20 @@
 #' Drilldown Scatterplot Server
 #'
 #' @param id Module ID
-#' @param data A shiny::reactive that returns a dataframe with columns
-#' "sample", "x", "y", "color"
+#' @param plot_data A shiny::reactive that returns a dataframe with columns
+#' "sample", "group", "feature", "feature_value"
 #' @param eventdata A shiny::reactive that returns a dataframe with column
-#' "x"
+#' "key"
+#' @param x_feature_input A shiny::reactive that returns a string
+#' @param y_feature_input A shiny::reactive that returns a string
 #'
 #' @export
 drilldown_scatterplot_server <- function(
   id,
-  data,
-  eventdata
+  plot_data,
+  eventdata,
+  x_feature_input = NULL,
+  y_feature_input = NULL
 ) {
   shiny::moduleServer(
     id,
@@ -21,21 +25,45 @@ drilldown_scatterplot_server <- function(
 
       selected_group <- shiny::reactive({
         shiny::req(eventdata())
-        eventdata()$x[[1]]
+        eventdata()$key[[1]]
       })
 
       scatterplot_data <- shiny::reactive({
-        shiny::req(data(), selected_group())
-        data() %>%
-          dplyr::filter(.data$x == selected_group()) %>%
-          dplyr::select("sample", "color", "y") %>%
-          tidyr::pivot_wider(., values_from = "y", names_from = "color")
+        shiny::req(
+          plot_data(),
+          selected_group(),
+          selected_group() %in% plot_data()$group
+        )
+        build_scatterplot_data(plot_data(), selected_group())
       })
 
+      scatterplot_feature_columns <- shiny::reactive({
+        scatterplot_data() %>%
+          colnames() %>%
+          setdiff("sample")
+      })
+
+      display_feature_selection_ui <- shiny::reactive({
+        all(
+          any(is.null(x_feature_input), is.null(y_feature_input)),
+          length(scatterplot_feature_columns()) > 2
+        )
+      })
+
+      output$display_feature_selection_ui <- shiny::reactive({
+        display_feature_selection_ui()
+      })
+
+      shiny::outputOptions(
+        output,
+        "display_feature_selection_ui",
+        suspendWhenHidden = FALSE
+      )
+
       output$x_feature_selection_ui <- shiny::renderUI({
-        shiny::req(scatterplot_data())
-        choices <- colnames(scatterplot_data())[-1]
-        shiny::req(length(choices) > 1)
+        shiny::req(display_feature_selection_ui())
+        choices <- scatterplot_feature_columns()
+
         shiny::selectInput(
           inputId  = ns("x_feature_choice"),
           label    = "Select X Feature",
@@ -44,9 +72,10 @@ drilldown_scatterplot_server <- function(
       })
 
       output$y_feature_selection_ui <- shiny::renderUI({
-        shiny::req(scatterplot_data())
-        choices <- colnames(scatterplot_data())[-1]
-        shiny::req(length(choices) > 1)
+        shiny::req(display_feature_selection_ui(), input$x_feature_choice)
+        choices <- scatterplot_feature_columns() %>%
+          setdiff(input$x_feature_choice)
+
         shiny::selectInput(
           inputId  = ns("y_feature_choice"),
           label    = "Select Y Feature",
@@ -54,30 +83,51 @@ drilldown_scatterplot_server <- function(
         )
       })
 
+      if(is.null(x_feature_input)){
+        x_feature <-
+          shiny::reactive(
+            get_scatterplot_x_feature(
+              input$x_feature_choice,
+              scatterplot_feature_columns()
+            )
+          )
+      } else {
+        x_feature <- x_feature_input
+      }
+
+      if(is.null(y_feature_input)){
+        y_feature <-
+          shiny::reactive(
+            get_scatterplot_y_feature(
+              input$y_feature_choice,
+              scatterplot_feature_columns()
+            )
+          )
+      } else {
+        y_feature <- y_feature_input
+      }
+
       formatted_scatterplot_data <- shiny::reactive({
         shiny::req(
-          input$x_feature_choice, input$y_feature_choice, selected_group()
+          scatterplot_data(),
+          x_feature(),
+          y_feature(),
+          selected_group(),
+          x_feature() %in% colnames(scatterplot_data()),
+          y_feature() %in% colnames(scatterplot_data())
         )
-        scatterplot_data() %>%
-          dplyr::select(
-            "sample",
-            "x" = input$x_feature_choice,
-            "y" = input$y_feature_choice
-          ) %>%
-          tidyr::drop_na() %>%
-          dplyr::mutate("group" = selected_group()) %>%
-          create_plotly_label(
-            .data$sample, .data$group, c("x", "y"), "Sample"
-          ) %>%
-          dplyr::select("x", "y", "text" = "label")
+
+        format_scatterplot_data(
+          scatterplot_data(), x_feature(), y_feature(), selected_group()
+        )
       })
 
       output$scatterplot <- plotly::renderPlotly({
         plotly_scatter(
           formatted_scatterplot_data(),
           text_col = "text",
-          xlab = input$x_feature_choice,
-          ylab = input$y_feature_choice,
+          xlab = x_feature(),
+          ylab = y_feature(),
           title = selected_group(),
           identity_line = TRUE
         )

@@ -4,12 +4,21 @@
 \alias{barplot_ui}
 \title{Barplot UI}
 \usage{
-barplot_ui(id, title = "")
+barplot_ui(
+  id,
+  title = "",
+  barplot_html = htmltools::includeMarkdown(get_markdown_path("barchart1")),
+  ...
+)
 }
 \arguments{
 \item{id}{Module ID}
 
 \item{title}{A string}
+
+\item{barplot_html}{A string that is HTML}
+
+\item{...}{Arguments passed to drilldown_scatterplot_ui}
 }
 \description{
 Barplot UI

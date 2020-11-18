@@ -6,27 +6,26 @@
 \usage{
 barplot_server(
   id,
-  plot_data,
-  group_data = shiny::reactive(NULL),
-  feature_data = shiny::reactive(NULL),
+  plot_data_function,
+  feature_classes = shiny::reactive(NULL),
   barplot_xlab = shiny::reactive(""),
   barplot_ylab = shiny::reactive(""),
   barplot_title = shiny::reactive(""),
   barplot_label = shiny::reactive("Feature"),
-  drilldown = shiny::reactive(F)
+  drilldown = shiny::reactive(F),
+  ...
 )
 }
 \arguments{
 \item{id}{Module ID}
 
-\item{plot_data}{A shiny::reactive that returns a dataframe with columns
-"sample", "x", "y", "color"}
+\item{plot_data_function}{A shiny::reactive that returns a function
+The function must take an argument called ".feature_class" and return a
+dataframe with columns "sample", "feature", "feature_value", "group",
+and optionally "group_description"}
 
-\item{group_data}{A shiny::reactive that returns NULL or a dataframe with
-columns "feature", "description"}
-
-\item{feature_data}{A shiny::reactive that returns NULL or a dataframe with
-columns "feature", "class"}
+\item{feature_classes}{A shiny::reactive that returns a vector of strings.
+One of these strings are passed to plot_data_function}
 
 \item{barplot_xlab}{A shiny::reactive that returns a string}
 
@@ -37,6 +36,8 @@ columns "feature", "class"}
 \item{barplot_label}{A shiny::reactive that returns a string}
 
 \item{drilldown}{A shiny::reactive that returns True or False}
+
+\item{...}{shiny::reactives passed to drilldown_scatterplot_server}
 }
 \description{
 Barplot Server

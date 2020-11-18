@@ -2,30 +2,30 @@
 #' Barplot Server
 #'
 #' @param id Module ID
-#' @param plot_data A shiny::reactive that returns a dataframe with columns
-#' "sample", "x", "y", "color"
-#' @param group_data A shiny::reactive that returns NULL or a dataframe with
-#' columns "feature", "description"
-#' @param feature_data A shiny::reactive that returns NULL or a dataframe with
-#' columns "feature", "class"
+#' @param plot_data_function A shiny::reactive that returns a function
+#' The function must take an argument called ".feature_class" and return a
+#' dataframe with columns "sample", "feature", "feature_value", "group",
+#' and optionally "group_description"
+#' @param feature_classes A shiny::reactive that returns a vector of strings.
+#' One of these strings are passed to plot_data_function
 #' @param barplot_xlab A shiny::reactive that returns a string
 #' @param barplot_ylab A shiny::reactive that returns a string
 #' @param barplot_title A shiny::reactive that returns a string
 #' @param barplot_label A shiny::reactive that returns a string
 #' @param drilldown A shiny::reactive that returns True or False
+#' @param ... shiny::reactives passed to drilldown_scatterplot_server
 #'
 #' @export
-#' @importFrom magrittr %>%
 barplot_server <- function(
   id,
-  plot_data,
-  group_data    = shiny::reactive(NULL),
-  feature_data  = shiny::reactive(NULL),
+  plot_data_function,
+  feature_classes = shiny::reactive(NULL),
   barplot_xlab  = shiny::reactive(""),
   barplot_ylab  = shiny::reactive(""),
   barplot_title = shiny::reactive(""),
   barplot_label = shiny::reactive("Feature"),
-  drilldown     = shiny::reactive(F)
+  drilldown     = shiny::reactive(F),
+  ...
 ) {
   shiny::moduleServer(
     id,
@@ -33,34 +33,35 @@ barplot_server <- function(
 
       ns <- session$ns
 
+      display_feature_class_selection_ui <- shiny::reactive({
+        !is.null(feature_classes())
+      })
+
+      output$display_feature_class_selection_ui <- shiny::reactive({
+        display_feature_class_selection_ui()
+      })
+
+      shiny::outputOptions(
+        output,
+        "display_feature_class_selection_ui",
+        suspendWhenHidden = FALSE
+      )
+
       output$feature_class_selection_ui <- shiny::renderUI({
-        shiny::req(feature_data())
-        choices <- unique(feature_data()$class)
-        shiny::req(length(choices) > 1)
+        shiny::req(feature_classes())
         shiny::selectInput(
           inputId  = ns("feature_class_choice"),
           label    = "Select Feature Class",
-          choices  = choices
+          choices  = feature_classes()
         )
       })
 
-      barplot_features <- shiny::reactive({
-        shiny::req(input$feature_class_choice)
-        feature_data() %>%
-          dplyr::filter(.data$class == input$feature_class_choice) %>%
-          dplyr::pull("feature")
-      })
-
       barplot_data <- shiny::reactive({
-        shiny::req(plot_data())
-        plot_data <- dplyr::select(plot_data(), "sample", "x", "y", "color")
-
-        if(!is.null(input$feature_class_choice)){
-          shiny::req(barplot_features())
-          plot_data <- plot_data %>%
-            dplyr::filter(.data$color %in% barplot_features())
+        shiny::req(plot_data_function())
+        if(display_feature_class_selection_ui()){
+          shiny::req(input$feature_class_choice)
         }
-        return(plot_data)
+        build_barplot_data(plot_data_function(), input$feature_class_choice)
       })
 
       summarized_barplot_data <- shiny::reactive({
@@ -75,8 +76,9 @@ barplot_server <- function(
         plotly_bar(
           summarized_barplot_data(),
           source_name = barplot_source_name(),
+          x_col = "group",
           y_col = "MEAN",
-          color_col = "color",
+          color_col = "feature",
           error_col = "SE",
           text_col = "text",
           xlab = barplot_xlab(),
@@ -86,9 +88,15 @@ barplot_server <- function(
       })
 
       barplot_eventdata <- shiny::reactive({
+        shiny::req(barplot_source_name(), summarized_barplot_data())
         eventdata <- plotly::event_data("plotly_click", barplot_source_name())
         shiny::validate(shiny::need(eventdata, "Click on above barplot."))
         return(eventdata)
+      })
+
+      group_data <- shiny::reactive({
+        shiny::req("group_description" %in% colnames(barplot_data()))
+        get_group_data(barplot_data())
       })
 
       plotly_server(
@@ -100,13 +108,20 @@ barplot_server <- function(
 
       drilldown_scatterplot_server(
         "scatterplot",
-        data = barplot_data,
-        eventdata = barplot_eventdata
+        plot_data = barplot_data,
+        eventdata = barplot_eventdata,
+        ...
       )
 
-      output$drilldown_ui <- shiny::renderUI({
-        if(drilldown()) drilldown_scatterplot_ui(ns("scatterplot"))
+      output$display_drilldown_ui <- shiny::reactive({
+        drilldown()
       })
+
+      shiny::outputOptions(
+        output,
+        "display_drilldown_ui",
+        suspendWhenHidden = FALSE
+      )
     }
   )
 }

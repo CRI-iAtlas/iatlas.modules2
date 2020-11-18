@@ -1,8 +1,9 @@
 distributions_plot_server <- function(
   id,
-  plot_data,
-  group_data    = shiny::reactive(NULL),
-  feature_data  = shiny::reactive(NULL)
+  plot_data_function
+  # plot_data
+  # group_data    = shiny::reactive(NULL),
+  # feature_data  = shiny::reactive(NULL)
 ) {
   shiny::moduleServer(
     id,
@@ -10,26 +11,43 @@ distributions_plot_server <- function(
 
       ns <- session$ns
 
-      feature_choice_list <- shiny::reactive({
-        shiny::req(feature_data())
-        create_nested_named_list(feature_data())
+      output$display_feature_class_selection_ui <- shiny::reactive({
+        display_feature_class_selection_ui()
       })
 
-      output$feature_selection_ui <- shiny::renderUI({
-        shiny::req(feature_choice_list())
+      feature
+
+      shiny::outputOptions(
+        output,
+        "display_feature_class_selection_ui",
+        suspendWhenHidden = FALSE
+      )
+
+      output$feature_class_selection_ui <- shiny::renderUI({
+        shiny::req(feature_classes())
         shiny::selectInput(
-          inputId  = ns("feature_choice"),
-          label    = "Select Feature",
-          choices  = feature_choice_list()
+          inputId  = ns("feature_class_choice"),
+          label    = "Select Feature Class",
+          choices  = feature_classes()
         )
       })
 
       distplot_data <- shiny::reactive({
-        shiny::req(plot_data())
-
-        plot_data() %>%
-          dplyr::filter(.data$feature == input$feature_choice) %>%
-          dplyr::select("sample", "x", "y")
+        shiny::req(plot_data_function())
+        if(display_feature_class_selection_ui()){
+          shiny::req(input$feature_class_choice)
+        }
+        data <-
+          plot_data_function(.feature_class = feature_class_choice) %>%
+          dplyr::select(dplyr::any_of(
+            c("sample", "feature", "feature_value", "group", "group_description")
+          ))
+      })
+        # shiny::req(plot_data())
+        #
+        # plot_data() %>%
+        #   dplyr::filter(.data$feature == input$feature_choice) %>%
+        #   dplyr::select("sample", "x", "y")
       })
 
       distplot_source_name <- shiny::reactive(ns("distplot"))
