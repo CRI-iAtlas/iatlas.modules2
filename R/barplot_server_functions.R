@@ -19,7 +19,7 @@ summarise_barplot_se <- function(data, title){
     create_plotly_text(.data$feature, .data$group, c("MEAN", "SE"), title)
 }
 
-get_group_data <- function(barplot_data){
+get_barplot_group_data <- function(barplot_data){
   barplot_data %>%
     dplyr::select("group", "description" = "group_description") %>%
     dplyr::distinct()

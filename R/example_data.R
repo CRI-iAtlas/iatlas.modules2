@@ -35,20 +35,23 @@ example_iris_data <- function(){
     ) %>%
     dplyr::inner_join(
       dplyr::tribble(
-        ~feature_class, ~feature,
-        "Length",       "Sepal.Length",
-        "Width",        "Sepal.Width",
-        "Length",       "Petal.Length",
-        "Width",        "Petal.Width"
+        ~feature_class, ~feature,        ~feature_class2, ~feature_display,
+        "Length",       "Sepal.Length",  "Sepal",         "Sepal Length",
+        "Width",        "Sepal.Width",   "Sepal",         "Sepal Width",
+        "Length",       "Petal.Length",  "Petal",         "Petal Length",
+        "Width",        "Petal.Width",   "Petal",         "Petal Width"
       ),
       by = "feature"
     )
 }
 
-example_iris_data_func <- function(.feature_class = NULL){
+example_iris_data_func <- function(.feature_class = NULL, .feature = NULL){
   iris_data <- example_iris_data()
   if (!is.null(.feature_class)){
     iris_data <- dplyr::filter(iris_data, .data$feature_class == .feature_class)
+  }
+  if (!is.null(.feature)){
+    iris_data <- dplyr::filter(iris_data, .data$feature == .feature)
   }
   dplyr::select(iris_data, -"feature_class")
 }
