@@ -10,14 +10,7 @@ distributions_plot_server <- function(
       ns <- session$ns
 
       feature_classes <- shiny::reactive({
-        if(is.null(features())){
-          return(character(0))
-        } else {
-          features() %>%
-            colnames() %>%
-            setdiff(c("feature_name", "feature_display")) %>%
-            return()
-        }
+        get_distributions_feature_classes(features())
       })
 
       display_feature_class_selection_ui <- shiny::reactive({
@@ -60,26 +53,18 @@ distributions_plot_server <- function(
 
       feature_list <- shiny::reactive({
         shiny::req(
+          features(),
           display_feature_selection_ui(),
           !is.null(display_feature_class_selection_ui())
         )
         if(display_feature_class_selection_ui()){
           shiny::req(input$feature_class_choice)
-          tbl <- features() %>%
-            dplyr::select(
-              "feature_class" = input$feature_class_choice,
-              "feature_display",
-              "feature_name"
-            )
-        } else {
-          tbl <- features() %>%
-            dplyr::select(
-              "feature_class",
-              "feature_display",
-              "feature_name"
-            )
         }
-        create_nested_named_list(tbl)
+        get_distributions_feature_list(
+          features(),
+          input$feature_class_choice,
+          display_feature_class_selection_ui()
+        )
       })
 
       output$feature_selection_ui <- shiny::renderUI({
@@ -101,14 +86,12 @@ distributions_plot_server <- function(
         if(display_feature_selection_ui()){
           shiny::req(input$feature_choice)
         }
-
-        data <-
-          plot_data_function()(.feature = input$feature_choice) %>%
-          scale_tbl_value_column(input$scale_method_choice) %>%
-          reafctor_by_tbl_value_column(input$reorder_method_choice) %>%
-          dplyr::select(dplyr::any_of(
-            c("sample", "feature", "feature_value", "group", "group_description")
-          ))
+        create_distplot_data(
+          plot_data_function(),
+          input$feature_choice,
+          input$scale_method_choice,
+          input$reorder_method_choice
+        )
       })
 
       distplot_source_name <- shiny::reactive(ns("distplot"))

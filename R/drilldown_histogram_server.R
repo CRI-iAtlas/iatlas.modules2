@@ -6,6 +6,7 @@
 #' "group", "feature_value"
 #' @param eventdata A shiny::reactive that returns a dataframe with column
 #' "key"
+#' @param ... arguments sents to plotly_histogram
 #'
 #' @export
 drilldown_histogram_server <- function(

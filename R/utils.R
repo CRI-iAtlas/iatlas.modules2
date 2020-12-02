@@ -73,6 +73,7 @@ scale_tbl_value_column <- function(tbl, scale_method = "None"){
 
 #' Refactor By Tibble Value Column
 #'
+#' @param reorder_method One of "None", "Median", "Mean", "Max", "Min
 #' @param tbl A Tibble with columns "feature_value", "group"
 reafctor_by_tbl_value_column <- function(tbl, reorder_method = "None"){
   if(reorder_method == "None") {

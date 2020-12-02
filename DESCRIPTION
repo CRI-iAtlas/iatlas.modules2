@@ -25,6 +25,7 @@ Imports:
     stringr,
     viridis,
     shinydashboard,
+    tibble,
     tidyselect,
     htmltools,
     markdown
