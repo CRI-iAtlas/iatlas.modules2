@@ -1,4 +1,50 @@
 
+test_that("Transform Feature String", {
+  feature <- "Leukocyte Fraction"
+  expect_equal(transform_feature_string(feature, "None"), feature)
+  expect_equal(
+    transform_feature_string(feature, "Log2"),
+    "Log2( Leukocyte Fraction )"
+  )
+  expect_equal(
+    transform_feature_string(feature, "Log2 + 1"),
+    "Log2( Leukocyte Fraction + 1 )"
+  )
+  expect_equal(
+    transform_feature_string(feature, "Log10"),
+    "Log10( Leukocyte Fraction )"
+  )
+  expect_equal(
+    transform_feature_string(feature, "Log10 + 1"),
+    "Log10( Leukocyte Fraction + 1 )"
+  )
+  expect_equal(
+    transform_feature_string(feature, "Squared"),
+    "Leukocyte Fraction**2"
+  )
+  expect_equal(
+    transform_feature_string(feature, "Reciprocal"),
+    "1/Leukocyte Fraction"
+  )
+})
+
+test_that("Transform Feature Formula", {
+  feature <- "Leukocyte Fraction"
+  expect_equal(transform_feature_formula(feature, "None"), feature)
+  expect_equal(
+    transform_feature_formula(feature, "Log10"),
+    "I(log10(Leukocyte Fraction))"
+  )
+  expect_equal(
+    transform_feature_formula(feature, "Squared"),
+    "I(Leukocyte Fraction**2)"
+  )
+  expect_equal(
+    transform_feature_formula(feature, "Reciprocal"),
+    "I(1/Leukocyte Fraction)"
+  )
+})
+
 test_that("Create Plotly Text", {
   tbl <- dplyr::tribble(
     ~name,   ~name2,  ~group, ~v1, ~v2,
@@ -67,4 +113,19 @@ test_that("Add Plotly Value text", {
 test_that("Get Values from Eventdata Dataframe", {
   df <- data.frame(x = c(rep("C1", 3)), y = 1:3, stringsAsFactors = F)
   expect_equal(get_values_from_eventdata(df), "C1")
+})
+
+test_that("Create Nested Named List", {
+  tbl    <- dplyr::tibble(
+    "feature_class"   = c(rep("Class1", 3), "Class2"),
+    "feature_display" = c("feature1", "feature2", "feature3", "feature4"),
+    "feature_name" = 1:4
+  )
+  result1 <- create_nested_named_list(tbl)
+  expect_named(result1, c("Class1", "Class2"))
+  expect_length(result1, 2)
+  expect_named(result1$Class1, c("feature1", "feature2", "feature3"))
+  expect_length(result1$Class1, 3)
+  expect_named(result1$Class2, "feature4")
+  expect_length(result1$Class2, 1)
 })

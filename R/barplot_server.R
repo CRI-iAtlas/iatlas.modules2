@@ -30,7 +30,6 @@ barplot_server <- function(
   shiny::moduleServer(
     id,
     function(input, output, session) {
-
       ns <- session$ns
 
       display_feature_class_selection_ui <- shiny::reactive({
@@ -96,7 +95,7 @@ barplot_server <- function(
 
       group_data <- shiny::reactive({
         shiny::req("group_description" %in% colnames(barplot_data()))
-        get_group_data(barplot_data())
+        get_barplot_group_data(barplot_data())
       })
 
       plotly_server(
