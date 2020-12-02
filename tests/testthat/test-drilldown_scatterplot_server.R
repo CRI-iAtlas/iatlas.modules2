@@ -1,4 +1,3 @@
-test_data_dir  <- system.file("test_data", package = "iatlas.modules")
 
 test_that("drilldown_scatterplot_server_2_features", {
 

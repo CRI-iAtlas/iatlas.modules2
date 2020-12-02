@@ -11,6 +11,12 @@ ui <- function() {
           barplot_ui("barplot2", title = "Example 2"),
           barplot_ui("barplot3", title = "Example 3"),
           barplot_ui("barplot4", title = "Example 4")
+        ),
+        shiny::tabPanel(
+          "Distribution Plots",
+          distributions_plot_ui("distplot1", title = "Example 1"),
+          distributions_plot_ui("distplot2", title = "Example 2"),
+          distributions_plot_ui("distplot3", title = "Example 3")
         )
       )
     )
