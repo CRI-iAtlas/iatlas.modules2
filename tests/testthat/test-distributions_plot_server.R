@@ -14,7 +14,7 @@ test_that("distributions_plot_server_no_classes", {
       session$setInputs("reorder_method_choice" = "None")
       expect_named(
         distplot_data(),
-        c("sample", "feature", "feature_value", "group", "group_description")
+        c("sample", "feature", "feature_value", "group", "group_description", "color")
       )
       session$setInputs("plot_type_choice" = "Violin")
       expect_type(output$distplot, "character")
@@ -50,7 +50,7 @@ test_that("distributions_plot_server_1_class", {
       session$setInputs("reorder_method_choice" = "None")
       expect_named(
         distplot_data(),
-        c("sample", "feature", "feature_value", "group", "group_description")
+        c("sample", "feature", "feature_value", "group", "group_description", "color")
       )
       session$setInputs("plot_type_choice" = "Violin")
       expect_type(output$distplot, "character")
@@ -88,7 +88,7 @@ test_that("distributions_plot_server_with_2_classes", {
       session$setInputs("reorder_method_choice" = "None")
       expect_named(
         distplot_data(),
-        c("sample", "feature", "feature_value", "group", "group_description")
+        c("sample", "feature", "feature_value", "group", "group_description", "color")
       )
       session$setInputs("plot_type_choice" = "Violin")
       expect_type(output$distplot, "character")

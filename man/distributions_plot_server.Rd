@@ -17,9 +17,11 @@ distributions_plot_server(
 \item{plot_data_function}{A shiny::reactive that returns a function
 The function must take an argument called ".feature_class" and return a
 dataframe with columns "sample", "feature", "feature_value", "group",
-and optionally "group_description"}
+and optionally "group_description", "color"}
 
-\item{features}{A shiny::reactive that returns a dataframe}
+\item{features}{A shiny::reactive that returns a dataframe with "feature",
+"feature_display", and any other additional optional columns to group the
+features by}
 
 \item{drilldown}{A shiny::reactive that returns True or False}
 }
