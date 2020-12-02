@@ -5,8 +5,10 @@
 #' @param plot_data_function A shiny::reactive that returns a function
 #' The function must take an argument called ".feature_class" and return a
 #' dataframe with columns "sample", "feature", "feature_value", "group",
-#' and optionally "group_description"
-#' @param features A shiny::reactive that returns a dataframe
+#' and optionally "group_description", "color"
+#' @param features A shiny::reactive that returns a dataframe with "feature",
+#' "feature_display", and any other additional optional columns to group the
+#' features by
 #' @param drilldown A shiny::reactive that returns True or False
 #'
 #' @export
@@ -113,13 +115,27 @@ distributions_plot_server <- function(
         else return(plotly_box)
       })
 
+      plot_fill_colors <- shiny::reactive({
+        shiny::req(distplot_data())
+        if("color" %in% colnames(distplot_data())){
+          fill_colors <- distplot_data() %>%
+            dplyr::select("group", "color") %>%
+            dplyr::distinct() %>%
+            tibble::deframe(.)
+        } else {
+          fill_colors <- NULL
+        }
+        return(fill_colors)
+      })
+
       output$distplot <- plotly::renderPlotly({
         shiny::req(distplot_data(), distplot_source_name(), plotly_function())
         plotly_function()(
           data = distplot_data(),
           source_name = distplot_source_name(),
           x_col = "group",
-          y_col = "feature_value"
+          y_col = "feature_value",
+          fill_colors = plot_fill_colors()
         )
       })
 

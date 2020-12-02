@@ -3,16 +3,21 @@
 #'
 #' @param id Module ID
 #' @param title A string
-#'
+#' @param distplot_html A string that is HTML
 #' @export
-distributions_plot_ui <- function(id, title = ""){
+distributions_plot_ui <- function(
+  id,
+  title = "",
+  distplot_html = htmltools::includeMarkdown(get_markdown_path("distplot1"))
+  ){
 
   ns <- shiny::NS(id)
 
   shiny::tagList(
     titleBox(title),
     messageBox(
-      width = 12
+      width = 12,
+      distplot_html
     ),
     shiny::fluidRow(
       optionsBox(
