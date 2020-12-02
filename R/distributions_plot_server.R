@@ -9,6 +9,41 @@ distributions_plot_server <- function(
     function(input, output, session) {
       ns <- session$ns
 
+      feature_classes <- shiny::reactive({
+        if(is.null(features())){
+          return(character(0))
+        } else {
+          features() %>%
+            colnames() %>%
+            setdiff(c("feature_name", "feature_display")) %>%
+            return()
+        }
+      })
+
+      display_feature_class_selection_ui <- shiny::reactive({
+        shiny::req(!is.null(feature_classes()))
+        length(feature_classes()) > 1
+      })
+
+      output$display_feature_class_selection_ui <- shiny::reactive({
+        display_feature_class_selection_ui()
+      })
+
+      shiny::outputOptions(
+        output,
+        "display_feature_class_selection_ui",
+        suspendWhenHidden = FALSE
+      )
+
+      output$feature_class_selection_ui <- shiny::renderUI({
+        shiny::req(feature_classes())
+        shiny::selectInput(
+          inputId  = ns("feature_class_choice"),
+          label    = "Select Feature",
+          choices  = feature_classes()
+        )
+      })
+
       display_feature_selection_ui <- shiny::reactive({
         !is.null(features())
       })
@@ -23,43 +58,36 @@ distributions_plot_server <- function(
         suspendWhenHidden = FALSE
       )
 
-      output$feature_selection_ui <- shiny::renderUI({
-        shiny::req(features())
-        shiny::selectInput(
-          inputId  = ns("feature_choice"),
-          label    = "Select Feature",
-          choices  = create_nested_named_list(features())
+      feature_list <- shiny::reactive({
+        shiny::req(
+          display_feature_selection_ui(),
+          !is.null(display_feature_class_selection_ui())
         )
+        if(display_feature_class_selection_ui()){
+          shiny::req(input$feature_class_choice)
+          tbl <- features() %>%
+            dplyr::select(
+              "feature_class" = input$feature_class_choice,
+              "feature_display",
+              "feature_name"
+            )
+        } else {
+          tbl <- features() %>%
+            dplyr::select(
+              "feature_class",
+              "feature_display",
+              "feature_name"
+            )
+        }
+        create_nested_named_list(tbl)
       })
 
-      feature_classes <- shiny::reactive({
-        shiny::req(features())
-        features() %>%
-          colnames() %>%
-          setdiff(c("feature_name", "feature_display"))
-      })
-
-      display_feature_class_selection_ui <- shiny::reactive({
-        shiny::req(display_feature_selection_ui())
-        length(colnames(features())) > 3
-      })
-
-      output$display_feature_class_selection_ui <- shiny::reactive({
-        display_feature_class_selection_ui()
-      })
-
-      shiny::outputOptions(
-        output,
-        "display_feature_class_selection_ui",
-        suspendWhenHidden = FALSE
-      )
-
-      output$feature_class_selection_ui <- shiny::renderUI({
-        shiny::req(features())
+      output$feature_selection_ui <- shiny::renderUI({
+        shiny::req(feature_list())
         shiny::selectInput(
           inputId  = ns("feature_choice"),
           label    = "Select Feature",
-          choices  = create_nested_named_list(features())
+          choices  = feature_list()
         )
       })
 

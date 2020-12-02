@@ -4,6 +4,30 @@ test_that("distributions_plot_server_no_classes", {
     distributions_plot_server,
     args = list(
       "plot_data_func" = shiny::reactive(example_iris_data_func),
+      "drilldown" = shiny::reactive(T)
+    ),
+    {
+      expect_equal(feature_classes(), character(0))
+      expect_false(display_feature_class_selection_ui())
+      expect_false(display_feature_selection_ui())
+      session$setInputs("scale_method_choice" = "None")
+      session$setInputs("reorder_method_choice" = "None")
+      expect_named(
+        distplot_data(),
+        c("sample", "feature", "feature_value", "group", "group_description")
+      )
+      session$setInputs("plot_type_choice" = "Violin")
+      expect_type(output$distplot, "character")
+    }
+  )
+})
+
+test_that("distributions_plot_server_1_class", {
+
+  shiny::testServer(
+    distributions_plot_server,
+    args = list(
+      "plot_data_func" = shiny::reactive(example_iris_data_func),
       "features" = shiny::reactiveVal(
         example_iris_data() %>%
           dplyr::select(
@@ -16,11 +40,11 @@ test_that("distributions_plot_server_no_classes", {
       "drilldown" = shiny::reactive(T)
     ),
     {
-      expect_true(display_feature_selection_ui())
-      expect_type(output$feature_selection_ui, "list")
       expect_equal(feature_classes(), "feature_class")
       expect_false(display_feature_class_selection_ui())
       expect_type(output$feature_class_selection_ui, "list")
+      expect_true(display_feature_selection_ui())
+      expect_type(output$feature_selection_ui, "list")
       session$setInputs("feature_choice" = "Sepal.Length")
       session$setInputs("scale_method_choice" = "None")
       session$setInputs("reorder_method_choice" = "None")
@@ -34,7 +58,7 @@ test_that("distributions_plot_server_no_classes", {
   )
 })
 
-test_that("distributions_plot_server_with_classes", {
+test_that("distributions_plot_server_with_2_classes", {
 
   shiny::testServer(
     distributions_plot_server,
@@ -53,10 +77,12 @@ test_that("distributions_plot_server_with_classes", {
       "drilldown" = shiny::reactive(T)
     ),
     {
-      expect_true(display_feature_selection_ui())
-      expect_type(output$feature_selection_ui, "list")
       expect_true(display_feature_class_selection_ui())
+      expect_equal(feature_classes(), c("feature_class", "feature_class2"))
       expect_type(output$feature_class_selection_ui, "list")
+      expect_true(display_feature_selection_ui())
+      session$setInputs("feature_class_choice" = "feature_class2")
+      expect_type(output$feature_selection_ui, "list")
       session$setInputs("feature_choice" = "Sepal.Length")
       session$setInputs("scale_method_choice" = "None")
       session$setInputs("reorder_method_choice" = "None")

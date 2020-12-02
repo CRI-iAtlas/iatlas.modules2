@@ -35,12 +35,34 @@ server <- function(input, output, session) {
   distributions_plot_server(
     "distplot1",
     plot_data_function = shiny::reactive(example_iris_data_func),
+    drilldown = shiny::reactive(T)
+  )
+
+  distributions_plot_server(
+    "distplot2",
+    plot_data_function = shiny::reactive(example_iris_data_func),
     features = shiny::reactive(
       example_iris_data() %>%
         dplyr::select(
           "feature_class",
           "feature_name" = "feature",
-          "feature_display" = "feature"
+          "feature_display"
+        ) %>%
+        dplyr::distinct()
+    ),
+    drilldown = shiny::reactive(T)
+  )
+
+  distributions_plot_server(
+    "distplot3",
+    plot_data_function = shiny::reactive(example_iris_data_func),
+    features = shiny::reactive(
+      example_iris_data() %>%
+        dplyr::select(
+          "feature_class",
+          "feature_class2",
+          "feature_name" = "feature",
+          "feature_display"
         ) %>%
         dplyr::distinct()
     ),

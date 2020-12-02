@@ -93,7 +93,6 @@ reafctor_by_tbl_value_column <- function(tbl, reorder_method = "None"){
       dplyr::summarise(
         "feature_value" = reorder_method(.data$feature_value), .groups = "drop"
       ) %>%
-      print() %>%
       dplyr::arrange(.data$feature_value) %>%
       dplyr::pull("group")
     tbl <- tbl %>%
