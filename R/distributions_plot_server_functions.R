@@ -40,11 +40,15 @@ create_distplot_data <- function(
   scale_method_choice,
   reorder_method_choice
   ){
+
   data <-
     plot_data_function(.feature = feature_choice) %>%
     scale_tbl_value_column(scale_method_choice) %>%
     reafctor_by_tbl_value_column(reorder_method_choice) %>%
     dplyr::select(dplyr::any_of(
-      c("sample", "feature", "feature_value", "group", "group_description")
+      c(
+        "sample", "feature", "feature_value", "group", "group_description",
+        "color"
+      )
     ))
 }

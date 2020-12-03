@@ -13,19 +13,22 @@ Suggests:
     testthat
 RoxygenNote: 7.1.1
 Imports: 
-    magrittr,
-    rlang,
     dplyr,
-    tidyr,
+    htmltools,
+    magrittr,
+    markdown,
+    plotly,
     purrr,
     readr,
+    rlang,
+    tidyr,
     shiny,
-    plotly,
     shinycssloaders,
     stringr,
     viridis,
     shinydashboard,
     tibble,
+    tidyr,
     tidyselect,
-    htmltools,
-    markdown
+    utils,
+    viridis

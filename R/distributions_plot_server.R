@@ -1,13 +1,51 @@
+
+#' Barplot Server
+#'
+#' @param id Module ID
+#' @param plot_data_function A shiny::reactive that returns a function
+#' The function must take an argument called ".feature" and return a
+#' dataframe with columns "sample", "feature", "feature_value", "group",
+#' and optionally "group_description", "color"
+#' @param features A shiny::reactive that returns a dataframe with "feature",
+#' "feature_display", and any other additional optional columns to group the
+#' features by
+#' @param distplot_xlab A shiny::reactive that returns a string
+#' @param scale_method_default A shiny::reactive that returns a string
+#' @param feature_default A shiny::reactive that returns a string
+#' @param drilldown A shiny::reactive that returns True or False
+#' @param ... shiny::reactives passed to drilldown_histogram_server
+#'
+#' @export
 distributions_plot_server <- function(
   id,
   plot_data_function,
   features = shiny::reactive(NULL),
-  drilldown = shiny::reactive(F)
+  distplot_xlab = shiny::reactive(""),
+  scale_method_default = shiny::reactive("None"),
+  feature_default = shiny::reactive(NULL),
+  drilldown = shiny::reactive(F),
+  ...
   ) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
       ns <- session$ns
+
+      output$scale_method_selection_ui <- shiny::renderUI({
+        shiny::req(scale_method_default())
+        shiny::selectInput(
+          ns("scale_method_choice"),
+          "Select or Search for variable scaling",
+          selected = scale_method_default(),
+          choices = c(
+            "None",
+            "Log2",
+            "Log2 + 1",
+            "Log10",
+            "Log10 + 1"
+          )
+        )
+      })
 
       feature_classes <- shiny::reactive({
         get_distributions_feature_classes(features())
@@ -32,7 +70,7 @@ distributions_plot_server <- function(
         shiny::req(feature_classes())
         shiny::selectInput(
           inputId  = ns("feature_class_choice"),
-          label    = "Select Feature",
+          label    = "Select Feature Class",
           choices  = feature_classes()
         )
       })
@@ -72,7 +110,8 @@ distributions_plot_server <- function(
         shiny::selectInput(
           inputId  = ns("feature_choice"),
           label    = "Select Feature",
-          choices  = feature_list()
+          choices  = feature_list(),
+          selected = feature_default()
         )
       })
 
@@ -101,13 +140,43 @@ distributions_plot_server <- function(
         else return(plotly_box)
       })
 
+      plot_fill_colors <- shiny::reactive({
+        shiny::req(distplot_data())
+        if("color" %in% colnames(distplot_data())){
+          fill_colors <- distplot_data() %>%
+            dplyr::select("group", "color") %>%
+            dplyr::distinct() %>%
+            tibble::deframe(.)
+        } else {
+          fill_colors <- NULL
+        }
+        return(fill_colors)
+      })
+
+      plot_title <- shiny::reactive({
+        if(display_feature_selection_ui()){
+          shiny::req(features(), input$feature_choice)
+          title <- features() %>%
+            dplyr::filter(.data$feature_name == input$feature_choice) %>%
+            dplyr::pull("feature_display") %>%
+            unique()
+        } else {
+          title <- ""
+        }
+        return(title)
+      })
+
       output$distplot <- plotly::renderPlotly({
         shiny::req(distplot_data(), distplot_source_name(), plotly_function())
         plotly_function()(
           data = distplot_data(),
           source_name = distplot_source_name(),
           x_col = "group",
-          y_col = "feature_value"
+          y_col = "feature_value",
+          fill_colors = plot_fill_colors(),
+          title = plot_title(),
+          xlab = distplot_xlab(),
+          ylab = plot_title()
         )
       })
 
@@ -136,7 +205,8 @@ distributions_plot_server <- function(
         "histogram",
         plot_data = distplot_data,
         eventdata = distplot_eventdata,
-        x_lab = "test_feature"
+        x_lab = plot_title(),
+        ...
       )
 
       output$display_drilldown_ui <- shiny::reactive({

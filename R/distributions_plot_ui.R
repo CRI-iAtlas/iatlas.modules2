@@ -3,16 +3,21 @@
 #'
 #' @param id Module ID
 #' @param title A string
-#'
+#' @param html A string that is HTML
 #' @export
-distributions_plot_ui <- function(id, title = ""){
+distributions_plot_ui <- function(
+  id,
+  title = "",
+  html = htmltools::includeMarkdown(get_markdown_path("distplot1"))
+  ){
 
   ns <- shiny::NS(id)
 
   shiny::tagList(
     titleBox(title),
     messageBox(
-      width = 12
+      width = 12,
+      html
     ),
     shiny::fluidRow(
       optionsBox(
@@ -43,18 +48,7 @@ distributions_plot_ui <- function(id, title = ""){
         ),
         shiny::column(
           width = 3,
-          shiny::selectInput(
-            ns("scale_method_choice"),
-            "Select or Search for variable scaling",
-            selected = "None",
-            choices = c(
-              "None",
-              "Log2",
-              "Log2 + 1",
-              "Log10",
-              "Log10 + 1"
-            )
-          )
+          shiny::uiOutput(ns("scale_method_selection_ui"))
         ),
         shiny::column(
           width = 3,

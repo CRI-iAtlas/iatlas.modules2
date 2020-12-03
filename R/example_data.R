@@ -30,6 +30,15 @@ example_iris_data <- function(){
       values_to = "feature_value"
     ) %>%
     dplyr::rename("group" = "Species") %>%
+    dplyr::inner_join(
+      dplyr::tribble(
+        ~group,       ~color,
+        "setosa",     "#FF0000",
+        "versicolor", "#0000FF",
+        "virginica",  "#FFFF00"
+      ),
+      by = "group"
+    ) %>%
     dplyr::mutate(
       "group_description" = stringr::str_c("Iris Species: ", .data$group),
     ) %>%
