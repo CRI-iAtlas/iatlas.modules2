@@ -506,15 +506,10 @@
     },
     "plotly": {
       "Package": "plotly",
-      "Version": "4.9.2.9000",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteUsername": "ropensci",
-      "RemoteRepo": "plotly",
-      "RemoteRef": "master",
-      "RemoteSha": "5e5db5938ebc60139cd318a06f2bbedbba6f00c0",
-      "RemoteHost": "api.github.com",
-      "Hash": "ef8152c5b178ad8d43ef51de526b9978"
+      "Version": "4.9.2.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "b08edf378e0e38959a6983e3d5902795"
     },
     "praise": {
       "Package": "praise",
