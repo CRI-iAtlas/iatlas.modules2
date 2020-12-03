@@ -35,7 +35,8 @@ server <- function(input, output, session) {
   distributions_plot_server(
     "distplot1",
     plot_data_function = shiny::reactive(example_iris_data_func),
-    drilldown = shiny::reactive(T)
+    drilldown = shiny::reactive(T),
+    distplot_xlab = shiny::reactive("Species")
   )
 
   distributions_plot_server(
@@ -50,7 +51,8 @@ server <- function(input, output, session) {
         ) %>%
         dplyr::distinct()
     ),
-    drilldown = shiny::reactive(T)
+    drilldown = shiny::reactive(T),
+    distplot_xlab = shiny::reactive("Species")
   )
 
   distributions_plot_server(
@@ -66,6 +68,7 @@ server <- function(input, output, session) {
         ) %>%
         dplyr::distinct()
     ),
-    drilldown = shiny::reactive(T)
+    drilldown = shiny::reactive(T),
+    distplot_xlab = shiny::reactive("Species")
   )
 }

@@ -7,7 +7,7 @@
 distributions_plot_ui(
   id,
   title = "",
-  distplot_html = htmltools::includeMarkdown(get_markdown_path("distplot1"))
+  html = htmltools::includeMarkdown(get_markdown_path("distplot1"))
 )
 }
 \arguments{
@@ -15,7 +15,7 @@ distributions_plot_ui(
 
 \item{title}{A string}
 
-\item{distplot_html}{A string that is HTML}
+\item{html}{A string that is HTML}
 }
 \description{
 Distributions Plot UI

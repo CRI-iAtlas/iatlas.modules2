@@ -8,14 +8,16 @@ distributions_plot_server(
   id,
   plot_data_function,
   features = shiny::reactive(NULL),
-  drilldown = shiny::reactive(F)
+  distplot_xlab = shiny::reactive(""),
+  drilldown = shiny::reactive(F),
+  ...
 )
 }
 \arguments{
 \item{id}{Module ID}
 
 \item{plot_data_function}{A shiny::reactive that returns a function
-The function must take an argument called ".feature_class" and return a
+The function must take an argument called ".feature" and return a
 dataframe with columns "sample", "feature", "feature_value", "group",
 and optionally "group_description", "color"}
 
@@ -23,7 +25,11 @@ and optionally "group_description", "color"}
 "feature_display", and any other additional optional columns to group the
 features by}
 
+\item{distplot_xlab}{A string}
+
 \item{drilldown}{A shiny::reactive that returns True or False}
+
+\item{...}{shiny::reactives passed to drilldown_histogram_server}
 }
 \description{
 Barplot Server

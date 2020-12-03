@@ -3,20 +3,24 @@
 #'
 #' @param id Module ID
 #' @param plot_data_function A shiny::reactive that returns a function
-#' The function must take an argument called ".feature_class" and return a
+#' The function must take an argument called ".feature" and return a
 #' dataframe with columns "sample", "feature", "feature_value", "group",
 #' and optionally "group_description", "color"
 #' @param features A shiny::reactive that returns a dataframe with "feature",
 #' "feature_display", and any other additional optional columns to group the
 #' features by
 #' @param drilldown A shiny::reactive that returns True or False
+#' @param ... shiny::reactives passed to drilldown_histogram_server
+#' @param distplot_xlab A string
 #'
 #' @export
 distributions_plot_server <- function(
   id,
   plot_data_function,
   features = shiny::reactive(NULL),
-  drilldown = shiny::reactive(F)
+  distplot_xlab = shiny::reactive(""),
+  drilldown = shiny::reactive(F),
+  ...
   ) {
   shiny::moduleServer(
     id,
@@ -128,6 +132,19 @@ distributions_plot_server <- function(
         return(fill_colors)
       })
 
+      plot_title <- shiny::reactive({
+        if(display_feature_selection_ui()){
+          shiny::req(features(), input$feature_choice)
+          title <- features() %>%
+            dplyr::filter(.data$feature_name == input$feature_choice) %>%
+            dplyr::pull("feature_display") %>%
+            unique()
+        } else {
+          title <- ""
+        }
+        return(title)
+      })
+
       output$distplot <- plotly::renderPlotly({
         shiny::req(distplot_data(), distplot_source_name(), plotly_function())
         plotly_function()(
@@ -135,7 +152,10 @@ distributions_plot_server <- function(
           source_name = distplot_source_name(),
           x_col = "group",
           y_col = "feature_value",
-          fill_colors = plot_fill_colors()
+          fill_colors = plot_fill_colors(),
+          title = plot_title(),
+          xlab = distplot_xlab(),
+          ylab = plot_title()
         )
       })
 
@@ -164,7 +184,8 @@ distributions_plot_server <- function(
         "histogram",
         plot_data = distplot_data,
         eventdata = distplot_eventdata,
-        x_lab = "test_feature"
+        x_lab = "test_feature",
+        ...
       )
 
       output$display_drilldown_ui <- shiny::reactive({

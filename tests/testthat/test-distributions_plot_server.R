@@ -4,7 +4,8 @@ test_that("distributions_plot_server_no_classes", {
     distributions_plot_server,
     args = list(
       "plot_data_func" = shiny::reactive(example_iris_data_func),
-      "drilldown" = shiny::reactive(T)
+      "drilldown" = shiny::reactive(T),
+      "distplot_xlab" = shiny::reactive("Species")
     ),
     {
       expect_equal(feature_classes(), character(0))
