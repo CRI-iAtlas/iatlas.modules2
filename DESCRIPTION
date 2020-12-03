@@ -1,7 +1,7 @@
 Package: iatlas.modules
 Title: iAatlas Modules
 Type: Package
-Version: 0.3.1
+Version: 0.3.2
 Date: 2020-12-03
 Author: Andrew Lamb
 Maintainer: Andrew Lamb <Andrew.Lamb@sagebase.org>
@@ -13,6 +13,7 @@ Suggests:
     testthat
 RoxygenNote: 7.1.1
 Imports: 
+    crayon,
     dplyr,
     htmltools,
     magrittr,
@@ -21,6 +22,7 @@ Imports:
     purrr,
     readr,
     rlang,
+    pillar,
     shiny,
     shinycssloaders,
     stringr,
