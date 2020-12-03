@@ -9,9 +9,11 @@
 #' @param features A shiny::reactive that returns a dataframe with "feature",
 #' "feature_display", and any other additional optional columns to group the
 #' features by
+#' @param distplot_xlab A shiny::reactive that returns a string
+#' @param scale_method_default A shiny::reactive that returns a string
+#' @param feature_default A shiny::reactive that returns a string
 #' @param drilldown A shiny::reactive that returns True or False
 #' @param ... shiny::reactives passed to drilldown_histogram_server
-#' @param distplot_xlab A string
 #'
 #' @export
 distributions_plot_server <- function(
@@ -19,6 +21,8 @@ distributions_plot_server <- function(
   plot_data_function,
   features = shiny::reactive(NULL),
   distplot_xlab = shiny::reactive(""),
+  scale_method_default = shiny::reactive("None"),
+  feature_default = shiny::reactive(NULL),
   drilldown = shiny::reactive(F),
   ...
   ) {
@@ -26,6 +30,22 @@ distributions_plot_server <- function(
     id,
     function(input, output, session) {
       ns <- session$ns
+
+      output$scale_method_selection_ui <- shiny::renderUI({
+        shiny::req(scale_method_default())
+        shiny::selectInput(
+          ns("scale_method_choice"),
+          "Select or Search for variable scaling",
+          selected = scale_method_default(),
+          choices = c(
+            "None",
+            "Log2",
+            "Log2 + 1",
+            "Log10",
+            "Log10 + 1"
+          )
+        )
+      })
 
       feature_classes <- shiny::reactive({
         get_distributions_feature_classes(features())
@@ -90,7 +110,8 @@ distributions_plot_server <- function(
         shiny::selectInput(
           inputId  = ns("feature_choice"),
           label    = "Select Feature",
-          choices  = feature_list()
+          choices  = feature_list(),
+          selected = feature_default()
         )
       })
 
@@ -184,7 +205,7 @@ distributions_plot_server <- function(
         "histogram",
         plot_data = distplot_data,
         eventdata = distplot_eventdata,
-        x_lab = "test_feature",
+        x_lab = plot_title(),
         ...
       )
 

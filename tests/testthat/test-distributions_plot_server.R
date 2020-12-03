@@ -75,6 +75,8 @@ test_that("distributions_plot_server_with_2_classes", {
           ) %>%
           dplyr::distinct()
       ),
+      "scale_method_default" = shiny::reactive("Log2"),
+      "feature_default" = shiny::reactive("Sepal.Length"),
       "drilldown" = shiny::reactive(T)
     ),
     {
