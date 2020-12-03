@@ -70,7 +70,7 @@ distributions_plot_server <- function(
         shiny::req(feature_classes())
         shiny::selectInput(
           inputId  = ns("feature_class_choice"),
-          label    = "Select Feature",
+          label    = "Select Feature Class",
           choices  = feature_classes()
         )
       })
