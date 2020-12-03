@@ -9,6 +9,8 @@ distributions_plot_server(
   plot_data_function,
   features = shiny::reactive(NULL),
   distplot_xlab = shiny::reactive(""),
+  scale_method_default = shiny::reactive("None"),
+  feature_default = shiny::reactive(NULL),
   drilldown = shiny::reactive(F),
   ...
 )
@@ -25,7 +27,11 @@ and optionally "group_description", "color"}
 "feature_display", and any other additional optional columns to group the
 features by}
 
-\item{distplot_xlab}{A string}
+\item{distplot_xlab}{A shiny::reactive that returns a string}
+
+\item{scale_method_default}{A shiny::reactive that returns a string}
+
+\item{feature_default}{A shiny::reactive that returns a string}
 
 \item{drilldown}{A shiny::reactive that returns True or False}
 

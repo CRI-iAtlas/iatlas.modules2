@@ -61,14 +61,16 @@ server <- function(input, output, session) {
     features = shiny::reactive(
       example_iris_data() %>%
         dplyr::select(
-          "feature_class",
-          "feature_class2",
+          "Class1" = "feature_class",
+          "Class2" = "feature_class2",
           "feature_name" = "feature",
           "feature_display"
         ) %>%
         dplyr::distinct()
     ),
     drilldown = shiny::reactive(T),
-    distplot_xlab = shiny::reactive("Species")
+    distplot_xlab = shiny::reactive("Species"),
+    scale_method_default = shiny::reactive("Log2"),
+    feature_default = shiny::reactive("Petal.Length")
   )
 }

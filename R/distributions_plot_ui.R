@@ -48,18 +48,7 @@ distributions_plot_ui <- function(
         ),
         shiny::column(
           width = 3,
-          shiny::selectInput(
-            ns("scale_method_choice"),
-            "Select or Search for variable scaling",
-            selected = "None",
-            choices = c(
-              "None",
-              "Log2",
-              "Log2 + 1",
-              "Log10",
-              "Log10 + 1"
-            )
-          )
+          shiny::uiOutput(ns("scale_method_selection_ui"))
         ),
         shiny::column(
           width = 3,
