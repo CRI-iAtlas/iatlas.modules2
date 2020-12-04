@@ -1,7 +1,7 @@
 Package: iatlas.modules
 Title: iAatlas Modules
 Type: Package
-Version: 0.3.2
+Version: 0.3.3
 Date: 2020-12-03
 Author: Andrew Lamb
 Maintainer: Andrew Lamb <Andrew.Lamb@sagebase.org>
