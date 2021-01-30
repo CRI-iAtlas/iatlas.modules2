@@ -24,11 +24,11 @@ format_scatterplot_data <- function(
   selected_group
 ){
   plot_data %>%
-    dplyr::select(
-      "sample",
+    dplyr::rename(
       "x" = x_feature,
       "y" = y_feature
     ) %>%
+    dplyr::select("sample", "x", "y") %>%
     tidyr::drop_na() %>%
     dplyr::mutate("group" = selected_group) %>%
     create_plotly_text(

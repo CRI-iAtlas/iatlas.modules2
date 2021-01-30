@@ -41,7 +41,7 @@ plotly_scatter <- function(
     "text"  = text_col
   )
 
-  data <- dplyr::select(data, select_cols)
+  data <- dplyr::select(data, dplyr::all_of(select_cols))
 
   p <-
     plotly::plot_ly(
