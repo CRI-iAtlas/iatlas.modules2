@@ -28,6 +28,6 @@ Imports:
     stringr,
     viridis,
     shinydashboard,
-    tibble
+    tibble,
     tidyselect,
     utils
