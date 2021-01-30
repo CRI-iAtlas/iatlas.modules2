@@ -18,11 +18,11 @@ get_distributions_feature_list <- function(
 
   if(display_feature_class_selection_ui){
     tbl <- features %>%
-      dplyr::select(
+      dplyr::select(dplyr::all_of(c(
         "feature_class" = feature_class_choice,
         "feature_display",
         "feature_name"
-      )
+      )))
   } else {
     tbl <- features %>%
       dplyr::select(

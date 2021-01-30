@@ -34,18 +34,14 @@ plotly_scatter <- function(
   format_func = format_plotly
 ) {
 
-  select_cols <- c(
-    "x"     = x_col,
-    "y"     = y_col,
-    "key"   = key_col,
-    "text"  = text_col
-  )
-
-  data <- dplyr::select(data, dplyr::all_of(select_cols))
-
-  p <-
+  p <- data %>%
+    dplyr::select(dplyr::all_of(c(
+      "x"     = x_col,
+      "y"     = y_col,
+      "key"   = key_col,
+      "text"  = text_col
+    ))) %>%
     plotly::plot_ly(
-      data,
       x = ~x,
       y = ~y,
       text = ~text,

@@ -15,14 +15,14 @@ plotly_box <- function(
   ) {
 
   data  %>%
-    dplyr::select(
+    dplyr::select(dplyr::all_of(c(
       "x"     = x_col,
       "y"     = y_col,
       "key"   = key_col,
       "text"  = text_col,
       "color" = color_col,
       "split" = split_col
-    ) %>%
+    ))) %>%
     plotly::plot_ly(
       x     = ~x,
       y     = ~y,
