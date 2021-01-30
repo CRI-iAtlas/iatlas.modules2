@@ -1,11 +1,11 @@
 Package: iatlas.modules
+Title: iAatlas Modules
 Type: Package
-Title: What the Package Does (Title Case)
 Version: 0.4.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Date: 2021-1-30
+Author: Andrew Lamb
+Maintainer: Andrew Lamb <Andrew.Lamb@sagebase.org>
+Description: Modules for Iatlas.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -14,6 +14,7 @@ Suggests:
 RoxygenNote: 7.1.1
 Config/testthat/edition: 3
 Imports: 
+    crayon,
     dplyr,
     htmltools,
     magrittr,
@@ -22,11 +23,10 @@ Imports:
     purrr,
     readr,
     rlang,
-    tidyr,
+    pillar,
     shiny,
     shinycssloaders,
     stringr,
-    viridis,
     shinydashboard,
     tibble,
     tidyselect,

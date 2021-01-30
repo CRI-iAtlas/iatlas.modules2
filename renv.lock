@@ -527,10 +527,17 @@
     },
     "plotly": {
       "Package": "plotly",
+<<<<<<< HEAD
       "Version": "4.9.3",
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "f6b85d9e4ed88074ea0ede1aa74bb00e"
+=======
+      "Version": "4.9.2.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "b08edf378e0e38959a6983e3d5902795"
+>>>>>>> master
     },
     "praise": {
       "Package": "praise",
