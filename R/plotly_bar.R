@@ -51,7 +51,7 @@ plotly_bar <- function(
     )
   }
 
-  plot_data <- dplyr::select(plot_data, select_cols)
+  plot_data <- dplyr::select(plot_data, dplyr::all_of(select_cols))
 
   if (is.null(bar_colors)) {
     bar_colors <- plot_data %>%

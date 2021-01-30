@@ -12,7 +12,7 @@ test_that("plotly_server", {
       "count" = dplyr::n(),
       .groups = "drop"
     )  %>%
-    dplyr::mutate("error" = .data$y / sqrt(.data$count))
+  dplyr::mutate("error" = .data$y / sqrt(.data$count))
 
   eventdata <-dplyr::filter(plot_data, x == "Aleena")
 
