@@ -29,5 +29,7 @@ Imports:
     stringr,
     shinydashboard,
     tibble,
+    tidyr,
     tidyselect,
-    utils
+    utils,
+    viridis
