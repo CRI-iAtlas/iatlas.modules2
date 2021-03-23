@@ -167,9 +167,13 @@ distributions_plot_server <- function(
       })
 
       output$distplot <- plotly::renderPlotly({
-        shiny::req(distplot_data(), distplot_source_name(), plotly_function())
+        shiny::req(
+          distplot_data(),
+          distplot_source_name(),
+          plotly_function()
+        )
         plotly_function()(
-          data = distplot_data(),
+          plot_data = distplot_data(),
           source_name = distplot_source_name(),
           x_col = "group",
           y_col = "feature_value",
@@ -205,7 +209,7 @@ distributions_plot_server <- function(
         "histogram",
         plot_data = distplot_data,
         eventdata = distplot_eventdata,
-        x_lab = plot_title(),
+        xlab = plot_title(),
         ...
       )
 

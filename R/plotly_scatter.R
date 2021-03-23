@@ -1,6 +1,6 @@
 #' Plotly Scatter
 #'
-#' @param data A dataframe
+#' @param plot_data A dataframe
 #' @param x_col A string
 #' @param y_col A string
 #' @param color_col A string or NA
@@ -18,7 +18,7 @@
 #' @export
 #' @importFrom magrittr %>%
 plotly_scatter <- function(
-  data,
+  plot_data,
   x_col = "x",
   y_col = "y",
   color_col = x_col,
@@ -34,7 +34,7 @@ plotly_scatter <- function(
   format_func = format_plotly
 ) {
 
-  p <- data %>%
+  p <- plot_data %>%
     dplyr::select(dplyr::all_of(c(
       "x"     = x_col,
       "y"     = y_col,
@@ -78,10 +78,10 @@ plotly_scatter <- function(
       plotly::layout(
         shapes = list(
           type = "line",
-          x0 = min(data$x),
-          y0 = min(data$y),
-          x1 = max(data$x),
-          y1 = max(data$y),
+          x0 = min(plot_data$x),
+          y0 = min(plot_data$y),
+          x1 = max(plot_data$x),
+          y1 = max(plot_data$y),
           line = list(color = "black", dash = "dot", alpha = 0.5)
         ),
         xaxis = list(range(0, 1)),

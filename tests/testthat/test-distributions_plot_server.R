@@ -53,7 +53,11 @@ test_that("distributions_plot_server_1_class", {
         distplot_data(),
         c("sample", "feature", "feature_value", "group", "group_description", "color")
       )
+      expect_equal(distplot_source_name(), "proxy1-distplot")
       session$setInputs("plot_type_choice" = "Violin")
+      expect_type(plotly_function(), "closure")
+      expect_type(plot_fill_colors(), "character")
+      expect_type(plot_title(), "character")
       expect_type(output$distplot, "character")
     }
   )
