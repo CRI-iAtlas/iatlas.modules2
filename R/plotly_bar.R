@@ -14,8 +14,9 @@
 #' @param bar_colors A string or NULL
 #' @param format_func A function
 #'
-#' @export
 #' @importFrom magrittr %>%
+#'
+#' @export
 plotly_bar <- function(
   plot_data,
   x_col = "x",

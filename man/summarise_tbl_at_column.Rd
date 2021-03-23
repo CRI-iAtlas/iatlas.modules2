@@ -13,7 +13,8 @@ summarise_tbl_at_column(tbl, column, grouping_columns, function_names)
 
 \item{grouping_columns}{A vector of strings, columns in the tibble}
 
-\item{function_names}{A function fun, a quosure style lambda ~ fun(.) or a list of either form.}
+\item{function_names}{A function fun, a quosure style lambda ~ fun(.) or a
+list of either form.}
 }
 \description{
 Summarise Tibble At Column

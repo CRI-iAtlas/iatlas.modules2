@@ -1,5 +1,24 @@
+#' Plotly Box
+#'
+#' @param plot_data A dataframe
+#' @param x_col A string
+#' @param y_col A string
+#' @param color_col A string or NA
+#' @param key_col A string or NA
+#' @param text_col A string or NA
+#' @param split_col A string or NA
+#' @param xlab A string
+#' @param ylab A string
+#' @param title A string
+#' @param source_name A string or NULL
+#' @param fill_colors A string or NULL
+#' @param format_func A function
+#'
+#'@importFrom magrittr %>%
+#'
+#' @export
 plotly_box <- function(
-  data,
+  plot_data,
   x_col = "x",
   y_col = "y",
   color_col = x_col,
@@ -14,7 +33,7 @@ plotly_box <- function(
   format_func = format_plotly
   ) {
 
-  data  %>%
+  plot_data  %>%
     dplyr::select(dplyr::all_of(c(
       "x"     = x_col,
       "y"     = y_col,
