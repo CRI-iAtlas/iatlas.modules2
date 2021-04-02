@@ -35,3 +35,5 @@ Imports:
     tidyselect (>= 1.0),
     utils,
     viridis (>= 0.5)
+URL: https://github.com/CRI-iAtlas/iatlas.modules
+BugReports: https://github.com/CRI-iAtlas/iatlas.modules/issues
