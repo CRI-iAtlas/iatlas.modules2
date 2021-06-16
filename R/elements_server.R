@@ -1,3 +1,5 @@
+
+
 # used in cohort selection ----------------------------------------------------
 
 numeric_filter_element_server <- function(
@@ -33,7 +35,7 @@ numeric_filter_element_server <- function(
       })
 
       features_tbl <- shiny::reactive({
-        req(numeric_type(), numeric_name(), dataset())
+        shiny::req(numeric_type(), numeric_name(), dataset())
         if(numeric_type() == "feature"){
           tbl <-
             iatlas.api.client::query_features_range(
@@ -56,14 +58,14 @@ numeric_filter_element_server <- function(
       feature_min <- shiny::reactive({
         shiny::req(features_tbl())
         features_tbl() %>%
-          dplyr::pull(value_min) %>%
+          dplyr::pull("value_min") %>%
           round(2)
       })
 
       feature_max <- shiny::reactive({
         shiny::req(features_tbl())
         features_tbl() %>%
-          dplyr::pull(value_max) %>%
+          dplyr::pull("value_max") %>%
           round(2)
       })
 

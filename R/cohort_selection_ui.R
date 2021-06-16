@@ -3,19 +3,19 @@ cohort_selection_ui <- function(id) {
   ns <- shiny::NS(id)
 
   shiny::tagList(
-    titleBox("iAtlas Explorer — Cohort Selection"),
-    textBox(
+    iatlas.modules::titleBox("iAtlas Explorer - Cohort Selection"),
+    iatlas.modules::textBox(
       width = 12,
       shiny::includeMarkdown(get_markdown_path("cohort_selection1"))
     ),
-    sectionBox(
+    iatlas.modules::sectionBox(
       title = "Cohort Selection",
-      messageBox(
+      iatlas.modules::messageBox(
         width = 12,
         shiny::includeMarkdown(get_markdown_path("cohort_selection2")),
       ),
       shiny::fluidRow(
-        optionsBox(
+        iatlas.modules::optionsBox(
           width = 12,
           shiny::column(
             width = 12,
@@ -38,7 +38,7 @@ cohort_selection_ui <- function(id) {
         ns = ns
       )
     ),
-    sectionBox(
+    iatlas.modules::sectionBox(
       title = "Group Key",
       data_table_ui(
         ns("sg_table"),

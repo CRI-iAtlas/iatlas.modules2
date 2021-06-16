@@ -1,6 +1,6 @@
 cohort_selection_server <- function(
   id,
-  cohort_obj
+  cohort_obj = NULL
 ){
   shiny::moduleServer(
     id,
@@ -33,11 +33,11 @@ cohort_selection_server <- function(
         shiny::req(cohort_obj())
         cohort_obj()$group_tbl %>%
           dplyr::select(
-            `Sample Group` = group,
-            `Group Name` = name,
-            `Group Size` = size,
-            Characteristics = characteristics,
-            `Plot Color` = color
+            "Sample Group" = .data$group,
+            "Group Name" = .data$name,
+            "Group Size" = .data$size,
+            "Characteristics" = .data$characteristics,
+            "Plot Color" = .data$color
           )
       })
 

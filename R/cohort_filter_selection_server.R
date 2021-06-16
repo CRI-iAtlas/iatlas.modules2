@@ -147,6 +147,8 @@ cohort_filter_selection_server <- function(id, dataset) {
         )
       })
 
+      # return filter obj ----
+
       selected_samples <- shiny::reactive({
         shiny::req(numeric_filter_samples(), group_filter_samples())
         intersect(numeric_filter_samples(), group_filter_samples())

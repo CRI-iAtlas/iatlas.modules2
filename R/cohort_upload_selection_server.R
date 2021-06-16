@@ -53,10 +53,10 @@ cohort_upload_selection_server <- function(id){
           dplyr::select("sample" = 1, "group" = input$user_group_choice)
 
         group_tbl <- sample_tbl %>%
-          dplyr::group_by(group) %>%
-          dplyr::summarise(size = dplyr::n(), .groups = "drop") %>%
-          dplyr::mutate(name = "", characteristics = "") %>%
-          dplyr::arrange(group) %>%
+          dplyr::group_by(.data$group) %>%
+          dplyr::summarise("size" = dplyr::n(), .groups = "drop") %>%
+          dplyr::mutate("name" = "", "characteristics" = "") %>%
+          dplyr::arrange(.data$group) %>%
           add_plot_colors_to_tbl()
 
         feature_tbl <- iatlas.api.client::query_features(
@@ -64,8 +64,8 @@ cohort_upload_selection_server <- function(id){
         )
 
         plot_colors <- group_tbl %>%
-          dplyr::select(group) %>%
-          dplyr::mutate(color = viridisLite::viridis(dplyr::n())) %>%
+          dplyr::select("group") %>%
+          dplyr::mutate("color" = viridisLite::viridis(dplyr::n())) %>%
           tibble::deframe(.)
 
         list(

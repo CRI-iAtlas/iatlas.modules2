@@ -59,14 +59,8 @@ cohort_group_selection_server <- function(id, selected_dataset) {
         )
       })
 
-      dedupe <- function(r) {
-        shiny::makeReactiveBinding("val")
-        shiny::observe(val <<- r(), priority = 10)
-        shiny::reactive(val)
-      }
-
       group_choice <- dedupe(shiny::reactive({
-        req(default_group())
+        shiny::req(default_group())
         if (is.null(input$group_choice)) return(default_group())
         else return(input$group_choice)
       }))

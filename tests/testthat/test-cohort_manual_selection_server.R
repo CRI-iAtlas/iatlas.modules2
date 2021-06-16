@@ -18,3 +18,23 @@ test_that("cohort_manual_selection_server_pcawg", {
     }
   )
 })
+
+test_that("cohort_manual_selection_server)tcga", {
+  shiny::testServer(
+    cohort_manual_selection_server,
+    {
+      session$setInputs("dataset_selection-dataset_choice" = "TCGA")
+      expect_type(default_dataset, "character")
+      expect_type(selected_dataset(), "character")
+      expect_equal(dataset(), "TCGA")
+      expect_named(filter_object(), c("samples", "filters"))
+      expect_type(filter_object()$samples, "character")
+      expect_equal(group_object()$dataset, "TCGA")
+      expect_equal(group_object()$group_name, "Immune_Subtype")
+      expect_equal(group_object()$group_display, "Immune Subtype")
+      expect_equal(group_object()$group_type, "tag")
+      cohort_object <- session$getReturned()()
+      expect_type(cohort_object, "list")
+    }
+  )
+})
