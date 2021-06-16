@@ -16,6 +16,13 @@
       "Repository": "CRAN",
       "Hash": "e4c04affc2cac20c8fec18385cd14691"
     },
+    "DT": {
+      "Package": "DT",
+      "Version": "0.18",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "a7d6660c869d4f41f856504828af4645"
+    },
     "MASS": {
       "Package": "MASS",
       "Version": "7.3-54",
@@ -156,6 +163,13 @@
       "Repository": "CRAN",
       "Hash": "2b06f9e415a62b6762e4b8098d2aecbc"
     },
+    "crul": {
+      "Package": "crul",
+      "Version": "1.1.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "345d571cc120a54c91ac952c6da4392e"
+    },
     "curl": {
       "Package": "curl",
       "Version": "4.3.1",
@@ -275,6 +289,13 @@
       "Repository": "CRAN",
       "Hash": "38c2580abbda249bd6afeec00d14f531"
     },
+    "ghql": {
+      "Package": "ghql",
+      "Version": "0.1.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "aa13ce03131717aa76a44259460ece6b"
+    },
     "gitcreds": {
       "Package": "gitcreds",
       "Version": "0.1.1",
@@ -288,6 +309,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "6efd734b14c6471cfe443345f3e35e29"
+    },
+    "graphql": {
+      "Package": "graphql",
+      "Version": "1.5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "9f7d9c6426833d0cdfea726201589c42"
     },
     "gridExtra": {
       "Package": "gridExtra",
@@ -331,6 +359,13 @@
       "Repository": "CRAN",
       "Hash": "6fdaa86d0700f8b3e92ee3c445a5a10d"
     },
+    "httpcode": {
+      "Package": "httpcode",
+      "Version": "0.3.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "13641a1c6d2cc98801b76764078e17ea"
+    },
     "httpuv": {
       "Package": "httpuv",
       "Version": "1.6.1",
@@ -344,6 +379,30 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "a525aba14184fec243f9eaec62fbed43"
+    },
+    "iatlas.api.client": {
+      "Package": "iatlas.api.client",
+      "Version": "0.16.1",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteUsername": "CRI-iAtlas",
+      "RemoteRepo": "iatlas.api.client",
+      "RemoteRef": "main",
+      "RemoteSha": "12099a9e9f30731a86dbc4028d06f76ab7caa8e1",
+      "RemoteHost": "api.github.com",
+      "Hash": "186d3294a3a35b2ed2d8d9c8c92ab388"
+    },
+    "iatlas.modules": {
+      "Package": "iatlas.modules",
+      "Version": "0.4.2",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteUsername": "CRI-iAtlas",
+      "RemoteRepo": "iatlas.modules",
+      "RemoteRef": "master",
+      "RemoteSha": "794fcdca0a69f754076ce74dad28042da2cf5f2d",
+      "RemoteHost": "api.github.com",
+      "Hash": "a4d1ca831b68647db784a145bc8f0010"
     },
     "ini": {
       "Package": "ini",
@@ -722,6 +781,20 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "7243004a708d06d4716717fa1ff5b2fe"
+    },
+    "triebeard": {
+      "Package": "triebeard",
+      "Version": "0.3.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "847a9d113b78baca4a9a8639609ea228"
+    },
+    "urltools": {
+      "Package": "urltools",
+      "Version": "1.7.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "e86a704261a105f4703f653e05defa3e"
     },
     "usethis": {
       "Package": "usethis",

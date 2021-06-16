@@ -1,3 +1,3 @@
-# iatlas.modules
+# iatlas.modules2
 
-devtools::install_github("CRI-iAtlas/iatlas.modules")
+devtools::install_github("CRI-iAtlas/iatlas.modules2")
