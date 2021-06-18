@@ -87,7 +87,7 @@ test_that("get_group_filtered_samples", {
       "parent_group_choice" = "ethnicity"
     )
   )
-  result1 <- get_group_filtered_samples(filter_obj, tcga_samples, "TCGA")
+  result1 <- get_group_filtered_samples(filter_obj, get_tcga_samples(), "TCGA")
   expect_type(result1, "character")
   expect_true(length(result1) > 0)
 })
@@ -97,7 +97,9 @@ test_that("get_filtered_group_tag_samples", {
     list("tags" = c("C1", "C2", "C3", "C4", "C6")),
     list("tags" = c("CLLE-ES", "MALY-DE"))
   )
-  result1 <- get_filtered_group_tag_samples(filter_obj, pcawg_samples, "PCAWG")
+  result1 <- get_filtered_group_tag_samples(
+    filter_obj, get_pcawg_samples(), "PCAWG"
+  )
   expect_type(result1, "character")
   expect_true(length(result1) > 0)
 })
@@ -181,7 +183,7 @@ test_that("get_numeric_filtered_samples", {
       "type" = "clinical"
     )
   )
-  result1 <- get_numeric_filtered_samples(filter_obj1, tcga_samples, "TCGA")
+  result1 <- get_numeric_filtered_samples(filter_obj1, get_tcga_samples(), "TCGA")
   expect_type(result1, "character")
   expect_true(length(result1) > 0)
 })
@@ -202,7 +204,7 @@ test_that("get_numeric_feature_filtered_samples", {
     )
   )
   result1 <- get_numeric_feature_filtered_samples(
-    filter_obj1, pcawg_samples, "PCAWG"
+    filter_obj1, get_pcawg_samples(), "PCAWG"
   )
   expect_type(result1, "character")
   expect_true(length(result1) > 0)

@@ -1,14 +1,4 @@
 
-tcga_samples_50 <- "TCGA_TCGA_Study" %>%
-  iatlas.api.client::query_cohort_samples(cohorts = .) %>%
-  dplyr::slice(1:50) %>%
-  dplyr::pull("sample_name")
-
-pcawg_samples_50 <- "PCAWG_PCAWG_Study" %>%
-  iatlas.api.client::query_cohort_samples(cohorts = .) %>%
-  dplyr::slice(1:50) %>%
-  dplyr::pull("sample_name")
-
 # tags --------------------------------------------------------------------
 
 test_that("build_cohort_tbl_by_tag", {
@@ -22,12 +12,12 @@ test_that("build_cohort_tbl_by_tag", {
   )
 
   result1 <- build_cohort_tbl_by_tag(
-    "TCGA", tcga_samples_50, "TCGA_Study"
+    "TCGA", get_tcga_samples_50(), "TCGA_Study"
   )
   expect_named(result1, expected_names)
 
   result2 <- build_cohort_tbl_by_tag(
-    "PCAWG", pcawg_samples_50, "PCAWG_Study"
+    "PCAWG", get_pcawg_samples_50(), "PCAWG_Study"
   )
   expect_named(result2, expected_names)
 })
@@ -42,7 +32,7 @@ test_that("build_tag_cohort_object", {
   expected_sample_names <- c("sample", "group")
 
   res1 <- build_tag_cohort_object(
-    "TCGA", tcga_samples, "TCGA_Study", "TCGA Study"
+    "TCGA", get_tcga_samples(), "TCGA_Study", "TCGA Study"
   )
   expect_named(res1, expected_names)
   expect_named(res1$sample_tbl, expected_sample_names)
@@ -50,7 +40,7 @@ test_that("build_tag_cohort_object", {
 
 
   res2 <- build_tag_cohort_object(
-    "PCAWG", pcawg_samples_50, "PCAWG_Study", "PCAWG Study"
+    "PCAWG", get_pcawg_samples_50(), "PCAWG_Study", "PCAWG Study"
   )
   expect_named(res2, expected_names)
   expect_named(res2$sample_tbl, expected_sample_names)
@@ -60,7 +50,7 @@ test_that("build_tag_cohort_object", {
 # clinical --------------------------------------------------------------------
 
 test_that("build_clinical_cohort_object", {
-  res1 <- build_clinical_cohort_object("TCGA", tcga_samples_50, "gender", "Gender")
+  res1 <- build_clinical_cohort_object("TCGA", get_tcga_samples_50(), "gender", "Gender")
   expected_names <- c(
     "sample_tbl", "group_tbl", "feature_tbl", "group_name", "group_display"
   )
@@ -78,8 +68,8 @@ test_that("build_clinical_cohort_object", {
 # mutation status -------------------------------------------------------------
 
 test_that("build_mutation_cohort_object", {
-  res1 <- build_mutation_cohort_object("TCGA", tcga_samples_50, 191)
-  res2 <- build_mutation_cohort_object("TCGA", tcga_samples_50, "191")
+  res1 <- build_mutation_cohort_object("TCGA", get_tcga_samples_50(), 191)
+  res2 <- build_mutation_cohort_object("TCGA", get_tcga_samples_50(), "191")
 
   expected_names <-  c(
     "sample_tbl", "group_tbl", "feature_tbl", "group_name", "group_display"
@@ -95,11 +85,11 @@ test_that("build_mutation_cohort_object", {
 # feature bins ------------------------------------------------------------
 
 feature_bin_sample_tbl1 <- build_feature_bin_sample_tbl(
-  "TCGA", tcga_samples_50, "leukocyte_fraction", 2L
+  "TCGA", get_tcga_samples_50(), "leukocyte_fraction", 2L
 )
 
 feature_bin_sample_tbl2 <- build_feature_bin_sample_tbl(
-  "PCAWG", pcawg_samples_50, "B_cells_Aggregate2", 2L
+  "PCAWG", get_pcawg_samples_50(), "B_cells_Aggregate2", 2L
 )
 
 test_that("Build Feature Bin Sample Tibble", {
@@ -129,10 +119,10 @@ test_that("Build Feature Bin Cohort Object",{
   expected_group_tbl_cols <- c("group", "size", "name", "characteristics", "color")
 
   res1 <- build_feature_bin_cohort_object(
-    "TCGA", tcga_samples_50, "leukocyte_fraction", 2L
+    "TCGA", get_tcga_samples_50(), "leukocyte_fraction", 2L
   )
   res2 <- build_feature_bin_cohort_object(
-    "PCAWG", pcawg_samples_50, "B_cells_Aggregate2", 2L
+    "PCAWG", get_pcawg_samples_50(), "B_cells_Aggregate2", 2L
   )
 
   expect_named(res1, expected_names)
@@ -179,21 +169,21 @@ test_that("Create Cohort Object", {
 
   res1 <- build_cohort_object(
     dataset = "TCGA",
-    samples = tcga_samples_50,
+    samples = get_tcga_samples_50(),
     group_name = "TCGA_Study",
     group_display = "TCGA Study",
     group_type = "tag"
   )
   res2 <- build_cohort_object(
     dataset = "PCAWG",
-    samples = pcawg_samples_50,
+    samples = get_pcawg_samples_50(),
     group_name = "PCAWG_Study",
     group_display = "PCAWG Study",
     group_type = "tag"
   )
   res3 <- build_cohort_object(
     dataset = "TCGA",
-    samples = tcga_samples_50,
+    samples = get_tcga_samples_50(),
     group_name = "Driver Mutation",
     group_display = "Driver Mutation",
     group_type = "custom",
@@ -201,7 +191,7 @@ test_that("Create Cohort Object", {
   )
   res4 <- build_cohort_object(
     dataset = "TCGA",
-    samples = tcga_samples_50,
+    samples = get_tcga_samples_50(),
     group_name = "Immune Feature Bins",
     group_display = "Immune Feature Bins",
     group_type = "custom",
@@ -225,7 +215,7 @@ test_that("Create Cohort Object", {
   expect_error(
     build_cohort_object(
       dataset = "TCGA",
-      samples = tcga_samples_50,
+      samples = get_tcga_samples_50(),
       group_name = "TCGA_Study",
       group_display = "TCGA Study",
       group_type = "not_type"
@@ -235,7 +225,7 @@ test_that("Create Cohort Object", {
   expect_error(
     build_cohort_object(
       dataset = "TCGA",
-      samples = tcga_samples_50,
+      samples = get_tcga_samples_50(),
       group_name = "TCGA_Study",
       group_display = "TCGA Study",
       group_type = "custom"
@@ -245,8 +235,8 @@ test_that("Create Cohort Object", {
 })
 
 test_that("build_cohort_object_from_objects", {
-  filter_object1 <- list(samples = tcga_samples_50)
-  filter_object2 <- list(samples = tcga_samples_50, filters = list())
+  filter_object1 <- list(samples = get_tcga_samples_50())
+  filter_object2 <- list(samples = get_tcga_samples_50(), filters = list())
   group_obj1 <- list(
     dataset = "TCGA",
     group_name = "Immune_Subtype",

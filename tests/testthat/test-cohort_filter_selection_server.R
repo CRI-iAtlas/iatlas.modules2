@@ -4,8 +4,8 @@ test_that("cohort_filter_selection_server_pcawg", {
     cohort_filter_selection_server,
     args = list(
       "dataset" = shiny::reactiveVal("PCAWG"),
-      "samples_tbl" = shiny::reactiveVal(pcawg_samples_tbl),
-      "features_tbl" = shiny::reactiveVal(pcawg_features_tbl)
+      "samples_tbl" = shiny::reactiveVal(get_pcawg_samples_tbl()),
+      "features_tbl" = shiny::reactiveVal(get_pcawg_features_tbl())
     ),
     {
       expect_type(samples(), "character")
@@ -52,8 +52,8 @@ test_that("cohort_filter_selection_server_tcga", {
     cohort_filter_selection_server,
     args = list(
       "dataset" = shiny::reactiveVal("TCGA"),
-      "samples_tbl" = shiny::reactiveVal(tcga_samples_tbl),
-      "features_tbl" = shiny::reactiveVal(tcga_features_tbl)
+      "samples_tbl" = shiny::reactiveVal(get_tcga_samples_tbl()),
+      "features_tbl" = shiny::reactiveVal(get_tcga_features_tbl())
     ),
     {
       expect_type(samples(), "character")

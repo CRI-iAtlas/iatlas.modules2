@@ -1,4 +1,3 @@
-
 test_that("Create Cohort Module String", {
     tbl1 <- dplyr::tibble(
         dataset = c(rep("DS1", 5), rep("DS2", 3)),
