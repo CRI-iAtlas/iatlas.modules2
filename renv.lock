@@ -382,15 +382,15 @@
     },
     "iatlas.api.client": {
       "Package": "iatlas.api.client",
-      "Version": "0.16.1",
+      "Version": "0.16.3",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.api.client",
       "RemoteRef": "main",
-      "RemoteSha": "12099a9e9f30731a86dbc4028d06f76ab7caa8e1",
+      "RemoteSha": "841e44fbdbdfadb2fc1fb0da78c53ab7efa61a50",
       "RemoteHost": "api.github.com",
-      "Hash": "186d3294a3a35b2ed2d8d9c8c92ab388"
+      "Hash": "cba6c71364db9ddbe22b37609eb136a3"
     },
     "iatlas.modules": {
       "Package": "iatlas.modules",
@@ -726,6 +726,13 @@
       "Repository": "CRAN",
       "Hash": "133639dc106955eee4ffb8ec73edac37"
     },
+    "snakecase": {
+      "Package": "snakecase",
+      "Version": "0.11.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "4079070fc210c7901c0832a3aeab894f"
+    },
     "sourcetools": {
       "Package": "sourcetools",
       "Version": "0.1.7",
@@ -756,10 +763,10 @@
     },
     "testthat": {
       "Package": "testthat",
-      "Version": "3.0.2",
+      "Version": "3.0.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "495e0434d9305716b6a87031570ce109"
+      "Hash": "3624827fc69a7ef793a67b36edb4db90"
     },
     "tibble": {
       "Package": "tibble",

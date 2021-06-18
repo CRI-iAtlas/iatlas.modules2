@@ -26,3 +26,8 @@ dedupe <- function(r) {
   shiny::observe(val <<- r(), priority = 10)
   shiny::reactive(val)
 }
+
+
+safe_is_na <- function(item){
+  !is.list(item) && is.na(item)
+}

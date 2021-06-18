@@ -3,34 +3,14 @@ read_rds_file <- function(file){
   readRDS(file.path(test_file_dir, file))
 }
 
-tcga_samples <- iatlas.api.client::query_dataset_samples("TCGA")$name
-pcawg_samples <- iatlas.api.client::query_dataset_samples("PCAWG")$name
+#TODO: fix using datasets
+tcga_samples_tbl <- iatlas.api.client::query_cohort_samples(cohorts = "TCGA_TCGA_Study")
+tcga_samples <- tcga_samples_tbl$sample_name
+tcga_features_tbl <- iatlas.api.client::query_features(cohorts = "TCGA")
 
-pcawg_immune_subtype_cohort_obj <- read_rds_file(
-  "pcawg_immune_subtype_cohort_obj.rds"
-)
+#TODO: fix using datasets
+pcawg_samples_tbl <- iatlas.api.client::query_cohort_samples(cohorts = "PCAWG_PCAWG_Study")
+pcawg_samples <- pcawg_samples_tbl$sample_name
+pcawg_features_tbl <- iatlas.api.client::query_features(cohorts = "PCAWG")
 
-tcga_immune_subtype_cohort_obj <- read_rds_file(
-  "tcga_immune_subtype_cohort_obj.rds"
-)
-
-pcawg_feature_bin_cohort_obj <- read_rds_file(
-  "pcawg_feature_bin_cohort_obj.rds"
-)
-
-tcga_feature_bin_cohort_obj <- read_rds_file(
-  "tcga_feature_bin_cohort_obj.rds"
-)
-
-tcga_immune_subtype_cohort_obj_50 <- read_rds_file(
-  "tcga_immune_subtype_cohort_obj_50.rds"
-)
-
-tcga_study_cohort_obj_50 <- read_rds_file(
-  "tcga_study_cohort_obj_50.rds"
-)
-
-tcga_feature_bin_cohort_obj_50 <- read_rds_file(
-  "tcga_feature_bin_cohort_obj_50.rds"
-)
 

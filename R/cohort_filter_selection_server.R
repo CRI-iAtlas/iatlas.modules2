@@ -1,36 +1,36 @@
-cohort_filter_selection_server <- function(id, dataset) {
+cohort_filter_selection_server <- function(
+  id,
+  dataset,
+  samples_tbl,
+  features_tbl
+) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
 
       samples <- shiny::reactive({
-        shiny::req(dataset())
-        iatlas.api.client::query_dataset_samples(dataset()) %>%
-          dplyr::pull("name")
+        shiny::req(samples_tbl())
+        dplyr::pull(samples_tbl(),"sample_name")
       })
 
 
       # group filters -----------------------------------------------------------
       tag_group_filter_tbl <- shiny::reactive({
+        shiny::req(dataset())
         iatlas.api.client::query_dataset_tags(dataset()) %>%
           dplyr::select("display" = "short_display", "name") %>%
           dplyr::mutate("name" = stringr::str_c("tag:", .data$name))
       })
 
       clinical_group_filter_tbl <- shiny::reactive({
-        dataset() %>%
-          iatlas.api.client::query_patients(datasets = .) %>%
-          dplyr::select("ethnicity", "gender", "race") %>%
-          tidyr::pivot_longer(cols = dplyr::everything()) %>%
+        shiny::req(dataset())
+        iatlas.api.client::query_cohorts(datasets = dataset()) %>%
+          dplyr::select("display" = "clinical") %>%
           tidyr::drop_na() %>%
-          dplyr::select("name") %>%
-          dplyr::distinct() %>%
           dplyr::mutate(
-            "display" = stringr::str_replace_all(.data$name, "_", " "),
-            "display" = stringr::str_to_title(.data$display),
-            "name" = stringr::str_c("clinical:", .data$name)
-          ) %>%
-          dplyr::select("display", "name")
+            "name" = stringr::str_to_lower(.data$display),
+            "name" = stringr::str_c("clinical:", .data$display)
+          )
       })
 
       group_filter_list <- shiny::reactive({
@@ -79,21 +79,26 @@ cohort_filter_selection_server <- function(id, dataset) {
 
       # # numeric_filters -------------------------------------------------------
 
-      # TODO fix to use cohort
       feature_tbl <- shiny::reactive({
-        iatlas.api.client::query_features(cohorts = dataset()) %>%
+        shiny::req(dataset(), features_tbl())
+        features_tbl() %>%
           dplyr::select("class", "display", "feature" = "name") %>%
           dplyr::mutate("feature" = stringr::str_c("feature:", .data$feature))
       })
 
+      # TODO: Fix to use api
       clinical_tbl <- shiny::reactive({
-        dataset() %>%
-          iatlas.api.client::query_patients(datasets = .) %>%
-          dplyr::select("age_at_diagnosis", "height", "weight") %>%
-          tidyr::pivot_longer(cols = dplyr::everything()) %>%
-          tidyr::drop_na() %>%
-          dplyr::select("name") %>%
-          dplyr::distinct() %>%
+        shiny::req(dataset())
+        if(dataset() == "TCGA"){
+          clinical <- dplyr::tibble(
+            "name" = c("age_at_diagnosis", "height", "weight")
+          )
+        } else {
+          clinical <- dplyr::tibble(
+            "name" = c("age_at_diagnosis")
+          )
+        }
+        clinical %>%
           dplyr::mutate(
             "display" = stringr::str_replace_all(.data$name, "_", " "),
             "display" = stringr::str_to_title(.data$display),

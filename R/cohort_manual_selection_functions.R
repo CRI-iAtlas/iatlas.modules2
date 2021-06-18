@@ -71,7 +71,6 @@ build_tag_cohort_object <- function(dataset, samples, tag_name, tag_display){
   feature_tbl <- iatlas.api.client::query_features(
     cohorts = dataset
   )
-
   list(
     "sample_tbl"    = sample_tbl,
     "group_tbl"     = group_tbl,

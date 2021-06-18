@@ -21,18 +21,12 @@ cohort_group_selection_server <- function(id, selected_dataset) {
       clinical_group_tbl <- shiny::reactive({
         shiny::req(selected_dataset())
         selected_dataset() %>%
-          iatlas.api.client::query_patients(datasets = .) %>%
-          dplyr::select("ethnicity", "gender", "race") %>%
-          tidyr::pivot_longer(cols = dplyr::everything()) %>%
+          iatlas.api.client::query_cohorts(datasets = .) %>%
+          dplyr::select("display" = "clinical") %>%
           tidyr::drop_na() %>%
-          dplyr::select("name") %>%
-          dplyr::distinct() %>%
           dplyr::mutate(
-            "display" = stringr::str_replace_all(.data$name, "_", " "),
-            "display" = stringr::str_to_title(.data$display)
-          ) %>%
-          dplyr::select("display", "name")
-
+            "name" = stringr::str_to_lower(.data$display)
+          )
       })
 
       available_groups_list <- shiny::reactive({
@@ -117,7 +111,7 @@ cohort_group_selection_server <- function(id, selected_dataset) {
       feature_bin_tbl <- shiny::reactive({
         shiny::req(group_choice() == "Immune Feature Bins", selected_dataset())
         selected_dataset() %>%
-          iatlas.api.client::query_features() %>%
+          iatlas.api.client::query_features(cohorts = .) %>%
           dplyr::select("class", "display", "name")
       })
 

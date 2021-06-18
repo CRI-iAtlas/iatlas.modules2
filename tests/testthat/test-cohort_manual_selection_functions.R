@@ -1,12 +1,13 @@
-tcga_samples_50 <- "TCGA" %>%
-  iatlas.api.client::query_dataset_samples() %>%
-  dplyr::slice(1:50) %>%
-  dplyr::pull("name")
 
-pcawg_samples_50 <- "PCAWG" %>%
-  iatlas.api.client::query_dataset_samples() %>%
+tcga_samples_50 <- "TCGA_TCGA_Study" %>%
+  iatlas.api.client::query_cohort_samples(cohorts = .) %>%
   dplyr::slice(1:50) %>%
-  dplyr::pull("name")
+  dplyr::pull("sample_name")
+
+pcawg_samples_50 <- "PCAWG_PCAWG_Study" %>%
+  iatlas.api.client::query_cohort_samples(cohorts = .) %>%
+  dplyr::slice(1:50) %>%
+  dplyr::pull("sample_name")
 
 # tags --------------------------------------------------------------------
 
@@ -23,16 +24,15 @@ test_that("build_cohort_tbl_by_tag", {
   result1 <- build_cohort_tbl_by_tag(
     "TCGA", tcga_samples_50, "TCGA_Study"
   )
+  expect_named(result1, expected_names)
+
   result2 <- build_cohort_tbl_by_tag(
     "PCAWG", pcawg_samples_50, "PCAWG_Study"
   )
-  expect_named(result1, expected_names)
   expect_named(result2, expected_names)
 })
 
 test_that("build_tag_cohort_object", {
-  res1 <- build_tag_cohort_object("TCGA", tcga_samples_50, "TCGA_Study", "TCGA Study")
-  res2 <- build_tag_cohort_object( "PCAWG", pcawg_samples_50, "PCAWG_Study", "PCAWG Study")
   expected_names <- c(
     "sample_tbl", "group_tbl", "feature_tbl", "group_name", "group_display"
   )
@@ -41,11 +41,19 @@ test_that("build_tag_cohort_object", {
   )
   expected_sample_names <- c("sample", "group")
 
+  res1 <- build_tag_cohort_object(
+    "TCGA", tcga_samples, "TCGA_Study", "TCGA Study"
+  )
   expect_named(res1, expected_names)
-  expect_named(res2, expected_names)
   expect_named(res1$sample_tbl, expected_sample_names)
-  expect_named(res2$sample_tbl, expected_sample_names)
   expect_named(res1$group_tbl, expected_group_names)
+
+
+  res2 <- build_tag_cohort_object(
+    "PCAWG", pcawg_samples_50, "PCAWG_Study", "PCAWG Study"
+  )
+  expect_named(res2, expected_names)
+  expect_named(res2$sample_tbl, expected_sample_names)
   expect_named(res2$group_tbl, expected_group_names)
 })
 
