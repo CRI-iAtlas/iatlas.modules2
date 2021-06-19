@@ -52,42 +52,6 @@ test_that("cohort_has_classes", {
   ))
 })
 
-test_that("show_co_submodules", {
-  expect_true(show_co_submodules(get_tcga_immune_subtype_cohort_obj_50()))
-  expect_true(show_co_submodules(get_tcga_feature_bin_cohort_obj_50()))
-  expect_false(show_co_submodules(get_pcawg_immune_subtype_cohort_obj()))
-})
-
-test_that("show_ud_submodule", {
-  expect_true(show_ud_submodule(get_tcga_immune_subtype_cohort_obj_50()))
-  expect_false(show_ud_submodule(get_pcawg_immune_subtype_cohort_obj()))
-  expect_false(show_ud_submodule(get_tcga_feature_bin_cohort_obj_50()))
-})
-
-test_that("show_md_submodule", {
-  expect_true(show_md_submodule(get_tcga_immune_subtype_cohort_obj_50()))
-  expect_false(show_md_submodule(get_pcawg_immune_subtype_cohort_obj()))
-  expect_true(show_md_submodule(get_tcga_feature_bin_cohort_obj_50()))
-})
-
-test_that("show_tilmap_submodules", {
-  expect_true(show_tilmap_submodules(get_tcga_immune_subtype_cohort_obj_50()))
-  expect_false(show_tilmap_submodules(get_pcawg_immune_subtype_cohort_obj()))
-  expect_true(show_tilmap_submodules(get_tcga_feature_bin_cohort_obj_50()))
-})
-
-test_that("show_ocp_submodule", {
-  expect_true(show_ocp_submodule(get_tcga_immune_subtype_cohort_obj_50()))
-  expect_false(show_ocp_submodule(get_pcawg_immune_subtype_cohort_obj()))
-  expect_true(show_ocp_submodule(get_tcga_feature_bin_cohort_obj_50()))
-})
-
-test_that("show_ctf_submodule", {
-  expect_true(show_ctf_submodule(get_tcga_immune_subtype_cohort_obj_50()))
-  expect_true(show_ctf_submodule(get_pcawg_immune_subtype_cohort_obj()))
-  expect_true(show_ctf_submodule(get_tcga_feature_bin_cohort_obj_50()))
-})
-
 ## API queries --------------------------------------------------------------
 # features ------------------------------------------------------------------
 
@@ -104,33 +68,33 @@ test_that("query_feature_values_with_cohort_object", {
 
   result1 <- query_feature_values_with_cohort_object(
     get_pcawg_immune_subtype_cohort_obj(),
-    feature = "Lymphocytes_Aggregate1"
+    features = "Lymphocytes_Aggregate1"
   )
   expect_named(result1, expected_columns)
   expect_length(result1$feature_value, 455L)
 
   result2 <- query_feature_values_with_cohort_object(
     get_pcawg_immune_subtype_cohort_obj(),
-    class = "Overall Proportion"
+    feature_classes  = "Overall Proportion"
   )
   expect_named(result2, expected_columns)
   expect_length(result2$feature_value, 0)
 
   result3 <- query_feature_values_with_cohort_object(
     get_pcawg_immune_subtype_cohort_obj(),
-    class = "EPIC"
+    feature_classes = "EPIC"
   )
   expect_named(result3, expected_columns)
   expect_length(result3$feature_value, 3640L)
 
   result4 <- query_feature_values_with_cohort_object(
     get_pcawg_feature_bin_cohort_obj(),
-    class = "EPIC"
+    feature_classes = "EPIC"
   )
 
   result5 <- query_feature_values_with_cohort_object(
     get_tcga_immune_subtype_cohort_obj_50(),
-    feature = "OS_time"
+    features = "OS_time"
   )
 
   result6 <- query_feature_values_with_cohort_object(
@@ -141,7 +105,7 @@ test_that("query_feature_values_with_cohort_object", {
       "sample_tbl" = iatlas.api.client::query_dataset_samples(datasets = "PCAWG") %>%
         dplyr::rename("sample" = "name")
     ),
-    feature = "Lymphocytes_Aggregate1"
+    features = "Lymphocytes_Aggregate1"
   )
 })
 
