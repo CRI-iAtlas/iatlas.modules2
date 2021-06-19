@@ -1,5 +1,15 @@
-build_cohort_object_from_objects <- function(group_object, filter_object){
-  purrr::invoke(build_cohort_object, c(group_object, filter_object))
+build_cohort_object_from_objects <- function(
+  group_object,
+  filter_object,
+  feature_tbl,
+  sample_tbl
+){
+  arg_list <- c(
+    group_object,
+    filter_object,
+    list("feature_tbl" = feature_tbl, "sample_tbl" = sample_tbl)
+  )
+  purrr::invoke(build_cohort_object, arg_list)
 }
 
 build_cohort_object <- function(
@@ -11,13 +21,15 @@ build_cohort_object <- function(
   mutation_id = NA,
   bin_immune_feature = NA,
   bin_number = NA,
-  filters = NA
+  filters = NA,
+  feature_tbl = NA,
+  sample_tbl = NA
 ){
 
   # tag types
   if(group_type == "tag"){
     cohort_object <- build_tag_cohort_object(
-      dataset, samples, group_name, group_display
+      dataset, samples, group_name, group_display, sample_tbl
     )
 
   # cutom types
@@ -40,6 +52,11 @@ build_cohort_object <- function(
   } else {
     stop(group_type, " is not an allowed group type.")
   }
+  if(safe_is_na(feature_tbl)){
+    feature_tbl <- iatlas.api.client::query_features(cohorts = dataset)
+  }
+
+  cohort_object$feature_tbl <- feature_tbl
   cohort_object$dataset <- dataset
   cohort_object$dataset_display <-
     iatlas.api.client::query_datasets() %>%
@@ -56,47 +73,40 @@ build_cohort_object <- function(
 
 # tag choice ------------------------------------------------------------------
 # TODO fix using cohorts
-# TODO use samples in features table
-build_tag_cohort_object <- function(dataset, samples, tag_name, tag_display){
-  cohort_tbl  <- build_cohort_tbl_by_tag(dataset, samples, tag_name)
-  sample_tbl   <- cohort_tbl %>%
-    dplyr::select("sample", "group") %>%
-    dplyr::arrange(.data$sample)
-  group_tbl <- cohort_tbl %>%
-    dplyr::select(-"sample") %>%
-    dplyr::distinct() %>%
+build_tag_cohort_object <- function(
+  dataset,
+  samples,
+  tag_name,
+  tag_display,
+  sample_tbl
+){
+  sample_tbl <- sample_tbl %>%
+    dplyr::filter(.data$sample_name %in% samples) %>%
+    dplyr::select(
+      "name" = "tag_long_display",
+      "group" = "tag_short_display",
+      "characteristics" = "tag_characteristics",
+      "color" = "tag_color",
+      "sample" = "sample_name"
+    )
+  group_tbl <- sample_tbl %>%
+    dplyr::group_by(dplyr::across(c(-"sample"))) %>%
+    dplyr::count(name = "size") %>%
+    dplyr::ungroup() %>%
     dplyr::arrange(.data$group) %>%
     add_plot_colors_to_tbl(.) %>%
     dplyr::select("name", "group", "characteristics", "color", "size")
-  feature_tbl <- iatlas.api.client::query_features(
-    cohorts = dataset
-  )
+  sample_tbl <- sample_tbl %>%
+    dplyr::select("sample", "group") %>%
+    dplyr::arrange(.data$sample)
+
   list(
     "sample_tbl"    = sample_tbl,
     "group_tbl"     = group_tbl,
-    "feature_tbl"   = feature_tbl,
     "group_name"    = tag_name,
     "group_display" = tag_display
 
   )
-}
-
-build_cohort_tbl_by_tag <- function(dataset, samples, tag){
-  tbl <-
-    iatlas.api.client::query_tag_samples(
-      datasets = dataset,
-      parent_tags = tag,
-      samples = samples
-    ) %>%
-    dplyr::select(
-      "name" = "long_display",
-      "group" = "short_display",
-      "characteristics",
-      "color",
-      "sample" = "samples",
-      "size"
-    ) %>%
-    tidyr::unnest(cols = "sample")
 }
 
 # clinical choice -------------------------------------------------------------
@@ -115,14 +125,10 @@ build_clinical_cohort_object <- function(
     dplyr::arrange(.data$group) %>%
     add_plot_colors_to_tbl(.) %>%
     dplyr::select("name", "group", "characteristics", "color", "size")
-  feature_tbl <- iatlas.api.client::query_features(
-    cohorts = dataset
-  )
 
   list(
     "sample_tbl"    = sample_tbl,
     "group_tbl"     = group_tbl,
-    "feature_tbl"   = feature_tbl,
     "group_name"    = group_name,
     "group_display" = group_display
 
@@ -171,14 +177,10 @@ build_mutation_cohort_object <- function(dataset, samples, mutation_id){
   group_tbl <- create_mutation_cohort_group_tbl(sample_tbl, mutation) %>%
     add_plot_colors_to_tbl()
 
-  feature_tbl <- iatlas.api.client::query_features(
-    cohorts = dataset
-  )
   group_name <- stringr::str_c("Mutation Status: ", mutation)
   list(
     "sample_tbl"    = sample_tbl,
     "group_tbl"     = group_tbl,
-    "feature_tbl"   = feature_tbl,
     "group_name"    = group_name,
     "group_display" = group_name
   )
@@ -218,15 +220,11 @@ build_feature_bin_cohort_object <- function(
 
   group_tbl <- build_feature_bin_group_tbl(sample_tbl, feature_display) %>%
     add_plot_colors_to_tbl()
-  feature_tbl <- iatlas.api.client::query_features(
-    cohorts = dataset
-  )
   group_name  = stringr::str_c("Immune Feature Bins:", feature_display)
 
   list(
     "sample_tbl"    = sample_tbl,
     "group_tbl"     = group_tbl,
-    "feature_tbl"   = feature_tbl,
     "group_name"    = group_name,
     "group_display" = group_name
   )

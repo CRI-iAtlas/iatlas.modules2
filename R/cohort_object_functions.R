@@ -127,26 +127,33 @@ query_feature_values_with_cohort_object <- function(
 
 # genes -----------------------------------------------------------------------
 
-# TODO: remove distinct
+
 query_gene_expression_with_cohort_object <- function(
   cohort_object,
   gene_types = NA,
   entrez = NA
 ){
   if (cohort_object$group_type == "tag"){
-    parent_tags <- cohort_object$group_name
-    samples <- NA
+    cohort <-stringr::str_c(
+      cohort_object$dataset,
+      cohort_object$group_name,
+      sep = "_"
+    )
+  } else if (cohort_object$group_type == "clinical"){
+    cohort <-stringr::str_c(
+      cohort_object$dataset,
+      stringr::str_to_title(cohort_object$group_name),
+      sep = "_"
+    )
   } else {
-    parent_tags <- NA
-    samples <- cohort_object$sample_tbl$sample
+    cohort <- cohort_object$dataset
   }
 
   iatlas.api.client::query_gene_expression(
-    datasets = cohort_object$dataset,
-    parent_tags = parent_tags,
-    samples = cohort_object$sample_tbl$sample,
+    cohort = cohort,
     gene_types = gene_types,
     entrez = entrez
   ) %>%
-    dplyr::distinct()
+    dplyr::filter(.data$sample %in% cohort_object$sample_tbl$sample)
+
 }

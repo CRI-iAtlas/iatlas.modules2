@@ -3,7 +3,7 @@ cohort_manual_selection_server <- function(id){
     id,
     function(input, output, session) {
 
-      default_dataset <- "PCAWG"
+      default_dataset <- "TCGA"
 
       selected_dataset <- cohort_dataset_selection_server(
         "dataset_selection",
@@ -15,38 +15,64 @@ cohort_manual_selection_server <- function(id){
         else return(selected_dataset())
       }))
 
-      # TODO: fix using dataset cohort
-      samples_tbl <- shiny::reactive({
-        if(dataset() == "TCGA"){
-          cohort <- "TCGA_TCGA_Study"
-        } else {
-          cohort <- "PCAWG_PCAWG_Study"
-        }
-        shiny::req(dataset())
-        iatlas.api.client::query_cohort_samples(cohorts = cohort)
-      })
-
-      features_tbl <- shiny::reactive({
+      feature_tbl <- shiny::reactive({
         shiny::req(dataset())
         iatlas.api.client::query_features(cohorts = dataset())
       })
 
       group_object <- cohort_group_selection_server(
         "group_selection",
-        dataset
+        dataset,
+        feature_tbl
       )
+
+      sample_tbl <- shiny::reactive({
+        shiny::req(dataset(),group_object())
+
+        if(group_object()$group_type == "tag"){
+          cohort <-
+            iatlas.api.client::query_cohorts(
+              datasets = dataset(),
+              tags = group_object()$group_name
+            ) %>%
+            dplyr::pull("name")
+        } else if (group_object()$group_type == "clinical"){
+          cohort <-
+            iatlas.api.client::query_cohorts(
+              datasets = dataset(),
+              clinical = group_object()$group_display
+            ) %>%
+            dplyr::pull("name")
+        } else {
+          # TODO: fix using dataset cohort
+          # cohort = dataset()
+          if(dataset() == "TCGA"){
+            cohort <- "TCGA_TCGA_Study"
+          } else {
+            cohort <- "PCAWG_PCAWG_Study"
+          }
+        }
+        iatlas.api.client::query_cohort_samples(cohorts = cohort)
+      })
 
       filter_object <- cohort_filter_selection_server(
         "filter_selection",
         dataset,
-        samples_tbl,
-        features_tbl
+        sample_tbl,
+        feature_tbl
       )
 
       cohort_object <- shiny::reactive({
-        shiny::req(group_object(), filter_object())
-        build_cohort_object_from_objects(group_object(), filter_object())
+
+        obj <- build_cohort_object_from_objects(
+          group_object(),
+          filter_object(),
+          feature_tbl(),
+          sample_tbl()
+        )
+        return(obj)
       })
+
       return(cohort_object)
     }
   )

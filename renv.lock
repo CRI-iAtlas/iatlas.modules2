@@ -214,10 +214,10 @@
     },
     "dplyr": {
       "Package": "dplyr",
-      "Version": "1.0.6",
+      "Version": "1.0.7",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "19e84500b64bc7e589cb1e2550e25832"
+      "Hash": "36f1ae62f026c8ba9f9b5c9a08c03297"
     },
     "ellipsis": {
       "Package": "ellipsis",
@@ -382,15 +382,15 @@
     },
     "iatlas.api.client": {
       "Package": "iatlas.api.client",
-      "Version": "0.16.3",
+      "Version": "0.17.0",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.api.client",
       "RemoteRef": "main",
-      "RemoteSha": "841e44fbdbdfadb2fc1fb0da78c53ab7efa61a50",
+      "RemoteSha": "afc0c4bcbca72c8a3e422a7b0da36b7736eab9a5",
       "RemoteHost": "api.github.com",
-      "Hash": "cba6c71364db9ddbe22b37609eb136a3"
+      "Hash": "7ede18395c2655813fe04c86a374bcd1"
     },
     "iatlas.modules": {
       "Package": "iatlas.modules",
@@ -560,10 +560,10 @@
     },
     "plotly": {
       "Package": "plotly",
-      "Version": "4.9.4",
+      "Version": "4.9.4.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "3f385f2cd5c270ea3bbe68cb94f7c558"
+      "Hash": "af4b92cb3828aa30002e2f945c49c2d7"
     },
     "praise": {
       "Package": "praise",

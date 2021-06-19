@@ -7,12 +7,35 @@ test_that("cohort_manual_selection_server_pcawg", {
       session$setInputs("dataset_selection-dataset_choice" = "PCAWG")
       expect_equal(selected_dataset(), "PCAWG")
       expect_equal(dataset(), "PCAWG")
-      expect_type(samples_tbl(), "list")
-      expect_type(features_tbl(), "list")
+      expect_type(sample_tbl(), "list")
+      expect_type(feature_tbl(), "list")
       expect_equal(group_object()$dataset, "PCAWG")
       expect_equal(group_object()$group_name, "Immune_Subtype")
       expect_equal(group_object()$group_display, "Immune Subtype")
       expect_equal(group_object()$group_type, "tag")
+      expect_named(filter_object(), c("samples", "filters"))
+      expect_type(filter_object()$samples, "character")
+      cohort_object <- session$getReturned()()
+      expect_type(cohort_object, "list")
+    }
+  )
+})
+
+test_that("cohort_manual_selection_server_pcawg_gender", {
+  shiny::testServer(
+    cohort_manual_selection_server,
+    {
+      expect_type(default_dataset, "character")
+      session$setInputs("dataset_selection-dataset_choice" = "PCAWG")
+      expect_equal(selected_dataset(), "PCAWG")
+      expect_equal(dataset(), "PCAWG")
+      expect_type(feature_tbl(), "list")
+      session$setInputs("group_selection-group_choice" = "gender")
+      expect_equal(group_object()$dataset, "PCAWG")
+      expect_equal(group_object()$group_name, "gender")
+      expect_equal(group_object()$group_display, "Gender")
+      expect_equal(group_object()$group_type, "clinical")
+      expect_type(sample_tbl(), "list")
       expect_named(filter_object(), c("samples", "filters"))
       expect_type(filter_object()$samples, "character")
       cohort_object <- session$getReturned()()
