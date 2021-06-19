@@ -1,5 +1,10 @@
-#TODO: fix using datasets
 get_tcga_samples_tbl <- memoise::memoise(
+  function(){
+    iatlas.api.client::query_cohort_samples(cohorts = "TCGA")
+  }
+)
+
+get_tcga_study_samples_tbl <- memoise::memoise(
   function(){
     iatlas.api.client::query_cohort_samples(cohorts = "TCGA_TCGA_Study")
   }
@@ -23,8 +28,13 @@ get_tcga_features_tbl <- memoise::memoise(
   }
 )
 
-#TODO: fix using datasets
 get_pcawg_samples_tbl <- memoise::memoise(
+  function(){
+    iatlas.api.client::query_cohort_samples(cohorts = "PCAWG")
+  }
+)
+
+get_pcawg_study_samples_tbl <- memoise::memoise(
   function(){
     iatlas.api.client::query_cohort_samples(cohorts = "PCAWG_PCAWG_Study")
   }

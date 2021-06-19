@@ -44,13 +44,7 @@ cohort_manual_selection_server <- function(id){
             ) %>%
             dplyr::pull("name")
         } else {
-          # TODO: fix using dataset cohort
-          # cohort = dataset()
-          if(dataset() == "TCGA"){
-            cohort <- "TCGA_TCGA_Study"
-          } else {
-            cohort <- "PCAWG_PCAWG_Study"
-          }
+          cohort = dataset()
         }
         iatlas.api.client::query_cohort_samples(cohorts = cohort)
       })

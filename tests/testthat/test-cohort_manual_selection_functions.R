@@ -11,7 +11,11 @@ test_that("build_tag_cohort_object", {
   expected_sample_names <- c("sample", "group")
 
   res1 <- build_tag_cohort_object(
-    "TCGA", get_tcga_samples(), "TCGA_Study", "TCGA Study", get_tcga_samples_tbl()
+    "TCGA",
+    get_tcga_samples_50(),
+    "TCGA_Study",
+    "TCGA Study",
+    get_tcga_study_samples_tbl()
   )
   expect_named(res1, expected_names)
   expect_named(res1$sample_tbl, expected_sample_names)
@@ -19,7 +23,11 @@ test_that("build_tag_cohort_object", {
 
 
   res2 <- build_tag_cohort_object(
-    "PCAWG", get_pcawg_samples_50(), "PCAWG_Study", "PCAWG Study", get_pcawg_samples_tbl()
+    "PCAWG",
+    get_pcawg_samples_50(),
+    "PCAWG_Study",
+    "PCAWG Study",
+    get_pcawg_study_samples_tbl()
   )
   expect_named(res2, expected_names)
   expect_named(res2$sample_tbl, expected_sample_names)
