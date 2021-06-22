@@ -2,6 +2,15 @@
 
 # used in cohort selection ----------------------------------------------------
 
+#' Numeric Filter Element Server
+#'
+#' @param id A shiny ID
+#' @param reactive_values a shiny::reactiveValues() object
+#' @param module_id A unique value for this instance of the element being called
+#' @param numeric_named_list A named list
+#' @param dataset A string
+#'
+#' @export
 numeric_filter_element_server <- function(
   id,
   reactive_values,
@@ -99,6 +108,15 @@ numeric_filter_element_server <- function(
   )
 }
 
+#' Group Filter Element Server
+#'
+#' @param id A shiny ID
+#' @param reactive_values a shiny::reactiveValues() object
+#' @param module_id A unique value for this instance of the element being called
+#' @param group_named_list A named list
+#' @param dataset A string
+#'
+#' @export
 group_filter_element_server <- function(
   id,
   reactive_values,
@@ -175,6 +193,14 @@ group_filter_element_server <- function(
 
 # used in driver module -------------------------------------------------------
 
+#' Numerical Model Covariate Element Server
+#'
+#' @param id A shiny ID
+#' @param reactive_values a shiny::reactiveValues() object
+#' @param module_id A unique value for this instance of the element being called
+#' @param covariate_list A named list
+#'
+#' @export
 numeric_model_covariate_element_server <- function(
   id,
   reactive_values,
@@ -219,6 +245,14 @@ numeric_model_covariate_element_server <- function(
   )
 }
 
+#' Categorical Model Covariate Element Server
+#'
+#' @param id A shiny ID
+#' @param reactive_values a shiny::reactiveValues() object
+#' @param module_id A unique value for this instance of the element being called
+#' @param covariate_list A named list
+#'
+#' @export
 categorical_model_covariate_element_server <- function(
   id,
   reactive_values,

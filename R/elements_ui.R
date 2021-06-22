@@ -1,5 +1,10 @@
 # used in cohort selection ----------------------------------------------------
 
+#' Numeric Filter Element UI
+#'
+#' @param id A shiny ID
+#'
+#' @export
 numeric_filter_element_ui <- function(id){
     ns <- shiny::NS(id)
     shiny::tagList(
@@ -8,6 +13,11 @@ numeric_filter_element_ui <- function(id){
     )
 }
 
+#' Group Filter Element UI
+#'
+#' @param id A shiny ID
+#'
+#' @export
 group_filter_element_ui <- function(id){
     ns <- shiny::NS(id)
     shiny::tagList(
@@ -18,6 +28,11 @@ group_filter_element_ui <- function(id){
 
 # used in driver module -------------------------------------------------------
 
+#' Numerical Model Covariate Element UI
+#'
+#' @param id A shiny ID
+#'
+#' @export
 numeric_model_covariate_element_ui <- function(id){
     ns <- shiny::NS(id)
     shiny::tagList(
@@ -26,6 +41,11 @@ numeric_model_covariate_element_ui <- function(id){
     )
 }
 
+#' Categorical Model Covariate Element UI
+#'
+#' @param id A shiny ID
+#'
+#' @export
 categorical_model_covariate_element_ui <- function(id){
     ns <- shiny::NS(id)
     shiny::tagList(

@@ -1,6 +1,12 @@
+#' Cohort Selection Server
+#'
+#' @param id A shiny ID
+#' @param ... unused args
+#'
+#' @export
 cohort_selection_server <- function(
   id,
-  cohort_obj = NULL
+  ...
 ){
   shiny::moduleServer(
     id,

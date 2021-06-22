@@ -1,3 +1,11 @@
+#' Insert Remove Element Server
+#'
+#' @param id A shiny ID
+#' @param element_module A shiny server module
+#' @param element_module_ui A shiny UI module
+#' @param remove_ui_event A Shiny reactive
+#'
+#' @export
 insert_remove_element_server <- function(
   id,
   element_module,

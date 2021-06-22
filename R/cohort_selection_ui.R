@@ -1,3 +1,8 @@
+#' Cohort Selection UI
+#'
+#' @param id A shiny ID
+#'
+#' @export
 cohort_selection_ui <- function(id) {
 
   ns <- shiny::NS(id)
