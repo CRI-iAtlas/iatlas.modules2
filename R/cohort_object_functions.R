@@ -78,12 +78,14 @@ cohort_has_group <- function(cohort_object, groups){
 #' @param cohort_object A named list
 #' @param features A vector of strings
 #' @param feature_classes A vector of strings
+#' @param groups A vector of strings
 #'
 #' @export
 query_feature_values_with_cohort_object <- function(
   cohort_object,
   features = NA,
-  feature_classes = NA
+  feature_classes = NA,
+  groups = NA
 ){
   if (cohort_object$group_type == "tag"){
     cohort <-stringr::str_c(
@@ -100,12 +102,19 @@ query_feature_values_with_cohort_object <- function(
   } else {
       cohort <- cohort_object$dataset
   }
-  iatlas.api.client::query_feature_values(
+  tbl <- iatlas.api.client::query_feature_values(
     cohort = cohort,
     features = features,
     feature_classes = feature_classes
   ) %>%
     dplyr::filter(.data$sample %in% cohort_object$sample_tbl$sample)
+  if(!is.na(groups)){
+    group_samples <- cohort_object$sample_tbl %>%
+      dplyr::filter(.data$group %in% groups) %>%
+      dplyr::pull("sample")
+    tbl <- dplyr::filter(tbl, .data$sample %in% group_samples)
+  }
+  return(tbl)
 }
 
 # genes -----------------------------------------------------------------------

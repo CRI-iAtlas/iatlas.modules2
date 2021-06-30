@@ -7,7 +7,8 @@
 query_feature_values_with_cohort_object(
   cohort_object,
   features = NA,
-  feature_classes = NA
+  feature_classes = NA,
+  groups = NA
 )
 }
 \arguments{
@@ -16,6 +17,8 @@ query_feature_values_with_cohort_object(
 \item{features}{A vector of strings}
 
 \item{feature_classes}{A vector of strings}
+
+\item{groups}{A vector of strings}
 }
 \description{
 Query Feature Values With Cohort Object
