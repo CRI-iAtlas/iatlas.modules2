@@ -32,7 +32,7 @@ build_cohort_object <- function(
       dataset, samples, group_name, group_display, sample_tbl
     )
 
-  # cutom types
+  # custom types
   } else if(group_type == "custom"){
     if(group_name == "Driver Mutation"){
       cohort_object <- build_mutation_cohort_object(
@@ -157,22 +157,18 @@ build_cohort_tbl_by_clinical <- function(samples, clinical){
 
 # mutation choice -------------------------------------------------------------
 
-# TODO: Fix after mutation status can be queried
-# TODO fix using cohorts
-# TODO use samples in features table
 build_mutation_cohort_object <- function(dataset, samples, mutation_id){
 
   mutation <- iatlas.api.client::query_mutations(ids = as.integer(mutation_id)) %>%
-    dplyr::mutate("mutation" = stringr::str_c(.data$hgnc, ":", .data$code)) %>%
-    dplyr::pull(mutation) %>%
+    dplyr::pull("mutation_name") %>%
     unique()
 
   sample_tbl <-
-    iatlas.api.client::query_samples_by_mutation_status(
-      mutation_ids = as.integer(mutation_id),
+    iatlas.api.client::query_mutation_statuses(
+      ids = as.integer(mutation_id),
       samples = samples
     ) %>%
-    dplyr::select("sample", "group" = "status")
+    dplyr::select("sample" = "sample_name", "group" = "mutation_status")
 
   group_tbl <- create_mutation_cohort_group_tbl(sample_tbl, mutation) %>%
     add_plot_colors_to_tbl()
