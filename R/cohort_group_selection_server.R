@@ -89,7 +89,7 @@ cohort_group_selection_server <- function(
           inputId  = ns("driver_mutation_choice_id"),
           label    = "Select or Search for Driver Mutation",
           choices  = mutation_tbl() %>%
-            dplyr::select("mutation", "id") %>%
+            dplyr::select("mutation", "mutation_id") %>%
             tibble::deframe(.)
         )
       })

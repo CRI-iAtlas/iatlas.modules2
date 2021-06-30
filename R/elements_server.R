@@ -51,6 +51,7 @@ numeric_filter_element_server <- function(
               cohorts = dataset(),
               features = numeric_name()
             ) %>%
+            print() %>%
             dplyr::distinct()
         } else if (numeric_type() == "clinical"){
           tbl <-
@@ -80,6 +81,8 @@ numeric_filter_element_server <- function(
 
       output$slider_ui <- shiny::renderUI({
         shiny::req(feature_max(), feature_min())
+        print(feature_max())
+        print(feature_min())
 
         shiny::sliderInput(
           inputId = ns("range"),
