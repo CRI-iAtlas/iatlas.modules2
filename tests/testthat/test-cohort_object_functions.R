@@ -107,6 +107,15 @@ test_that("query_feature_values_with_cohort_object", {
     ),
     features = "Lymphocytes_Aggregate1"
   )
+
+  result7 <- query_feature_values_with_cohort_object(
+    get_pcawg_immune_subtype_cohort_obj(),
+    features = "Lymphocytes_Aggregate1",
+    groups = "C1"
+  )
+  expect_named(result7, expected_columns)
+  expect_true(length(result7$feature_value) < 455L)
+  expect_true(length(result7$feature_value) > 0L)
 })
 
 # genes ---------------------------------------------------------------------
