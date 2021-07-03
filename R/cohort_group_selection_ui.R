@@ -12,6 +12,7 @@ cohort_group_selection_ui <- function(id) {
       shiny::column(
         width = 12,
         shiny::uiOutput(ns("select_group_ui")),
+
         shiny::conditionalPanel(
           condition = "output.display_immune_feature_bins",
           shiny::uiOutput(ns("select_immune_feature_bins_group_ui")),
@@ -25,6 +26,7 @@ cohort_group_selection_ui <- function(id) {
           ),
           ns = ns
         ),
+
         shiny::conditionalPanel(
           condition = "output.display_driver_mutation",
           shiny::uiOutput(ns("select_driver_mutation_group_ui")),

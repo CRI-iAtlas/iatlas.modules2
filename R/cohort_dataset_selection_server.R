@@ -6,7 +6,8 @@ cohort_dataset_selection_server <- function(
     id,
     function(input, output, session) {
       ns <- session$ns
-      choices = iatlas.api.client::query_datasets(types = "analysis") %>%
+
+      choices <- iatlas.api.client::query_datasets(types = "analysis") %>%
         dplyr::select("display", "name") %>%
         tibble::deframe(.)
 

@@ -9,6 +9,7 @@ cohort_manual_selection_server <- function(id){
         "dataset_selection",
         default_dataset
       )
+
       dataset <- dedupe(shiny::reactive({
         shiny::req(default_dataset)
         if (is.null(selected_dataset())) return(default_dataset)
@@ -27,7 +28,7 @@ cohort_manual_selection_server <- function(id){
       )
 
       sample_tbl <- shiny::reactive({
-        shiny::req(dataset(),group_object())
+        shiny::req(dataset(), group_object())
 
         if(group_object()$group_type == "tag"){
           cohort <-
