@@ -4,6 +4,7 @@ cohort_manual_selection_server <- function(id){
     function(input, output, session) {
 
       default_dataset <- "TCGA"
+      default_group   <- "Immune_Subtype"
 
       selected_dataset <- cohort_dataset_selection_server(
         "dataset_selection",
@@ -24,6 +25,7 @@ cohort_manual_selection_server <- function(id){
       group_object <- cohort_group_selection_server(
         "group_selection",
         dataset,
+        default_group,
         feature_tbl
       )
 
@@ -35,13 +37,6 @@ cohort_manual_selection_server <- function(id){
             iatlas.api.client::query_cohorts(
               datasets = dataset(),
               tags = group_object()$group_name
-            ) %>%
-            dplyr::pull("name")
-        } else if (group_object()$group_type == "clinical"){
-          cohort <-
-            iatlas.api.client::query_cohorts(
-              datasets = dataset(),
-              clinical = group_object()$group_display
             ) %>%
             dplyr::pull("name")
         } else {

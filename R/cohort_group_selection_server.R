@@ -1,6 +1,7 @@
 cohort_group_selection_server <- function(
   id,
   selected_dataset,
+  default_group,
   features_tbl
 ) {
   shiny::moduleServer(
@@ -22,44 +23,27 @@ cohort_group_selection_server <- function(
         build_custom_group_tbl(selected_dataset())
       })
 
-      clinical_group_tbl <- shiny::reactive({
-        shiny::req(selected_dataset())
-        selected_dataset() %>%
-          iatlas.api.client::query_cohorts(datasets = .) %>%
-          dplyr::select("display" = "clinical") %>%
-          tidyr::drop_na() %>%
-          dplyr::mutate(
-            "name" = stringr::str_to_lower(.data$display)
-          )
-      })
-
       available_groups_list <- shiny::reactive({
-        shiny::req(tag_group_tbl(), custom_group_tbl(), clinical_group_tbl())
+        shiny::req(tag_group_tbl(), custom_group_tbl())
         build_cohort_group_list(
           tag_group_tbl(),
-          custom_group_tbl(),
-          clinical_group_tbl()
+          custom_group_tbl()
         )
       })
 
-      default_group <- shiny::reactive({
-        shiny::req(available_groups_list())
-        available_groups_list()[[1]]
-      })
-
       output$select_group_ui <- shiny::renderUI({
-        shiny::req(available_groups_list(), default_group())
+        shiny::req(available_groups_list(), default_group)
         shiny::selectInput(
           inputId = ns("group_choice"),
           label = shiny::strong("Select or Search for Grouping Variable"),
           choices = available_groups_list(),
-          selected = default_group()
+          selected = default_group
         )
       })
 
       group_choice <- dedupe(shiny::reactive({
-        shiny::req(default_group())
-        if (is.null(input$group_choice)) return(default_group())
+        shiny::req(default_group)
+        if (is.null(input$group_choice)) return(default_group)
         else return(input$group_choice)
       }))
 
@@ -81,7 +65,9 @@ cohort_group_selection_server <- function(
         suspendWhenHidden = FALSE
       )
 
-      mutation_tbl <- shiny::reactive(build_cohort_mutation_tbl())
+      mutation_tbl <- shiny::reactive({
+        build_cohort_mutation_tbl()
+      })
 
       output$select_driver_mutation_group_ui <- shiny::renderUI({
         shiny::req(group_choice() == "Driver Mutation", mutation_tbl())
@@ -112,21 +98,24 @@ cohort_group_selection_server <- function(
         suspendWhenHidden = FALSE
       )
 
-      feature_bin_tbl <- shiny::reactive({
+      feature_bin_list <- shiny::reactive({
         shiny::req(group_choice() == "Immune Feature Bins", features_tbl())
-        dplyr::select(features_tbl(), "class", "display", "name")
+        features_tbl() %>%
+          dplyr::select("class", "display", "name") %>%
+          iatlas.modules::create_nested_named_list(
+            names_col1 = "class",
+            names_col2 = "display",
+            values_col = "name"
+          )
       })
 
-      # TODO: use sample names from feature object to query features, not dataset
       output$select_immune_feature_bins_group_ui <- shiny::renderUI({
-        shiny::req(feature_bin_tbl())
+        shiny::req(feature_bin_list())
 
         shiny::selectInput(
           inputId = ns("bin_immune_feature_choice"),
           label = "Select or Search for feature",
-          choices = iatlas.modules::create_nested_named_list(
-            feature_bin_tbl(), values_col = "name"
-          )
+          choices = feature_bin_list()
         )
       })
 
@@ -156,11 +145,6 @@ cohort_group_selection_server <- function(
           group_object$group_type <- "custom"
           group_object$bin_immune_feature <- input$bin_immune_feature_choice
           group_object$bin_number <- input$bin_number_choice
-        } else if (group_choice() %in% c("gender", "race", "etnicity")) {
-          group_object$group_display <- group_choice() %>%
-            stringr::str_replace_all("_", " ") %>%
-            stringr::str_to_title(.)
-          group_object$group_type <- "clinical"
         } else {
           group_object$group_display <- group_choice() %>%
             iatlas.api.client::query_tags(tags = .) %>%

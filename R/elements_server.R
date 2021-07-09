@@ -33,35 +33,14 @@ numeric_filter_element_server <- function(
         )
       })
 
-      numeric_type <- shiny::reactive({
-        shiny::req(input$numeric_choice)
-        stringr::str_remove_all(input$numeric_choice, ":[:print:]+$")
-      })
-
-      numeric_name <- shiny::reactive({
-        shiny::req(input$numeric_choice)
-        stringr::str_remove_all(input$numeric_choice, "^[:print:]+:")
-      })
-
       features_tbl <- shiny::reactive({
-        shiny::req(numeric_type(), numeric_name(), dataset())
-        if(numeric_type() == "feature"){
-          tbl <-
-            iatlas.api.client::query_features_range(
-              cohorts = dataset(),
-              features = numeric_name()
-            ) %>%
-            dplyr::distinct()
-        } else if (numeric_type() == "clinical"){
-          tbl <-
-            iatlas.api.client::query_patients(datasets = dataset()) %>%
-            dplyr::select("value" = numeric_name()) %>%
-            tidyr::drop_na() %>%
-            dplyr::summarise(
-              "value_min" = min(.data$value), "value_max" = max(.data$value)
-            )
-        }
-        return(tbl)
+        shiny::req(dataset(), input$numeric_choice)
+        tbl <-
+          iatlas.api.client::query_features_range(
+            cohorts = dataset(),
+            features = input$numeric_choice
+          ) %>%
+          dplyr::distinct()
       })
 
       feature_min <- shiny::reactive({
@@ -90,12 +69,8 @@ numeric_filter_element_server <- function(
         )
       })
 
-      shiny::observeEvent(numeric_type(), {
-        reactive_values[[module_id]]$type <- numeric_type()
-      })
-
-      shiny::observeEvent(numeric_name(), {
-        reactive_values[[module_id]]$name <- numeric_name()
+      shiny::observeEvent(input$numeric_choice, {
+        reactive_values[[module_id]]$name <- input$numeric_choice
       })
 
       shiny::observeEvent(input$range, {
@@ -139,29 +114,9 @@ group_filter_element_server <- function(
         )
       })
 
-      group_type <- shiny::reactive({
-        shiny::req(input$parent_group_choice)
-        stringr::str_remove_all(input$parent_group_choice, ":[:print:]+$")
-      })
-
-      parent_group <- shiny::reactive({
-        shiny::req(input$parent_group_choice)
-        stringr::str_remove_all(input$parent_group_choice, "^[:print:]+:")
-      })
-
       group_choices <- shiny::reactive({
-        shiny::req(group_type(), parent_group(), input$parent_group_choice)
-        if(group_type() == "tag"){
-          choices <- build_tag_filter_list(parent_group(), dataset())
-        } else if (group_type() == "clinical"){
-          choices <-
-            iatlas.api.client::query_patients(datasets = dataset()) %>%
-            dplyr::select(parent_group()) %>%
-            dplyr::distinct() %>%
-            tidyr::drop_na() %>%
-            dplyr::pull(parent_group())
-        }
-        return(choices)
+        shiny::req(input$parent_group_choice, dataset())
+        choices <- build_tag_filter_list(input$parent_group_choice, dataset())
       })
 
       output$checkbox_ui <- shiny::renderUI({
@@ -174,12 +129,8 @@ group_filter_element_server <- function(
         )
       })
 
-      shiny::observeEvent(parent_group(), {
-        reactive_values[[module_id]]$parent_group_choice <- parent_group()
-      })
-
-      shiny::observeEvent(group_type(), {
-        reactive_values[[module_id]]$group_type <- group_type()
+      shiny::observeEvent(input$parent_group_choice, {
+        reactive_values[[module_id]]$parent_group_choice <- input$parent_group_choice
       })
 
       shiny::observeEvent(input$group_choices, {
