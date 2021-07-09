@@ -68,38 +68,14 @@ test_that("get_group_filtered_samples", {
   filter_obj <- list(
     list(
       "group_choices" = c("C5", "C6"),
-      "group_type" = "tag",
       "parent_group_choice" = "Immnune_Subtype"
     ),
     list(
       "group_choices" = c("COAD", "STAD"),
-      "group_type" = "tag",
       "parent_group_choice" = "TCGA_Study"
-    ),
-    list(
-      "group_choices" = c("male", "female"),
-      "group_type" = "clinical",
-      "parent_group_choice" = "gender"
-    ),
-    list(
-      "group_choices" = c("not hispanic or latino"),
-      "group_type" = "clinical",
-      "parent_group_choice" = "ethnicity"
     )
   )
   result1 <- get_group_filtered_samples(filter_obj, get_tcga_samples(), "TCGA")
-  expect_type(result1, "character")
-  expect_true(length(result1) > 0)
-})
-
-test_that("get_filtered_group_tag_samples", {
-  filter_obj <- list(
-    list("tags" = c("C1", "C2", "C3", "C4", "C6")),
-    list("tags" = c("CLLE-ES", "MALY-DE"))
-  )
-  result1 <- get_filtered_group_tag_samples(
-    filter_obj, get_pcawg_samples(), "PCAWG"
-  )
   expect_type(result1, "character")
   expect_true(length(result1) > 0)
 })
@@ -110,12 +86,12 @@ test_that("Is Numeric Filter Valid", {
   expect_false(
     is_numeric_filter_valid(list("name" = "a", "min" = 0, "mx" = 1))
   )
-  expect_false(
+  expect_true(
     is_numeric_filter_valid(list("name" = "a", "min" = 0, "max" = 1))
   )
   expect_true(
     is_numeric_filter_valid(list(
-      "name" = "a", "min" = 0, "max" = 1, "type" = "feature"
+      "name" = "a", "min" = 0, "max" = 1
     ))
   )
 })
@@ -127,8 +103,8 @@ test_that("get_valid_numeric_filters", {
   invalid4 <- list("name" = "a", "min" = 1)
   invalid5 <- list("name" = "a", "max" = 1)
 
-  valid1 <- list("name" = "a", "max" = 1, "min" = 0, "type" = "feature")
-  valid2 <- list("name" = "b", "max" = 1, "min" = 0, "type" = "feature")
+  valid1 <- list("name" = "a", "max" = 1, "min" = 0)
+  valid2 <- list("name" = "b", "max" = 1, "min" = 0)
 
   expect_equal(get_valid_numeric_filters(invalid1), list())
   expect_equal(get_valid_numeric_filters(invalid2), list())
@@ -173,14 +149,7 @@ test_that("get_numeric_filtered_samples", {
     "element1" = list(
       "name" = "B_cells_memory",
       "max" = 0.11,
-      "min" = 0.1,
-      "type" = "feature"
-    ),
-    "element2" = list(
-      "name" = "height",
-      "max" = 200,
-      "min" = 0,
-      "type" = "clinical"
+      "min" = 0.1
     )
   )
   result1 <- get_numeric_filtered_samples(filter_obj1, get_tcga_samples(), "TCGA")
@@ -188,24 +157,3 @@ test_that("get_numeric_filtered_samples", {
   expect_true(length(result1) > 0)
 })
 
-test_that("get_numeric_feature_filtered_samples", {
-  filter_obj1 <- list(
-    "element1" = list(
-      "name" = "B_cells_memory",
-      "max" = 1,
-      "min" = 0,
-      "type" = "feature"
-    ),
-    "element2" = list(
-      "name" = "B_cells_naive",
-      "max" = 1,
-      "min" = 0,
-      "type" = "feature"
-    )
-  )
-  result1 <- get_numeric_feature_filtered_samples(
-    filter_obj1, get_pcawg_samples(), "PCAWG"
-  )
-  expect_type(result1, "character")
-  expect_true(length(result1) > 0)
-})

@@ -18,26 +18,14 @@ cohort_filter_selection_server <- function(
       tag_group_filter_tbl <- shiny::reactive({
         shiny::req(dataset())
         iatlas.api.client::query_dataset_tags(dataset()) %>%
-          dplyr::select("display" = "short_display", "name") %>%
-          dplyr::mutate("name" = stringr::str_c("tag:", .data$name))
-      })
-
-      clinical_group_filter_tbl <- shiny::reactive({
-        shiny::req(dataset())
-        iatlas.api.client::query_cohorts(datasets = dataset()) %>%
-          dplyr::select("display" = "clinical") %>%
-          tidyr::drop_na() %>%
-          dplyr::mutate(
-            "name" = stringr::str_to_lower(.data$display),
-            "name" = stringr::str_c("clinical:", .data$display)
-          )
+          dplyr::select("display" = "short_display", "name")
       })
 
       group_filter_list <- shiny::reactive({
-        shiny::req(tag_group_filter_tbl(), clinical_group_filter_tbl())
+        shiny::req(tag_group_filter_tbl())
         lst <-
           dplyr::bind_rows(
-            tag_group_filter_tbl(), clinical_group_filter_tbl()
+            tag_group_filter_tbl()
           ) %>%
           dplyr::select("display", "name") %>%
           tibble::deframe(.)
@@ -82,36 +70,13 @@ cohort_filter_selection_server <- function(
       feature_tbl <- shiny::reactive({
         shiny::req(dataset(), features_tbl())
         features_tbl() %>%
-          dplyr::select("class", "display", "feature" = "name") %>%
-          dplyr::mutate("feature" = stringr::str_c("feature:", .data$feature))
-      })
-
-      # TODO: Fix to use api
-      clinical_tbl <- shiny::reactive({
-        shiny::req(dataset())
-        if(dataset() == "TCGA"){
-          clinical <- dplyr::tibble(
-            "name" = c("age_at_diagnosis", "height", "weight")
-          )
-        } else {
-          clinical <- dplyr::tibble(
-            "name" = c("age_at_diagnosis")
-          )
-        }
-        clinical %>%
-          dplyr::mutate(
-            "display" = stringr::str_replace_all(.data$name, "_", " "),
-            "display" = stringr::str_to_title(.data$display),
-            "feature" = stringr::str_c("clinical:", .data$name)
-          ) %>%
-          dplyr::mutate("class" = "clinical") %>%
-          dplyr::select("class", "display", "feature")
+          dplyr::select("class", "display", "feature" = "name")
       })
 
       numeric_named_list <- shiny::reactive({
-        shiny::req(feature_tbl(), clinical_tbl())
+        shiny::req(feature_tbl())
         lst <-
-          dplyr::bind_rows(feature_tbl(), clinical_tbl()) %>%
+          dplyr::bind_rows(feature_tbl()) %>%
           iatlas.modules::create_nested_named_list(
             names_col1 = "class",
             names_col2 = "display",

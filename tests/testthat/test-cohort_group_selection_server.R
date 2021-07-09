@@ -3,6 +3,7 @@ test_that("cohort_group_selection_server_immune_subtype", {
     cohort_group_selection_server,
     args = list(
       "selected_dataset" = shiny::reactiveVal("TCGA"),
+      "default_group" = "Immune_Subtype",
       "features_tbl" = shiny::reactiveVal(get_tcga_features_tbl())
     ),
     {
@@ -12,10 +13,9 @@ test_that("cohort_group_selection_server_immune_subtype", {
       expect_named(custom_group_tbl(), c("display", "name"))
       expect_type(available_groups_list(), "character")
       expect_named(available_groups_list())
-      expect_type(default_group(), "character")
       expect_type(output$select_group_ui, "list")
       expect_type(group_choice(), "character")
-      expect_equal(group_choice(), default_group())
+      expect_equal(group_choice(), default_group)
 
       session$setInputs("group_choice" = "Immune_Subtype")
       expect_equal(group_choice(), "Immune_Subtype")
@@ -40,6 +40,7 @@ test_that("cohort_group_selection_server_driver_mutation", {
     cohort_group_selection_server,
     args = list(
       "selected_dataset" = shiny::reactiveVal("TCGA"),
+      "default_group" = "Immune_Subtype",
       "features_tbl" = shiny::reactiveVal(get_tcga_features_tbl())
     ),
     {
@@ -74,6 +75,7 @@ test_that("cohort_group_selection_server_immune_feature_bin", {
     cohort_group_selection_server,
     args = list(
       "selected_dataset" = shiny::reactiveVal("TCGA"),
+      "default_group" = "Immune_Subtype",
       "features_tbl" = shiny::reactiveVal(get_tcga_features_tbl())
     ),
     {
@@ -83,6 +85,8 @@ test_that("cohort_group_selection_server_immune_feature_bin", {
       expect_equal(group_choice(), "Immune Feature Bins")
       expect_false(display_driver_mutation_ui())
       expect_true(display_immune_feature_bins_ui())
+      expect_type(feature_bin_list(), "list")
+      expect_type(output$select_immune_feature_bins_group_ui, "list")
 
       group_object <- session$getReturned()()
       expect_named(
@@ -111,6 +115,7 @@ test_that("cohort_group_selection_server_tcga_clinical", {
     cohort_group_selection_server,
     args = list(
       "selected_dataset" = shiny::reactiveVal("TCGA"),
+      "default_group" = "Immune_Subtype",
       "features_tbl" = shiny::reactiveVal(get_tcga_features_tbl())
     ),
     {
@@ -120,11 +125,7 @@ test_that("cohort_group_selection_server_tcga_clinical", {
       expect_named(custom_group_tbl(), c("display", "name"))
       expect_true(nrow(custom_group_tbl()) > 0)
 
-      expect_named(clinical_group_tbl(), c("display", "name"))
-      expect_true(nrow(clinical_group_tbl()) > 0)
-
       expect_type(available_groups_list(), "character")
-      expect_true(length(clinical_group_tbl()) > 0)
 
       session$setInputs("group_choice" = "gender")
       expect_equal(group_choice(), "gender")
@@ -138,16 +139,17 @@ test_that("cohort_group_selection_server_tcga_clinical", {
       )
       expect_equal(group_object$dataset, "TCGA")
       expect_equal(group_object$group_name, "gender")
-      expect_equal(group_object$group_type, "clinical")
+      expect_equal(group_object$group_type, "tag")
     }
   )
 })
 
-test_that("cohort_group_selection_server_pcawg_clinical", {
+test_that("cohort_group_selection_server_pcawg_feature_bins", {
   shiny::testServer(
     cohort_group_selection_server,
     args = list(
       "selected_dataset" = shiny::reactiveVal("PCAWG"),
+      "default_group" = "Immune_Subtype",
       "features_tbl" = shiny::reactiveVal(get_pcawg_features_tbl())
     ),
     {

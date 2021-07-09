@@ -34,7 +34,7 @@ test_that("cohort_manual_selection_server_pcawg_gender", {
       expect_equal(group_object()$dataset, "PCAWG")
       expect_equal(group_object()$group_name, "gender")
       expect_equal(group_object()$group_display, "Gender")
-      expect_equal(group_object()$group_type, "clinical")
+      expect_equal(group_object()$group_type, "tag")
       expect_type(sample_tbl(), "list")
       expect_named(filter_object(), c("samples", "filters"))
       expect_type(filter_object()$samples, "character")

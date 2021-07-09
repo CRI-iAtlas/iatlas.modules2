@@ -14,22 +14,26 @@ build_cohort_object_from_objects <- function(
 
 build_cohort_object <- function(
   dataset,
+  sample_tbl,
   samples,
+  feature_tbl,
   group_name,
   group_display,
   group_type,
   mutation_id = NA,
   bin_immune_feature = NA,
   bin_number = NA,
-  filters = NA,
-  feature_tbl = NA,
-  sample_tbl = NA
+  filters = NA
 ){
 
   # tag types
   if(group_type == "tag"){
     cohort_object <- build_tag_cohort_object(
-      dataset, samples, group_name, group_display, sample_tbl
+      dataset = dataset,
+      sample_tbl = sample_tbl,
+      samples = samples,
+      tag_name =  group_name,
+      tag_display = group_display
     )
 
   # custom types
@@ -40,20 +44,13 @@ build_cohort_object <- function(
       )
     } else if (group_name == "Immune Feature Bins") {
       cohort_object <- build_feature_bin_cohort_object(
-        dataset, samples, bin_immune_feature, bin_number
+        dataset, samples, bin_immune_feature, bin_number, feature_tbl
       )
     } else {
       stop(group_name, " is not an allowed custom group name.")
     }
-  } else if (group_type == "clinical"){
-    cohort_object <- build_clinical_cohort_object(
-      dataset, samples, group_name, group_display
-    )
   } else {
     stop(group_type, " is not an allowed group type.")
-  }
-  if(safe_is_na(feature_tbl)){
-    feature_tbl <- iatlas.api.client::query_features(cohorts = dataset)
   }
 
   cohort_object$feature_tbl <- feature_tbl
@@ -72,13 +69,12 @@ build_cohort_object <- function(
 }
 
 # tag choice ------------------------------------------------------------------
-# TODO fix using cohorts
 build_tag_cohort_object <- function(
   dataset,
+  sample_tbl,
   samples,
   tag_name,
-  tag_display,
-  sample_tbl
+  tag_display
 ){
   sample_tbl <- sample_tbl %>%
     dplyr::filter(.data$sample_name %in% samples) %>%
@@ -107,52 +103,6 @@ build_tag_cohort_object <- function(
     "group_display" = tag_display
 
   )
-}
-
-# clinical choice -------------------------------------------------------------
-# TODO fix using cohorts
-# TODO use samples in features table
-build_clinical_cohort_object <- function(
-  dataset, samples, group_name, group_display
-  ){
-  cohort_tbl <- build_cohort_tbl_by_clinical(samples, group_name)
-  sample_tbl <- cohort_tbl %>%
-    dplyr::select("sample", "group") %>%
-    dplyr::arrange(.data$sample)
-  group_tbl <- cohort_tbl %>%
-    dplyr::select(-"sample") %>%
-    dplyr::distinct() %>%
-    dplyr::arrange(.data$group) %>%
-    add_plot_colors_to_tbl(.) %>%
-    dplyr::select("name", "group", "characteristics", "color", "size")
-
-  list(
-    "sample_tbl"    = sample_tbl,
-    "group_tbl"     = group_tbl,
-    "group_name"    = group_name,
-    "group_display" = group_display
-
-  )
-}
-
-build_cohort_tbl_by_clinical <- function(samples, clinical){
-  tbl <-
-    iatlas.api.client::query_sample_patients(
-      samples = samples
-    ) %>%
-    dplyr::select(dplyr::all_of(c(
-      "name" = clinical,
-      "group" = clinical,
-      "sample"
-    ))) %>%
-    tidyr::drop_na() %>%
-    dplyr::group_by(.data$group) %>%
-    dplyr::mutate(
-      size = dplyr::n(),
-      "characteristics" = "",
-      "color" = NA
-    ) %>%
-    dplyr::ungroup()
 }
 
 # mutation choice -------------------------------------------------------------
@@ -194,17 +144,16 @@ create_mutation_cohort_group_tbl <- function(sample_tbl, mutation){
 }
 
 # immune feature bin choice ---------------------------------------------------
-# TODO fix using cohorts
-# TODO use samples in features table
 build_feature_bin_cohort_object <- function(
   dataset,
   samples,
   feature_name,
-  bin_number
+  bin_number,
+  feature_tbl
 ){
 
-  feature_display <- feature_name %>%
-    iatlas.api.client::query_features(features = .) %>%
+  feature_display <- feature_tbl %>%
+    dplyr::filter(.data$name == feature_name) %>%
     dplyr::pull("display")
 
   sample_tbl <- build_feature_bin_sample_tbl(
@@ -226,14 +175,12 @@ build_feature_bin_cohort_object <- function(
   )
 }
 
-# TODO use samples in api query
-# TODO fix using cohorts
 build_feature_bin_sample_tbl <- function(
   dataset, samples, feature_name, n_bins
 ){
   res <-
     iatlas.api.client::query_feature_values(
-      features = feature_name, cohorts = dataset, samples = samples
+      features = feature_name, cohorts = dataset
     ) %>%
     dplyr::filter(.data$sample %in% samples) %>%
     dplyr::mutate("group" = as.character(cut(.data$feature_value, n_bins))) %>%
@@ -254,7 +201,6 @@ build_feature_bin_group_tbl <- function(sample_tbl, feature_name){
 
 # various ---------------------------------------------------------------------
 
-
 add_plot_colors_to_tbl <- function(tbl){
   if ("color" %in% colnames(tbl)){
     if(any(is.na(tbl$color))) {
@@ -270,5 +216,4 @@ add_plot_colors_to_tbl <- function(tbl){
     dplyr::mutate("color" = viridisLite::viridis(dplyr::n())) %>%
     dplyr::inner_join(tbl, ., by = "group")
   return(tbl)
-
 }
