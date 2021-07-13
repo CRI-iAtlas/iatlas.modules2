@@ -382,15 +382,15 @@
     },
     "iatlas.api.client": {
       "Package": "iatlas.api.client",
-      "Version": "0.22.1",
+      "Version": "0.23.1",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.api.client",
       "RemoteRef": "main",
-      "RemoteSha": "41eed585bd82c3f145d48ae6c779b51c9c71c439",
+      "RemoteSha": "4d968f72538dc86e5b264dbf7951472165bfa4ac",
       "RemoteHost": "api.github.com",
-      "Hash": "cc353fbe7087cfd8af7562aa96a5ddd4"
+      "Hash": "67b38ff191b8a60c60c0afef899676b7"
     },
     "iatlas.modules": {
       "Package": "iatlas.modules",

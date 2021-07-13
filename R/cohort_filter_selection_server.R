@@ -17,8 +17,8 @@ cohort_filter_selection_server <- function(
       # group filters -----------------------------------------------------------
       tag_group_filter_tbl <- shiny::reactive({
         shiny::req(dataset())
-        iatlas.api.client::query_dataset_tags(dataset()) %>%
-          dplyr::select("display" = "short_display", "name")
+        iatlas.api.client::query_dataset_tags(dataset = dataset()) %>%
+          dplyr::select("display" = "tag_short_display", "name" = "tag_name")
       })
 
       group_filter_list <- shiny::reactive({

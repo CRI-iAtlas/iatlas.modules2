@@ -19,9 +19,9 @@ get_group_filtered_samples <- function(filter_obj, samples, dataset){
     purrr::pluck("group_choices") %>%
     purrr::map(
       .,
-      ~iatlas.api.client::query_samples_by_tag2(datasets = dataset, tags = .x)
+      ~iatlas.api.client::query_tag_samples(cohorts = dataset, tags = .x)
     ) %>%
-    purrr::map(., dplyr::pull, "sample") %>%
+    purrr::map(., dplyr::pull, "sample_name") %>%
     purrr::reduce(base::intersect, .init = samples)
 }
 

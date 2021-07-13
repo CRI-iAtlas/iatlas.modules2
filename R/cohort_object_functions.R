@@ -88,17 +88,11 @@ query_feature_values_with_cohort_object <- function(
   groups = NA
 ){
   if (cohort_object$group_type == "tag"){
-    cohort <-stringr::str_c(
+    cohort <- stringr::str_c(
         cohort_object$dataset,
         cohort_object$group_name,
         sep = "_"
       )
-  } else if (cohort_object$group_type == "clinical"){
-    cohort <-stringr::str_c(
-      cohort_object$dataset,
-      stringr::str_to_title(cohort_object$group_name),
-      sep = "_"
-    )
   } else {
       cohort <- cohort_object$dataset
   }
@@ -138,12 +132,6 @@ query_gene_expression_with_cohort_object <- function(
       cohort_object$group_name,
       sep = "_"
     )
-  } else if (cohort_object$group_type == "clinical"){
-    cohort <-stringr::str_c(
-      cohort_object$dataset,
-      stringr::str_to_title(cohort_object$group_name),
-      sep = "_"
-    )
   } else {
     cohort <- cohort_object$dataset
   }
@@ -154,5 +142,4 @@ query_gene_expression_with_cohort_object <- function(
     entrez = entrez
   ) %>%
     dplyr::filter(.data$sample %in% cohort_object$sample_tbl$sample)
-
 }

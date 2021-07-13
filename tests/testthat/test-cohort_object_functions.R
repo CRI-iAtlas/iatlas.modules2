@@ -103,7 +103,7 @@ test_that("query_feature_values_with_cohort_object", {
       "group_name" = "COAD",
       "group_type" = "User Defined Group",
       "sample_tbl" = iatlas.api.client::query_dataset_samples(datasets = "PCAWG") %>%
-        dplyr::rename("sample" = "name")
+        dplyr::rename("sample" = "sample_name")
     ),
     features = "Lymphocytes_Aggregate1"
   )
