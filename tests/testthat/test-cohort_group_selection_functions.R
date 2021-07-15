@@ -41,18 +41,3 @@ test_that("build_cohort_group_list", {
   )
 })
 
-test_that("build_cohort_mutation_tbl", {
-  expect_named(
-    build_cohort_mutation_tbl(),
-    c(
-      "mutation_id",
-      "gene_entrez",
-      "gene_hgnc",
-      "mutation_code",
-      "mutation_type_name",
-      "mutation_type_display",
-      "mutation"
-    )
-  )
-})
-

@@ -13,20 +13,24 @@ Suggests:
     devtools, 
     testthat (>= 3.0),
     usethis,
-    memoise (>= 2.0)
+    memoise (>= 2.0),
+    covr
 RoxygenNote: 7.1.1
 Config/testthat/edition: 3
 Imports: 
     DT,
     dplyr (>= 1.0),
+    forcats (>= 0.5),
     iatlas.api.client,
     iatlas.modules,
     magrittr (>= 2.0),
+    plotly(>= 4.9),
     purrr (>= 0.3),
     readr (>= 1.0),
     rlang (>= 0.4),
     shiny (>= 1.6),
     shinycssloaders,
+    shinydashboard,
     stringr (>= 1.0),
     tibble (>= 3.0),
     tidyr (>= 1.0),

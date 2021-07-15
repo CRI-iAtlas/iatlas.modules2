@@ -1,4 +1,4 @@
-utils::globalVariables(c("val", "<<-"))
+utils::globalVariables(c("val", "<<-", "label"))
 
 # system files ----------------------------------------------------------------
 

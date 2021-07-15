@@ -45,7 +45,7 @@ test_that("cohort_group_selection_server_driver_mutation", {
     ),
     {
       session$setInputs("group_choice" = "Driver Mutation")
-      session$setInputs("driver_mutation_choice_id" = 1L)
+      session$setInputs("driver_mutation_choice" = 'ABL1:(NS)')
       expect_equal(group_choice(), "Driver Mutation")
       expect_true(display_driver_mutation_ui())
       expect_false(display_immune_feature_bins_ui())
@@ -58,14 +58,14 @@ test_that("cohort_group_selection_server_driver_mutation", {
           "group_name",
           "group_display",
           "group_type",
-          "mutation_id"
+          "mutation"
         )
       )
       expect_equal(group_object$dataset, "TCGA")
       expect_equal(group_object$group_name, "Driver Mutation")
       expect_equal(group_object$group_display, "Driver Mutation")
       expect_equal(group_object$group_type, "custom")
-      expect_equal(group_object$mutation_id, 1L)
+      expect_equal(group_object$mutation, "ABL1:(NS)")
     }
   )
 })

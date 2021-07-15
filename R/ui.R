@@ -3,7 +3,8 @@ ui <- function() {
     shiny::tabsetPanel(
       type = "tabs",
       shiny::tabPanel("Start", shiny::textOutput("cohort_text_output")),
-      shiny::tabPanel("Cohort Selection", cohort_selection_ui("module"))
+      shiny::tabPanel("Cohort Selection", cohort_selection_ui("module")),
+      shiny::tabPanel("Driver Associations", driver_associations_ui("driver_module"))
     )
   )
 }

@@ -107,15 +107,11 @@ build_tag_cohort_object <- function(
 
 # mutation choice -------------------------------------------------------------
 
-build_mutation_cohort_object <- function(dataset, samples, mutation_id){
-
-  mutation <- iatlas.api.client::query_mutations(ids = as.integer(mutation_id)) %>%
-    dplyr::pull("mutation_name") %>%
-    unique()
+build_mutation_cohort_object <- function(dataset, samples, mutation){
 
   sample_tbl <-
     iatlas.api.client::query_mutation_statuses(
-      ids = as.integer(mutation_id),
+      mutations = mutation,
       samples = samples
     ) %>%
     dplyr::select("sample" = "sample_name", "group" = "mutation_status")

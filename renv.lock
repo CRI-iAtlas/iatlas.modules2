@@ -254,6 +254,13 @@
       "Repository": "CRAN",
       "Hash": "77bd60a6157420d4ffa93b27cf6a58b8"
     },
+    "forcats": {
+      "Package": "forcats",
+      "Version": "0.5.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "81c3244cab67468aac4c60550832655d"
+    },
     "fs": {
       "Package": "fs",
       "Version": "1.5.0",
@@ -382,15 +389,15 @@
     },
     "iatlas.api.client": {
       "Package": "iatlas.api.client",
-      "Version": "0.23.1",
+      "Version": "0.24.1",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.api.client",
       "RemoteRef": "main",
-      "RemoteSha": "4d968f72538dc86e5b264dbf7951472165bfa4ac",
+      "RemoteSha": "1852e6b8dfa7e0fcd0f64512f0d5bbc1b2e634f0",
       "RemoteHost": "api.github.com",
-      "Hash": "67b38ff191b8a60c60c0afef899676b7"
+      "Hash": "178b53a51e9984d12a294f337c71e426"
     },
     "iatlas.modules": {
       "Package": "iatlas.modules",
@@ -413,10 +420,10 @@
     },
     "isoband": {
       "Package": "isoband",
-      "Version": "0.2.4",
+      "Version": "0.2.5",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "b2008df40fb297e3fef135c7e8eeec1a"
+      "Hash": "7ab57a6de7f48a8dc84910d1eca42883"
     },
     "jquerylib": {
       "Package": "jquerylib",
@@ -742,10 +749,10 @@
     },
     "stringi": {
       "Package": "stringi",
-      "Version": "1.6.2",
+      "Version": "1.7.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "9df5e6f9a7fa11b84adf0429961de66a"
+      "Hash": "45c84ccfd359febce4c7545fee3d36cb"
     },
     "stringr": {
       "Package": "stringr",
