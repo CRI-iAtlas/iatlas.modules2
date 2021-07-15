@@ -5,4 +5,12 @@ server <- function(input, output, session) {
     shiny::req(cohort_object())
     stringr::str_c(cohort_object()$dataset, " : ", cohort_object()$group_display)
   })
+  call_iatlas_module(
+    "driver_module",
+    driver_associations_server,
+    input,
+    session,
+    cohort_object
+  )
+
 }
