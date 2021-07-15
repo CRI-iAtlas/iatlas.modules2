@@ -1,3 +1,8 @@
+#' Multivariate Driver UI
+#'
+#' @param id A string, a module id
+#'
+#' @export
 multivariate_driver_ui <- function(id){
 
   ns <- shiny::NS(id)

@@ -1,3 +1,8 @@
+#' Univariate Driver UI
+#'
+#' @param id A string, a module id
+#'
+#' @export
 univariate_driver_ui <- function(id){
 
   ns <- shiny::NS(id)
