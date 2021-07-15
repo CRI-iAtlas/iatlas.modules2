@@ -66,17 +66,15 @@ cohort_group_selection_server <- function(
       )
 
       mutation_tbl <- shiny::reactive({
-        build_cohort_mutation_tbl()
+        iatlas.api.client::query_mutations(type = "driver_mutation")
       })
 
       output$select_driver_mutation_group_ui <- shiny::renderUI({
         shiny::req(group_choice() == "Driver Mutation", mutation_tbl())
         shiny::selectInput(
-          inputId  = ns("driver_mutation_choice_id"),
+          inputId  = ns("driver_mutation_choice"),
           label    = "Select or Search for Driver Mutation",
-          choices  = mutation_tbl() %>%
-            dplyr::select("mutation", "mutation_id") %>%
-            tibble::deframe(.)
+          choices  =  dplyr::pull(mutation_tbl(), "mutation_name")
         )
       })
 
@@ -130,12 +128,10 @@ cohort_group_selection_server <- function(
         )
 
         if (group_choice() == "Driver Mutation") {
-          shiny::req(input$driver_mutation_choice_id)
+          shiny::req(input$driver_mutation_choice)
           group_object$group_display <- "Driver Mutation"
           group_object$group_type <- "custom"
-          group_object$mutation_id <- as.integer(
-            input$driver_mutation_choice_id
-          )
+          group_object$mutation <- input$driver_mutation_choice
         } else if (group_choice() == "Immune Feature Bins") {
           shiny::req(
             input$bin_immune_feature_choice,

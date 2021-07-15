@@ -16,7 +16,3 @@ build_cohort_group_list <- function(tag_tbl, custom_tbl){
     tibble::deframe(.)
 }
 
-build_cohort_mutation_tbl <- function(){
-  iatlas.api.client::query_mutations(type = "driver_mutation") %>%
-    dplyr::rename("mutation" = "mutation_name")
-}
