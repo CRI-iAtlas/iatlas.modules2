@@ -1,3 +1,9 @@
+#' Multivariate Driver Server
+#'
+#' @param id A string, a module id
+#' @param cohort_obj A named list
+#'
+#' @export
 multivariate_driver_server <- function(id, cohort_obj) {
   shiny::moduleServer(
     id,
