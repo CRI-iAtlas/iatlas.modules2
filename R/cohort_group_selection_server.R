@@ -144,7 +144,7 @@ cohort_group_selection_server <- function(
         } else {
           group_object$group_display <- group_choice() %>%
             iatlas.api.client::query_tags(tags = .) %>%
-            dplyr::pull("short_display")
+            dplyr::pull("tag_short_display")
           group_object$group_type <- "tag"
         }
 
