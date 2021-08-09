@@ -42,7 +42,7 @@ univariate_driver_server <- function(id, cohort_obj) {
           cohorts = cohort_obj()$dataset,
           parent_tags = cohort_obj()$group_name
         ) %>%
-          dplyr::pull("name")
+          dplyr::pull("tag_name")
       })
 
       volcano_plot_tbl <- shiny::reactive({

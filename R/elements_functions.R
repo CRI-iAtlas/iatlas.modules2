@@ -4,5 +4,5 @@ build_tag_filter_list <- function(parent_tag_name, dataset){
     cohorts = dataset,
     parent_tags = parent_tag_name
   ) %>%
-    dplyr::pull("name")
+    dplyr::pull("tag_name")
 }
