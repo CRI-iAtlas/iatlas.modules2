@@ -242,7 +242,10 @@ test_that("build_cohort_object_from_objects", {
     group_type = "tag"
   )
 
-  filter_object1 <- list(samples = get_tcga_samples_50())
+  filter_object1 <- Cohort_Filters$new(
+    samples = get_tcga_samples_50(),
+    numeric_filters = list(list("name" = "x1", "min" = 0, "max" = 1))
+  )
   res1 <- build_cohort_object_from_objects(
     group_obj1,
     filter_object1,
@@ -250,8 +253,15 @@ test_that("build_cohort_object_from_objects", {
     get_tcga_study_samples_tbl()
   )
   expect_named(res1, expected_cohort_object_names, ignore.order = T)
+  expect_equal(
+    res1$filters,
+    list(
+      "numeric_filters" = list(list("name" = "x1", "min" = 0, "max" = 1)),
+      "catgegorical_filters" = list()
+    )
+  )
 
-  filter_object2 <- list(samples = get_tcga_samples_50(), filters = list())
+  filter_object2 <- Cohort_Filters$new(samples = get_tcga_samples_50())
   res2 <- build_cohort_object_from_objects(
     group_obj1,
     filter_object2,

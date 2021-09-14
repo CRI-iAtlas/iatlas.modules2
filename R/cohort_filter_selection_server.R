@@ -128,13 +128,22 @@ cohort_filter_selection_server <- function(
         c("Number of current samples:", length(selected_samples()))
       })
 
+      # filter_obj <- shiny::reactive({
+      #   list(
+      #     "samples" = selected_samples(),
+      #     "filters" = list(
+      #       "numeric_filters" = valid_numeric_filter_obj(),
+      #       "tag_filters" = valid_group_filter_obj()
+      #     )
+      #   )
+      # })
+
       filter_obj <- shiny::reactive({
-        list(
-          "samples" = selected_samples(),
-          "filters" = list(
-            "numeric_filters" = valid_numeric_filter_obj(),
-            "tag_filters" = valid_group_filter_obj()
-          )
+        shiny::req(selected_samples(), valid_numeric_filter_obj(), valid_group_filter_obj())
+        Cohort_Filters$new(
+          samples = selected_samples(),
+          catgegorical_filters = valid_group_filter_obj(),
+          numeric_filters = valid_numeric_filter_obj()
         )
       })
 

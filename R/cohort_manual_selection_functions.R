@@ -6,8 +6,15 @@ build_cohort_object_from_objects <- function(
 ){
   arg_list <- c(
     group_object,
-    filter_object,
-    list("feature_tbl" = feature_tbl, "sample_tbl" = sample_tbl)
+    list(
+      "feature_tbl" = feature_tbl,
+      "sample_tbl" = sample_tbl,
+      "samples" = filter_object$samples,
+      "filters" = list(
+        "numeric_filters" = filter_object$numeric_filters,
+        "catgegorical_filters" = filter_object$catgegorical_filters
+      )
+    )
   )
   purrr::invoke(build_cohort_object, arg_list)
 }
