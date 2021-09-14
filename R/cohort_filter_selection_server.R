@@ -101,49 +101,47 @@ cohort_filter_selection_server <- function(
         remove_ui_event = shiny::reactive(dataset())
       )
 
-      valid_numeric_filter_obj <- shiny::reactive({
+      cohort_numeric_filter_obj <- shiny::reactive({
         shiny::req(numeric_filter_output())
         numeric_filter_output() %>%
           shiny::reactiveValuesToList(.) %>%
-          get_valid_numeric_filters()
+          purrr::discard(purrr::map_lgl(., is.null)) %>%
+          unname() %>%
+          Cohort_Numeric_Filters$new()
       })
 
       numeric_filter_samples <- shiny::reactive({
-        shiny::req(samples)
-        get_numeric_filtered_samples(
-          valid_numeric_filter_obj(),
-          samples(),
-          dataset()
-        )
+        shiny::req(cohort_numeric_filter_obj(), dataset())
+        cohort_numeric_filter_obj()$get_samples(cohorts = dataset())
       })
 
       # return filter obj ----
 
       selected_samples <- shiny::reactive({
-        shiny::req(numeric_filter_samples(), group_filter_samples())
-        intersect(numeric_filter_samples(), group_filter_samples())
+        shiny::req(!is.null(numeric_filter_samples()), group_filter_samples())
+        no_numeric_filters <- all(
+          length(numeric_filter_samples()) == 1,
+          is.na(numeric_filter_samples())
+        )
+        if(no_numeric_filters){
+          return(group_filter_samples())
+        } else {
+          return(intersect(numeric_filter_samples(), group_filter_samples()))
+        }
+
       })
 
       output$samples_text <- shiny::renderText({
         c("Number of current samples:", length(selected_samples()))
       })
 
-      # filter_obj <- shiny::reactive({
-      #   list(
-      #     "samples" = selected_samples(),
-      #     "filters" = list(
-      #       "numeric_filters" = valid_numeric_filter_obj(),
-      #       "tag_filters" = valid_group_filter_obj()
-      #     )
-      #   )
-      # })
 
       filter_obj <- shiny::reactive({
-        shiny::req(selected_samples(), valid_numeric_filter_obj(), valid_group_filter_obj())
+        shiny::req(selected_samples(), cohort_numeric_filter_obj(), valid_group_filter_obj())
         Cohort_Filters$new(
           samples = selected_samples(),
           catgegorical_filters = valid_group_filter_obj(),
-          numeric_filters = valid_numeric_filter_obj()
+          numeric_filters = cohort_numeric_filter_obj()
         )
       })
 

@@ -28,8 +28,11 @@ test_that("cohort_filter_selection_server_pcawg", {
       expect_named(numeric_named_list())
 
       expect_type(numeric_element_module_server(), "closure")
-      expect_type(valid_numeric_filter_obj(), "list")
-      expect_type(numeric_filter_samples(), "character")
+      expect_equal(
+        class(cohort_numeric_filter_obj()),
+        c("Cohort_Numeric_Filters", "R6")
+      )
+      expect_equal(numeric_filter_samples(), NA)
 
       expect_type(selected_samples(), "character")
 
@@ -38,8 +41,6 @@ test_that("cohort_filter_selection_server_pcawg", {
       filter_obj <- session$getReturned()()
       expect_type(filter_obj, "environment")
       expect_equal(class(filter_obj), c("Cohort_Filters", "R6"))
-      expect_equal(filter_obj$catgegorical_filters, list())
-      expect_equal(filter_obj$numeric_filters, list())
     }
   )
 })
@@ -73,8 +74,11 @@ test_that("cohort_filter_selection_server_tcga", {
       expect_named(numeric_named_list())
 
       expect_type(numeric_element_module_server(), "closure")
-      expect_type(valid_numeric_filter_obj(), "list")
-      expect_type(numeric_filter_samples(), "character")
+      expect_equal(
+        class(cohort_numeric_filter_obj()),
+        c("Cohort_Numeric_Filters", "R6")
+      )
+      expect_equal(numeric_filter_samples(), NA)
 
       expect_type(selected_samples(), "character")
 
@@ -83,8 +87,6 @@ test_that("cohort_filter_selection_server_tcga", {
       filter_obj <- session$getReturned()()
       expect_type(filter_obj, "environment")
       expect_equal(class(filter_obj), c("Cohort_Filters", "R6"))
-      expect_equal(filter_obj$catgegorical_filters, list())
-      expect_equal(filter_obj$numeric_filters, list())
     }
   )
 })

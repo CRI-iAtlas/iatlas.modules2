@@ -1,3 +1,17 @@
+cnf1 <- Cohort_Numeric_Filter$new(
+  "name" = "B_cells_Aggregate2",
+  "min" = 0,
+  "max" = .001
+)
+
+cnf2 <- Cohort_Numeric_Filter$new(
+  "name" = "Neutrophils_Aggregate2",
+  "min" = 0,
+  "max" = .1
+)
+
+cnfs1 <- Cohort_Numeric_Filters$new(list(cnf1, cnf2))
+
 
 # tags --------------------------------------------------------------------
 
@@ -244,7 +258,7 @@ test_that("build_cohort_object_from_objects", {
 
   filter_object1 <- Cohort_Filters$new(
     samples = get_tcga_samples_50(),
-    numeric_filters = list(list("name" = "x1", "min" = 0, "max" = 1))
+    numeric_filters = cnfs1
   )
   res1 <- build_cohort_object_from_objects(
     group_obj1,
@@ -256,19 +270,19 @@ test_that("build_cohort_object_from_objects", {
   expect_equal(
     res1$filters,
     list(
-      "numeric_filters" = list(list("name" = "x1", "min" = 0, "max" = 1)),
+      "numeric_filters" = cnfs1,
       "catgegorical_filters" = list()
     )
   )
 
-  filter_object2 <- Cohort_Filters$new(samples = get_tcga_samples_50())
-  res2 <- build_cohort_object_from_objects(
-    group_obj1,
-    filter_object2,
-    get_tcga_features_tbl(),
-    get_tcga_study_samples_tbl()
-  )
-  expect_named(res2, expected_cohort_object_names, ignore.order = T)
+  # filter_object2 <- Cohort_Filters$new(samples = get_tcga_samples_50())
+  # res2 <- build_cohort_object_from_objects(
+  #   group_obj1,
+  #   filter_object2,
+  #   get_tcga_features_tbl(),
+  #   get_tcga_study_samples_tbl()
+  # )
+  # expect_named(res2, expected_cohort_object_names, ignore.order = T)
 })
 
 test_that("add_plot_colors_to_tbl", {

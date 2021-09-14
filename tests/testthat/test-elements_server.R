@@ -24,7 +24,6 @@ test_that("numeric_filter_element_server_pcawg", {
       expect_type(output$slider_ui, "list")
       session$setInputs("range" = c(100, 120))
       expect_true(shiny::is.reactivevalues(session$getReturned()))
-
     }
   )
 })

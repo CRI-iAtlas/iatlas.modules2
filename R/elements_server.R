@@ -69,13 +69,18 @@ numeric_filter_element_server <- function(
         )
       })
 
-      shiny::observeEvent(input$numeric_choice, {
-        reactive_values[[module_id]]$name <- input$numeric_choice
+      update_reactive <- shiny::reactive({
+        shiny::req(input$numeric_choice, input$range)
+        list(input$numeric_choice, input$range)
       })
 
-      shiny::observeEvent(input$range, {
-        reactive_values[[module_id]]$min <- input$range[[1]]
-        reactive_values[[module_id]]$max <- input$range[[2]]
+      shiny::observeEvent(update_reactive(), {
+        obj <- Cohort_Numeric_Filter$new(
+          "name" = input$numeric_choice,
+          "min" = input$range[[1]],
+          "max" = input$range[[2]]
+        )
+        reactive_values[[module_id]] <- obj
       })
 
       return(reactive_values)
