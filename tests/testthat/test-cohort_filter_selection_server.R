@@ -19,8 +19,10 @@ test_that("cohort_filter_selection_server_pcawg", {
       expect_named(group_filter_list())
 
       expect_type(group_element_module_server(), "closure")
-      expect_type(valid_group_filter_obj(), "list")
-      expect_type(group_filter_samples(), "character")
+      expect_equal(
+        class(cohort_group_filter_obj()),
+        c("Cohort_Group_Filters", "R6")
+      )
 
       expect_named(feature_tbl(), c("class", "display", "feature"))
       expect_true(nrow(feature_tbl()) > 0)
@@ -32,12 +34,6 @@ test_that("cohort_filter_selection_server_pcawg", {
         class(cohort_numeric_filter_obj()),
         c("Cohort_Numeric_Filters", "R6")
       )
-      expect_equal(numeric_filter_samples(), NA)
-
-      expect_type(selected_samples(), "character")
-
-      expect_type(output$samples_text, "character")
-
       filter_obj <- session$getReturned()()
       expect_type(filter_obj, "environment")
       expect_equal(class(filter_obj), c("Cohort_Filters", "R6"))
@@ -65,8 +61,10 @@ test_that("cohort_filter_selection_server_tcga", {
       expect_named(group_filter_list())
 
       expect_type(group_element_module_server(), "closure")
-      expect_type(valid_group_filter_obj(), "list")
-      expect_type(group_filter_samples(), "character")
+      expect_equal(
+        class(cohort_group_filter_obj()),
+        c("Cohort_Group_Filters", "R6")
+      )
 
       expect_named(feature_tbl(), c("class", "display", "feature"))
       expect_true(nrow(feature_tbl()) > 0)
@@ -78,12 +76,6 @@ test_that("cohort_filter_selection_server_tcga", {
         class(cohort_numeric_filter_obj()),
         c("Cohort_Numeric_Filters", "R6")
       )
-      expect_equal(numeric_filter_samples(), NA)
-
-      expect_type(selected_samples(), "character")
-
-      expect_type(output$samples_text, "character")
-
       filter_obj <- session$getReturned()()
       expect_type(filter_obj, "environment")
       expect_equal(class(filter_obj), c("Cohort_Filters", "R6"))

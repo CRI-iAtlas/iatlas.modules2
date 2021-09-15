@@ -1,7 +1,7 @@
 cnf1 <- Cohort_Numeric_Filter$new(
   "name" = "B_cells_Aggregate2",
   "min" = 0,
-  "max" = .001
+  "max" = .1
 )
 
 cnf2 <- Cohort_Numeric_Filter$new(
@@ -11,6 +11,23 @@ cnf2 <- Cohort_Numeric_Filter$new(
 )
 
 cnfs1 <- Cohort_Numeric_Filters$new(list(cnf1, cnf2))
+
+cgf1 <- Cohort_Group_Filter$new(
+  "name" = "PCAWG_Study",
+  "values" = c("BLCA-US", "BRCA-US", "CLLE-ES")
+)
+
+cgf2 <- Cohort_Group_Filter$new(
+  "name" = "Immune_Subtype",
+  "values" = c("C1", "C2", "C3", "C4", "C5")
+)
+
+cgfs1 <- Cohort_Group_Filters$new(list(cgf1, cgf2))
+
+cf1 <- Cohort_Filters$new(
+  numeric_filters = cnfs1,
+  group_filters = cgfs1
+)
 
 
 # tags --------------------------------------------------------------------
@@ -256,33 +273,19 @@ test_that("build_cohort_object_from_objects", {
     group_type = "tag"
   )
 
-  filter_object1 <- Cohort_Filters$new(
-    samples = get_tcga_samples_50(),
-    numeric_filters = cnfs1
-  )
   res1 <- build_cohort_object_from_objects(
     group_obj1,
-    filter_object1,
+    cf1,
     get_tcga_features_tbl(),
     get_tcga_study_samples_tbl()
   )
+
   expect_named(res1, expected_cohort_object_names, ignore.order = T)
   expect_equal(
     res1$filters,
-    list(
-      "numeric_filters" = cnfs1,
-      "catgegorical_filters" = list()
-    )
+    cf1
   )
 
-  # filter_object2 <- Cohort_Filters$new(samples = get_tcga_samples_50())
-  # res2 <- build_cohort_object_from_objects(
-  #   group_obj1,
-  #   filter_object2,
-  #   get_tcga_features_tbl(),
-  #   get_tcga_study_samples_tbl()
-  # )
-  # expect_named(res2, expected_cohort_object_names, ignore.order = T)
 })
 
 test_that("add_plot_colors_to_tbl", {

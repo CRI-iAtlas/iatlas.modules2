@@ -134,12 +134,17 @@ group_filter_element_server <- function(
         )
       })
 
-      shiny::observeEvent(input$parent_group_choice, {
-        reactive_values[[module_id]]$parent_group_choice <- input$parent_group_choice
+      update_reactive <- shiny::reactive({
+        shiny::req(input$parent_group_choice, input$group_choices)
+        list(input$parent_group_choice, input$group_choices)
       })
 
-      shiny::observeEvent(input$group_choices, {
-        reactive_values[[module_id]]$group_choices <- input$group_choices
+      shiny::observeEvent(update_reactive(), {
+        obj <- Cohort_Group_Filter$new(
+          "name" = input$parent_group_choice,
+          "values" = input$group_choices
+        )
+        reactive_values[[module_id]] <- obj
       })
 
       return(reactive_values)
