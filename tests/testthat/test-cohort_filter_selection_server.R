@@ -18,7 +18,7 @@ test_that("cohort_filter_selection_server_pcawg", {
       expect_type(group_element_module_server(), "closure")
       expect_equal(
         class(cohort_group_filter_obj()),
-        c("Cohort_Group_Filters", "R6")
+        c("CohortFilterList", "R6")
       )
 
       expect_named(feature_tbl(), c("class", "display", "feature"))
@@ -29,11 +29,11 @@ test_that("cohort_filter_selection_server_pcawg", {
       expect_type(numeric_element_module_server(), "closure")
       expect_equal(
         class(cohort_numeric_filter_obj()),
-        c("Cohort_Numeric_Filters", "R6")
+        c("CohortFilterList", "R6")
       )
       filter_obj <- session$getReturned()()
       expect_type(filter_obj, "environment")
-      expect_equal(class(filter_obj), c("Cohort_Filters", "R6"))
+      expect_equal(class(filter_obj), c("CohortFilters", "R6"))
     }
   )
 })
@@ -58,7 +58,7 @@ test_that("cohort_filter_selection_server_tcga", {
       expect_type(group_element_module_server(), "closure")
       expect_equal(
         class(cohort_group_filter_obj()),
-        c("Cohort_Group_Filters", "R6")
+        c("CohortFilterList", "R6")
       )
 
       expect_named(feature_tbl(), c("class", "display", "feature"))
@@ -69,11 +69,11 @@ test_that("cohort_filter_selection_server_tcga", {
       expect_type(numeric_element_module_server(), "closure")
       expect_equal(
         class(cohort_numeric_filter_obj()),
-        c("Cohort_Numeric_Filters", "R6")
+        c("CohortFilterList", "R6")
       )
       filter_obj <- session$getReturned()()
       expect_type(filter_obj, "environment")
-      expect_equal(class(filter_obj), c("Cohort_Filters", "R6"))
+      expect_equal(class(filter_obj), c("CohortFilters", "R6"))
     }
   )
 })

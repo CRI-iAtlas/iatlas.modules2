@@ -1,80 +1,68 @@
-Cohort_Filters <- R6::R6Class("Cohort_Filters", list(
+CohortFilters <- R6::R6Class("CohortFilters", list(
   numeric_filters = NULL,
   group_filters = NULL,
   initialize = function(numeric_filters, group_filters) {
-    validate_object_type(numeric_filters, "Cohort_Numeric_Filters")
-    validate_object_type(group_filters, "Cohort_Group_Filters")
+    validate_object_type(numeric_filters, "CohortFilterList")
+    validate_object_type(group_filters, "CohortFilterList")
     self$numeric_filters <- numeric_filters
     self$group_filters <- group_filters
   },
-  get_samples = function(cohorts, cohort_samples){
+  get_samples = function(cohorts){
     numeric_samples <- self$numeric_filters$get_samples(cohorts)
     group_samples   <- self$group_filters$get_samples(cohorts)
-    no_numeric_samples <- all(
-      length(numeric_samples) == 1,
-      is.na(numeric_samples)
-    )
-    no_group_samples <- all(
-      length(group_samples) == 1,
-      is.na(group_samples)
-    )
+    no_numeric_filters <- length(numeric_samples) == 0
+    no_group_filters   <- length(group_samples) == 0
 
-    if(all(no_numeric_samples, no_group_samples)){
-      return(cohort_samples)
-    } else if (no_numeric_samples){
-      return(base::intersect(cohort_samples, group_samples))
-    } else if (no_group_samples){
-      return(base::intersect(cohort_samples, numeric_samples))
+    if(all(no_numeric_filters, no_group_filters)) return(list())
+    else if (no_numeric_filters) return(group_samples)
+    else if (no_group_filters) return(numeric_samples)
+    else return(base::intersect(group_samples, numeric_samples))
+  },
+  get_sample_tbl = function(cohorts){
+    samples    <- self$get_samples(cohorts)
+    sample_tbl <- iatlas.api.client::query_cohort_samples(cohorts = cohorts)
+    if(length(samples) > 0) {
+      sample_tbl <- dplyr::filter(sample_tbl, .data$sample_name %in% samples)
+    }
+    return(sample_tbl)
+  }
+))
+
+CohortFilterList <- R6::R6Class("CohortFilterList", list(
+  filter_list = NULL,
+  initialize = function(filter_list, type) {
+    if(typeof(filter_list) != "list"){
+      stop("Filter list must be of type list")
+    }
+    if(!type %in% c("numeric", "group")){
+      stop("type must be either 'numeric' or 'group'")
+    }
+    if(type == "numeric") {
+      purrr::walk(filter_list, validate_object_type, "CohortNumericFilter")
     } else {
-      samples <- cohort_samples %>%
-        base::intersect(group_samples) %>%
-        base::intersect(numeric_samples)
+      purrr::walk(filter_list, validate_object_type, "CohortGroupFilter")
+    }
+    self$filter_list <- filter_list
+  },
+  get_samples = function(cohorts){
+    if(length(self$filter_list) == 0) return(list())
+    else {
+      samples <-
+        purrr::map(self$filter_list, ~.x$get_samples(cohorts)) %>%
+        purrr::reduce(base::intersect)
       return(samples)
     }
-  }
-))
-
-Cohort_Numeric_Filters <- R6::R6Class("Cohort_Numeric_Filters", list(
-  filter_list = NULL,
-  initialize = function(filter_list) {
-    if(typeof(filter_list) != "list"){
-      stop("Numeric filter list must must be a list")
-    }
-    purrr::walk(filter_list, validate_object_type, "Cohort_Numeric_Filter")
-    self$filter_list <- filter_list
   },
-  get_samples = function(cohorts){
-    if(length(self$filter_list) == 0) {
-      return(NA)
-    } else {
-      samples_list <- self$filter_list %>%
-        purrr::map(., ~.x$get_samples(cohorts)) %>%
-        purrr::reduce(base::intersect)
+  filter_sample_tbl = function(sample_tbl, cohorts){
+    samples <- self$get_samples(cohorts)
+    if(length(samples) > 0) {
+      sample_tbl <- dplyr::filter(sample_tbl, .data$sample_name %in% samples)
     }
+    return(sample_tbl)
   }
 ))
 
-Cohort_Group_Filters <- R6::R6Class("Cohort_Group_Filters", list(
-  filter_list = NULL,
-  initialize = function(filter_list) {
-    if(typeof(filter_list) != "list"){
-      stop("Group filter list must must be a list")
-    }
-    purrr::walk(filter_list, validate_object_type, "Cohort_Group_Filter")
-    self$filter_list <- filter_list
-  },
-  get_samples = function(cohorts){
-    if(length(self$filter_list) == 0) {
-      return(NA)
-    } else {
-      samples_list <- self$filter_list %>%
-        purrr::map(., ~.x$get_samples(cohorts)) %>%
-        purrr::reduce(base::intersect)
-    }
-  }
-))
-
-Cohort_Numeric_Filter <- R6::R6Class("Cohort_Numeric_Filter", list(
+CohortNumericFilter <- R6::R6Class("CohortNumericFilter", list(
   name = NULL,
   min = NULL,
   max = NULL,
@@ -102,7 +90,7 @@ Cohort_Numeric_Filter <- R6::R6Class("Cohort_Numeric_Filter", list(
 ))
 
 
-Cohort_Group_Filter <- R6::R6Class("Cohort_Group_Filter", list(
+CohortGroupFilter <- R6::R6Class("CohortGroupFilter", list(
   name = NULL,
   values = NULL,
   initialize = function(name, values) {

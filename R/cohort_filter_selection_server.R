@@ -49,7 +49,7 @@ cohort_filter_selection_server <- function(
           shiny::reactiveValuesToList(.) %>%
           purrr::discard(purrr::map_lgl(., is.null)) %>%
           unname() %>%
-          Cohort_Group_Filters$new()
+          CohortFilterList$new(type = "group")
       })
 
       # # numeric_filters -------------------------------------------------------
@@ -94,12 +94,12 @@ cohort_filter_selection_server <- function(
           shiny::reactiveValuesToList(.) %>%
           purrr::discard(purrr::map_lgl(., is.null)) %>%
           unname() %>%
-          Cohort_Numeric_Filters$new()
+          CohortFilterList$new(type = "numeric")
       })
 
       filter_object <- shiny::reactive({
         shiny::req(cohort_group_filter_obj(), cohort_numeric_filter_obj())
-        Cohort_Filters$new(
+        CohortFilters$new(
           numeric_filters = cohort_numeric_filter_obj(),
           group_filters = cohort_group_filter_obj()
         )

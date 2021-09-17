@@ -75,7 +75,7 @@ numeric_filter_element_server <- function(
       })
 
       shiny::observeEvent(update_reactive(), {
-        obj <- Cohort_Numeric_Filter$new(
+        obj <- CohortNumericFilter$new(
           "name" = input$numeric_choice,
           "min" = input$range[[1]],
           "max" = input$range[[2]]
@@ -140,7 +140,7 @@ group_filter_element_server <- function(
       })
 
       shiny::observeEvent(update_reactive(), {
-        obj <- Cohort_Group_Filter$new(
+        obj <- CohortGroupFilter$new(
           "name" = input$parent_group_choice,
           "values" = input$group_choices
         )

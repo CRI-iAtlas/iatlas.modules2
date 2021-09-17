@@ -29,12 +29,13 @@ Cohort <- R6::R6Class(
       group_name    <- group_object$group_name
       group_display <- group_object$group_display
 
-      sample_tbl <- iatlas.api.client::query_cohort_samples(cohorts = cohort)
+      # sample_tbl <- iatlas.api.client::query_cohort_samples(cohorts = cohort)
+      # samples <- filter_object$get_samples(cohort, sample_tbl$sample_name)
+
+      sample_tbl <- filter_object$get_sample_tbl(cohort)
 
       # tag_types ----
       if(group_type == "tag"){
-
-        samples <- filter_object$get_samples(cohort, sample_tbl$sample_name)
 
         sample_tbl <- sample_tbl %>%
           dplyr::select(
@@ -43,8 +44,7 @@ Cohort <- R6::R6Class(
             "characteristics" = "tag_characteristics",
             "color" = "tag_color",
             "sample" = "sample_name"
-          ) %>%
-          dplyr::filter(.data$sample %in% samples)
+          )
 
         group_tbl <- sample_tbl %>%
           dplyr::group_by(dplyr::across(c(-"sample"))) %>%
@@ -58,21 +58,18 @@ Cohort <- R6::R6Class(
           dplyr::select("sample", "group") %>%
           dplyr::arrange(.data$sample)
 
-
-
       # mutation_types ----
       } else if(group_type == "mutation_status"){
 
         mutation_name <- group_object$mutation_name
-        samples <- filter_object$get_samples(dataset_name, sample_tbl$sample_name)
+
 
         sample_tbl <-
           iatlas.api.client::query_mutation_statuses(
             mutations = mutation_name,
             cohorts = cohort
           ) %>%
-          dplyr::select("sample" = "sample_name", "group" = "mutation_status") %>%
-          dplyr::filter(.data$sample %in% samples)
+          dplyr::select("sample" = "sample_name", "group" = "mutation_status")
 
         group_tbl <- sample_tbl %>%
           dplyr::group_by(.data$group) %>%
@@ -92,8 +89,6 @@ Cohort <- R6::R6Class(
         feature_name <- group_object$feature_name
         feature_bins <- group_object$feature_bins
 
-        samples <- filter_object$get_samples(dataset_name, sample_tbl$sample_name)
-
         feature_display <- feature_tbl %>%
           dplyr::filter(.data$name == feature_name) %>%
           dplyr::pull("display")
@@ -101,7 +96,6 @@ Cohort <- R6::R6Class(
         sample_tbl <- iatlas.api.client::query_feature_values(
           features = feature_name, cohorts = dataset_name
         ) %>%
-          dplyr::filter(.data$sample %in% samples) %>%
           dplyr::mutate("group" = as.character(cut(.data$feature_value, feature_bins))) %>%
           dplyr::select("sample", "group")
 

@@ -16,7 +16,7 @@ test_that("cohort_manual_selection_server_pcawg", {
       expect_equal(group_object()$group_name, "Immune_Subtype")
       expect_equal(group_object()$group_display, "Immune Subtype")
 
-      expect_equal(class(filter_object()), c("Cohort_Filters", "R6"))
+      expect_equal(class(filter_object()), c("CohortFilters", "R6"))
 
       cohort_object <- session$getReturned()()
       expect_equal(class(cohort_object()), c("Cohort", "R6"))
@@ -42,7 +42,7 @@ test_that("cohort_manual_selection_server_pcawg_gender", {
       expect_equal(group_object()$group_name, "gender")
       expect_equal(group_object()$group_display, "Gender")
 
-      expect_equal(class(filter_object()), c("Cohort_Filters", "R6"))
+      expect_equal(class(filter_object()), c("CohortFilters", "R6"))
 
       cohort_object <- session$getReturned()()
       expect_equal(class(cohort_object()), c("Cohort", "R6"))
@@ -68,7 +68,7 @@ test_that("cohort_manual_selection_server_tcga", {
       expect_equal(group_object()$group_display, "Immune Subtype")
 
 
-      expect_equal(class(filter_object()), c("Cohort_Filters", "R6"))
+      expect_equal(class(filter_object()), c("CohortFilters", "R6"))
 
       cohort_object <- session$getReturned()()
       expect_equal(class(cohort_object()), c("Cohort", "R6"))
