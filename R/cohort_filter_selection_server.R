@@ -1,17 +1,11 @@
 cohort_filter_selection_server <- function(
   id,
   dataset,
-  samples_tbl,
   features_tbl
 ) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
-
-      samples <- shiny::reactive({
-        shiny::req(samples_tbl())
-        dplyr::pull(samples_tbl(),"sample_name")
-      })
 
 
       # group filters -----------------------------------------------------------
@@ -110,13 +104,6 @@ cohort_filter_selection_server <- function(
           group_filters = cohort_group_filter_obj()
         )
       })
-
-
-
-      # output$samples_text <- shiny::renderText({
-      #   c("Number of current samples:", length(selected_samples()))
-      # })
-
 
       return(filter_object)
     }

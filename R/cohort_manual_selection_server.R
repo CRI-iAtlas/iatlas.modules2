@@ -17,7 +17,7 @@ cohort_manual_selection_server <- function(id){
         else return(selected_dataset())
       }))
 
-      feature_tbl <- shiny::reactive({
+      dataset_feature_tbl <- shiny::reactive({
         shiny::req(dataset())
         iatlas.api.client::query_features(cohorts = dataset())
       })
@@ -26,41 +26,30 @@ cohort_manual_selection_server <- function(id){
         "group_selection",
         dataset,
         default_group,
-        feature_tbl
+        dataset_feature_tbl
       )
-
-      sample_tbl <- shiny::reactive({
-        shiny::req(dataset(), group_object())
-
-        if(group_object()$group_type == "tag"){
-          cohort <-
-            iatlas.api.client::query_cohorts(
-              datasets = dataset(),
-              tags = group_object()$group_name
-            ) %>%
-            dplyr::pull("name")
-        } else {
-          cohort = dataset()
-        }
-        iatlas.api.client::query_cohort_samples(cohorts = cohort)
-      })
 
       filter_object <- cohort_filter_selection_server(
         "filter_selection",
         dataset,
-        sample_tbl,
-        feature_tbl
+        dataset_feature_tbl
       )
 
-      cohort_object <- shiny::reactive({
+      sample_tbl <- shiny::reactive({
+        shiny::req(group_object())
+        iatlas.api.client::query_cohort_samples(cohorts = group_object()$cohort)
+      })
 
-        obj <- build_cohort_object_from_objects(
-          group_object(),
-          filter_object(),
-          feature_tbl(),
-          sample_tbl()
+
+
+      cohort_object <- shiny::reactive({
+        shiny::req(group_object(), filter_object(), sample_tbl, dataset_feature_tbl())
+        Cohort$new(
+          feature_tbl = dataset_feature_tbl(),
+          sample_tbl = sample_tbl(),
+          filter_object = filter_object(),
+          group_object = group_object()
         )
-        return(obj)
       })
 
       return(cohort_object)

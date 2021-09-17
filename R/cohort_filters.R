@@ -2,18 +2,8 @@ Cohort_Filters <- R6::R6Class("Cohort_Filters", list(
   numeric_filters = NULL,
   group_filters = NULL,
   initialize = function(numeric_filters, group_filters) {
-    if(typeof(numeric_filters) != "environment"){
-      stop("numeric_filters must be of type environment (class: Cohort_Numeric_Filters)")
-    }
-    if(!all(class(numeric_filters) == c("Cohort_Numeric_Filters", "R6"))){
-      stop("numeric_filters must be of class Cohort_Numeric_Filters")
-    }
-    if(typeof(group_filters) != "environment"){
-      stop("group_filters must be of type environment (class: Cohort_Numeric_Filters)")
-    }
-    if(!all(class(group_filters) == c("Cohort_Group_Filters", "R6"))){
-      stop("group_filters must be of class Cohort_Group_Filters")
-    }
+    validate_object_type(numeric_filters, "Cohort_Numeric_Filters")
+    validate_object_type(group_filters, "Cohort_Group_Filters")
     self$numeric_filters <- numeric_filters
     self$group_filters <- group_filters
   },
@@ -50,12 +40,7 @@ Cohort_Numeric_Filters <- R6::R6Class("Cohort_Numeric_Filters", list(
     if(typeof(filter_list) != "list"){
       stop("Numeric filter list must must be a list")
     }
-    if(all("R6" %in% purrr::map(filter_list, class))){
-      stop("Numeric filter list items must must be of class R6")
-    }
-    if(all("Cohort_Numeric_Filter" %in% purrr::map(filter_list, class))){
-      stop("Numeric filter list items must must be of class Cohort_Numeric_Filter")
-    }
+    purrr::walk(filter_list, validate_object_type, "Cohort_Numeric_Filter")
     self$filter_list <- filter_list
   },
   get_samples = function(cohorts){
@@ -75,12 +60,7 @@ Cohort_Group_Filters <- R6::R6Class("Cohort_Group_Filters", list(
     if(typeof(filter_list) != "list"){
       stop("Group filter list must must be a list")
     }
-    if(all("R6" %in% purrr::map(filter_list, class))){
-      stop("Group filter list items must must be of class R6")
-    }
-    if(all("Cohort_Group_Filter" %in% purrr::map(filter_list, class))){
-      stop("Group filter list items must must be of class Cohort_Group_Filter")
-    }
+    purrr::walk(filter_list, validate_object_type, "Cohort_Group_Filter")
     self$filter_list <- filter_list
   },
   get_samples = function(cohorts){

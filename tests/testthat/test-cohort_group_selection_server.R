@@ -23,14 +23,11 @@ test_that("cohort_group_selection_server_immune_subtype", {
       expect_false(display_immune_feature_bins_ui())
 
       group_object <- session$getReturned()()
-      expect_named(
-        group_object,
-        c("dataset", "group_name", "group_display", "group_type")
-      )
-      expect_equal(group_object$dataset, "TCGA")
+      expect_type(group_object, "environment")
+      expect_equal(class(group_object), c("TagGroup", "R6"))
+      expect_equal(group_object$dataset_name, "TCGA")
       expect_equal(group_object$group_name, "Immune_Subtype")
       expect_equal(group_object$group_display, "Immune Subtype")
-      expect_equal(group_object$group_type, "tag")
     }
   )
 })
@@ -51,21 +48,12 @@ test_that("cohort_group_selection_server_driver_mutation", {
       expect_false(display_immune_feature_bins_ui())
 
       group_object <- session$getReturned()()
-      expect_named(
-        group_object,
-        c(
-          "dataset",
-          "group_name",
-          "group_display",
-          "group_type",
-          "mutation"
-        )
-      )
-      expect_equal(group_object$dataset, "TCGA")
+      expect_type(group_object, "environment")
+      expect_equal(class(group_object), c("MutationStatusGroup", "R6"))
+      expect_equal(group_object$dataset_name, "TCGA")
       expect_equal(group_object$group_name, "Driver Mutation")
       expect_equal(group_object$group_display, "Driver Mutation")
-      expect_equal(group_object$group_type, "custom")
-      expect_equal(group_object$mutation, "ABL1:(NS)")
+      expect_equal(group_object$mutation_name, "ABL1:(NS)")
     }
   )
 })
@@ -89,23 +77,14 @@ test_that("cohort_group_selection_server_immune_feature_bin", {
       expect_type(output$select_immune_feature_bins_group_ui, "list")
 
       group_object <- session$getReturned()()
-      expect_named(
-        group_object,
-        c(
-          "dataset",
-          "group_name",
-          "group_display",
-          "group_type",
-          "bin_immune_feature",
-          "bin_number"
-        )
-      )
-      expect_equal(group_object$dataset, "TCGA")
+
+      expect_type(group_object, "environment")
+      expect_equal(class(group_object), c("FeatureBinGroup", "R6"))
+      expect_equal(group_object$dataset_name, "TCGA")
       expect_equal(group_object$group_name, "Immune Feature Bins")
       expect_equal(group_object$group_display, "Immune Feature Bins")
-      expect_equal(group_object$group_type, "custom")
-      expect_equal(group_object$bin_immune_feature, "feature1")
-      expect_equal(group_object$bin_number, 2)
+      expect_equal(group_object$feature_name, "feature1")
+      expect_equal(group_object$feature_bins, 2)
     }
   )
 })
@@ -133,13 +112,11 @@ test_that("cohort_group_selection_server_tcga_clinical", {
       expect_false(display_immune_feature_bins_ui())
 
       group_object <- session$getReturned()()
-      expect_named(
-        group_object,
-        c("dataset", "group_name", "group_display", "group_type")
-      )
-      expect_equal(group_object$dataset, "TCGA")
+      expect_type(group_object, "environment")
+      expect_equal(class(group_object), c("TagGroup", "R6"))
+      expect_equal(group_object$dataset_name, "TCGA")
       expect_equal(group_object$group_name, "gender")
-      expect_equal(group_object$group_type, "tag")
+      expect_equal(group_object$group_display, "Gender")
     }
   )
 })
@@ -161,22 +138,13 @@ test_that("cohort_group_selection_server_pcawg_feature_bins", {
       expect_true(display_immune_feature_bins_ui())
 
       group_object <- session$getReturned()()
-      expect_named(
-        group_object,
-        c(
-          "dataset",
-          "group_name",
-          "group_display",
-          "group_type",
-          "bin_immune_feature",
-          "bin_number"
-        )
-      )
-      expect_equal(group_object$dataset, "PCAWG")
+      expect_type(group_object, "environment")
+      expect_equal(class(group_object), c("FeatureBinGroup", "R6"))
+      expect_equal(group_object$dataset_name, "PCAWG")
       expect_equal(group_object$group_name, "Immune Feature Bins")
-      expect_equal(group_object$group_type, "custom")
-      expect_equal(group_object$bin_immune_feature, "feature1")
-      expect_equal(group_object$bin_number, 2)
+      expect_equal(group_object$group_display, "Immune Feature Bins")
+      expect_equal(group_object$feature_name, "feature1")
+      expect_equal(group_object$feature_bins, 2)
     }
   )
 })
