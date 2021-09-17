@@ -8,7 +8,6 @@ test_that("cohort_manual_selection_server_pcawg", {
       expect_type(default_dataset, "character")
       expect_equal(selected_dataset(), "PCAWG")
       expect_equal(dataset(), "PCAWG")
-      expect_type(sample_tbl(), "list")
       expect_type(dataset_feature_tbl(), "list")
 
       expect_type(group_object(), "environment")
@@ -36,7 +35,6 @@ test_that("cohort_manual_selection_server_pcawg_gender", {
       expect_equal(selected_dataset(), "PCAWG")
       expect_equal(dataset(), "PCAWG")
       expect_type(dataset_feature_tbl(), "list")
-      expect_type(sample_tbl(), "list")
 
       expect_type(group_object(), "environment")
       expect_equal(class(group_object()), c("TagGroup", "R6"))
@@ -62,7 +60,6 @@ test_that("cohort_manual_selection_server_tcga", {
       expect_type(selected_dataset(), "character")
       expect_equal(dataset(), "TCGA")
       expect_type(dataset_feature_tbl(), "list")
-      expect_type(sample_tbl(), "list")
 
       expect_type(group_object(), "environment")
       expect_equal(class(group_object()), c("TagGroup", "R6"))

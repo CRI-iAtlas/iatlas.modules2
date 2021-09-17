@@ -35,18 +35,10 @@ cohort_manual_selection_server <- function(id){
         dataset_feature_tbl
       )
 
-      sample_tbl <- shiny::reactive({
-        shiny::req(group_object())
-        iatlas.api.client::query_cohort_samples(cohorts = group_object()$cohort)
-      })
-
-
-
       cohort_object <- shiny::reactive({
-        shiny::req(group_object(), filter_object(), sample_tbl, dataset_feature_tbl())
+        shiny::req(group_object(), filter_object(), dataset_feature_tbl())
         Cohort$new(
           feature_tbl = dataset_feature_tbl(),
-          sample_tbl = sample_tbl(),
           filter_object = filter_object(),
           group_object = group_object()
         )

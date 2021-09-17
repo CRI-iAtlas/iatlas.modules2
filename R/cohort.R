@@ -15,7 +15,6 @@ Cohort <- R6::R6Class(
     plot_colors = NULL,
     initialize = function(
       feature_tbl,
-      sample_tbl,
       filter_object,
       group_object
     ){
@@ -30,15 +29,10 @@ Cohort <- R6::R6Class(
       group_name    <- group_object$group_name
       group_display <- group_object$group_display
 
+      sample_tbl <- iatlas.api.client::query_cohort_samples(cohorts = cohort)
+
       # tag_types ----
       if(group_type == "tag"){
-
-        cohort <- dataset_name <-
-          iatlas.api.client::query_cohorts(
-            datasets = dataset_name,
-            tags = group_name
-          ) %>%
-          dplyr::pull("name")
 
         samples <- filter_object$get_samples(cohort, sample_tbl$sample_name)
 
