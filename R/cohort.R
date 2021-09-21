@@ -29,92 +29,10 @@ Cohort <- R6::R6Class(
       group_name    <- group_object$group_name
       group_display <- group_object$group_display
 
-      # sample_tbl <- iatlas.api.client::query_cohort_samples(cohorts = cohort)
-      # samples <- filter_object$get_samples(cohort, sample_tbl$sample_name)
-
       sample_tbl <- filter_object$get_sample_tbl(cohort)
-
-      # tag_types ----
-      if(group_type == "tag"){
-
-        sample_tbl <- sample_tbl %>%
-          dplyr::select(
-            "name" = "tag_long_display",
-            "group" = "tag_short_display",
-            "characteristics" = "tag_characteristics",
-            "color" = "tag_color",
-            "sample" = "sample_name"
-          )
-
-        group_tbl <- sample_tbl %>%
-          dplyr::group_by(dplyr::across(c(-"sample"))) %>%
-          dplyr::count(name = "size") %>%
-          dplyr::ungroup() %>%
-          dplyr::arrange(.data$group) %>%
-          add_plot_colors_to_tbl(.) %>%
-          dplyr::select("name", "group", "characteristics", "color", "size")
-
-        sample_tbl <- sample_tbl %>%
-          dplyr::select("sample", "group") %>%
-          dplyr::arrange(.data$sample)
-
-      # mutation_types ----
-      } else if(group_type == "mutation_status"){
-
-        mutation_name <- group_object$mutation_name
-
-
-        sample_tbl <-
-          iatlas.api.client::query_mutation_statuses(
-            mutations = mutation_name,
-            cohorts = cohort
-          ) %>%
-          dplyr::select("sample" = "sample_name", "group" = "mutation_status")
-
-        group_tbl <- sample_tbl %>%
-          dplyr::group_by(.data$group) %>%
-          dplyr::summarise(size = dplyr::n(), .groups = "drop") %>%
-          dplyr::mutate(
-            "name" = mutation_name,
-            "characteristics" = "Mutation Status"
-          ) %>%
-          dplyr::arrange(.data$group) %>%
-          add_plot_colors_to_tbl()
-
-        group_name <- stringr::str_c("Mutation Status: ", mutation_name)
-
-      # feature bins ----
-      } else if (group_type == "feature_bin"){
-
-        feature_name <- group_object$feature_name
-        feature_bins <- group_object$feature_bins
-
-        feature_display <- feature_tbl %>%
-          dplyr::filter(.data$name == feature_name) %>%
-          dplyr::pull("display")
-
-        sample_tbl <- iatlas.api.client::query_feature_values(
-          features = feature_name, cohorts = dataset_name
-        ) %>%
-          dplyr::mutate("group" = as.character(cut(.data$feature_value, feature_bins))) %>%
-          dplyr::select("sample", "group")
-
-        group_tbl <- sample_tbl %>%
-          dplyr::group_by(.data$group) %>%
-          dplyr::summarise(size = dplyr::n()) %>%
-          dplyr::ungroup() %>%
-          dplyr::mutate(
-            "name" = feature_name,
-            "characteristics" = "Immune feature bin range"
-          ) %>%
-          dplyr::arrange(.data$group) %>%
-          add_plot_colors_to_tbl()
-
-        group_name  = stringr::str_c("Immune Feature Bins:", feature_display)
-
-      }
-
-      # other ----
+      tables     <- group_object$get_tables(sample_tbl)
+      sample_tbl <- tables$sample_tbl
+      group_tbl  <- tables$group_tbl
 
       plot_colors <- group_tbl %>%
         dplyr::select("group", "color") %>%
