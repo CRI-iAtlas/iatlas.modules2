@@ -168,11 +168,12 @@ univariate_driver_server <- function(id, cohort_obj) {
 
       violin_tbl <- shiny::reactive({
         shiny::req(selected_volcano_result(), input$response_choice)
-        feature_tbl <- iatlas.modules2::query_feature_values_with_cohort_object(
-          cohort_object = cohort_obj(),
+
+        feature_tbl <- cohort_obj()$get_feature_values(
           features = input$response_choice,
           groups = selected_volcano_result()$group
         )
+
         status_tbl <-
           iatlas.api.client::query_mutation_statuses(
             entrez = selected_volcano_result()$entrez,
@@ -184,6 +185,7 @@ univariate_driver_server <- function(id, cohort_obj) {
             "sample" = "sample_name",
             "status" = "mutation_status"
           )
+
         dplyr::inner_join(feature_tbl, status_tbl, by = "sample") %>%
           dplyr::mutate(
             "status" = forcats::fct_relevel(.data$status, "Wt", "Mut")

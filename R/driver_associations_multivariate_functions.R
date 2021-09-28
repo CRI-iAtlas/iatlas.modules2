@@ -1,7 +1,3 @@
-show_md_submodule <- function(cohort_obj){
-  iatlas.modules2::cohort_has_dataset(cohort_obj, "TCGA")
-}
-
 build_md_tag_covariate_tbl <- function(cohort_obj, cov_obj){
   parent_tags <- cov_obj$categorical_covariates
   if (is.null(parent_tags)) return(NULL)
