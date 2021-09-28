@@ -59,6 +59,58 @@ Cohort <- R6::R6Class(
       self$filters         <- filter_object
       self$plot_colors     <- plot_colors
 
+    },
+    get_feature_class_list = function(){
+      self$feature_tbl %>%
+        dplyr::pull("class") %>%
+        unique() %>%
+        sort()
+    },
+    get_feature_list = function(){
+      self$feature_tbl %>%
+        dplyr::pull("name") %>%
+        unique() %>%
+        sort()
+    },
+    has_classes = function(classes, all_classes = T){
+      cohort_classes <- self$get_feature_class_list()
+      if(all_classes) has_function <- base::all
+      else has_function <- base::any
+      has_function(classes %in% cohort_classes)
+    },
+    has_features = function(features, all_features = T){
+      cohort_features <- self$get_feature_list()
+      if(all_features) has_function <- base::all
+      else has_function <- base::any
+      has_function(features %in% cohort_features)
+    },
+
+    get_feature_values = function(
+      features = NA, feature_classes = NA, groups = NA
+    ){
+      tbl <- iatlas.api.client::query_feature_values(
+        cohort = self$cohort,
+        features = features,
+        feature_classes = feature_classes
+      ) %>%
+        dplyr::filter(.data$sample %in% self$sample_tbl$sample)
+
+      if(!is.na(groups)){
+        group_samples <- self$sample_tbl %>%
+          dplyr::filter(.data$group %in% groups) %>%
+          dplyr::pull("sample")
+        tbl <- dplyr::filter(tbl, .data$sample %in% group_samples)
+      }
+      return(tbl)
+    },
+
+    get_gene_values = function(entrez = NA, gene_types = NA){
+      iatlas.api.client::query_gene_expression(
+        cohort = self$cohort,
+        gene_types = gene_types,
+        entrez = entrez
+      ) %>%
+        dplyr::filter(.data$sample %in% self$sample_tbl$sample)
     }
   )
 )

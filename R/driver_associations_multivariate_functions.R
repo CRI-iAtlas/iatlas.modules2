@@ -9,7 +9,7 @@ build_md_tag_covariate_tbl <- function(cohort_obj, cov_obj){
     purrr::map(
       parent_tags,
       ~iatlas.api.client::query_tag_samples(
-        cohorts = cohort_obj$dataset,
+        cohorts = cohort_obj$dataset_name,
         parent_tags = .x
       )
     ) %>%
@@ -27,10 +27,7 @@ build_md_feature_covariate_tbl <- function(cohort_obj, cov_obj){
   features <- cov_obj$numerical_covariates
   if (is.null(features)) return(NULL)
   tbl <-
-    query_feature_values_with_cohort_object(
-      cohort_object = cohort_obj,
-      features = features
-    ) %>%
+    cohort_obj$get_feature_values(features) %>%
     dplyr::select("sample", "feature_name", "feature_value") %>%
     tidyr::pivot_wider(
       ., names_from = "feature_name", values_from = "feature_value"
@@ -53,7 +50,7 @@ build_md_covariate_tbl <- function(cohort_obj, cov_obj){
 
 build_md_response_tbl <- function(cohort_obj, feature){
   tbl <-
-    query_feature_values_with_cohort_object(cohort_obj, feature) %>%
+    cohort_obj$get_feature_values(feature) %>%
     dplyr::select("sample", "response" = "feature_value")
 }
 

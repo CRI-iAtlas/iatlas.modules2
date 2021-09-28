@@ -52,8 +52,42 @@ test_that("tag cohort", {
     "filter_object" = cf1,
     "group_object" = tag_group
   )
-
   expect_equal(class(cohort), c("Cohort", "R6"))
+
+
+  class_list <- cohort$get_feature_class_list()
+  expect_type(class_list, "character")
+  expect_true(length(class_list) > 0)
+
+  feature_list <- cohort$get_feature_list()
+  expect_type(class_list, "character")
+  expect_true(length(class_list) > 0)
+
+  expect_true(cohort$has_classes(c("EPIC", "MCPcounter")))
+  expect_false(cohort$has_classes("DNA Alteration"))
+
+  expect_true(cohort$has_features("B_cells_memory"))
+  expect_false(cohort$has_classes("not_a_feature"))
+
+  feature_values <- cohort$get_feature_values("B_cells_memory")
+  expect_type(feature_values, "list")
+  expect_true(nrow(feature_values) > 0)
+  expect_true(all(feature_values$feature_name == "B_cells_memory"))
+  expect_true(all(feature_values$sample %in% cohort$sample_tbl$sample))
+
+  feature_values2 <- cohort$get_feature_values("B_cells_memory", groups = "C1")
+  expect_type(feature_values2, "list")
+  expect_true(nrow(feature_values2) > 0)
+  expect_true(nrow(feature_values2) < nrow(feature_values))
+  expect_true(all(feature_values2$feature_name == "B_cells_memory"))
+  expect_true(all(feature_values2$sample %in% cohort$sample_tbl$sample))
+
+  gene_values <- cohort$get_gene_values(entrez = 1)
+  expect_type(gene_values, "list")
+  expect_true(nrow(gene_values) > 0)
+  expect_true(all(gene_values$entrez == 1))
+  expect_true(all(gene_values$sample %in% cohort$sample_tbl$sample))
+
 })
 
 test_that("mutation cohort", {
@@ -64,6 +98,20 @@ test_that("mutation cohort", {
   )
 
   expect_equal(class(cohort), c("Cohort", "R6"))
+
+  class_list <- cohort$get_feature_class_list()
+  expect_type(class_list, "character")
+  expect_true(length(class_list) > 0)
+
+  feature_list <- cohort$get_feature_list()
+  expect_type(class_list, "character")
+  expect_true(length(class_list) > 0)
+
+  expect_true(cohort$has_classes("DNA Alteration"))
+  expect_false(cohort$has_classes("not a class"))
+
+  expect_true(cohort$has_features("B_cells_memory"))
+  expect_false(cohort$has_classes("not_a_feature"))
 })
 
 test_that("feature bin cohort", {
@@ -72,7 +120,20 @@ test_that("feature bin cohort", {
     "filter_object" = cf2,
     "group_object" = bin_group
   )
-
   expect_equal(class(cohort), c("Cohort", "R6"))
+
+  class_list <- cohort$get_feature_class_list()
+  expect_type(class_list, "character")
+  expect_true(length(class_list) > 0)
+
+  feature_list <- cohort$get_feature_list()
+  expect_type(class_list, "character")
+  expect_true(length(class_list) > 0)
+
+  expect_true(cohort$has_classes("DNA Alteration"))
+  expect_false(cohort$has_classes("not a class"))
+
+  expect_true(cohort$has_features("B_cells_memory"))
+  expect_false(cohort$has_classes("not_a_feature"))
 })
 

@@ -89,9 +89,9 @@ get_tcga_feature_bin_cohort_obj <- memoise::memoise(
   }
 )
 
-get_tcga_immune_subtype_cohort_obj_50 <- memoise::memoise(
+get_tcga_immune_subtype_cohort_obj_small <- memoise::memoise(
   function(){
-    read_rds_file("tcga_immune_subtype_cohort_obj_50.rds")
+    read_rds_file("tcga_immune_subtype_cohort_obj_small.rds")
   }
 )
 
