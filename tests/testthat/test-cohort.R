@@ -48,7 +48,6 @@ bin_group <- FeatureBinGroup$new(
 
 test_that("tag cohort", {
   cohort <- Cohort$new(
-    "feature_tbl" = get_pcawg_features_tbl(),
     "filter_object" = cf1,
     "group_object" = tag_group
   )
@@ -92,7 +91,6 @@ test_that("tag cohort", {
 
 test_that("mutation cohort", {
   cohort <- Cohort$new(
-    "feature_tbl" = get_tcga_features_tbl(),
     "filter_object" = cf2,
     "group_object" = mutation_group
   )
@@ -116,7 +114,6 @@ test_that("mutation cohort", {
 
 test_that("feature bin cohort", {
   cohort <- Cohort$new(
-    "feature_tbl" = get_tcga_features_tbl(),
     "filter_object" = cf2,
     "group_object" = bin_group
   )

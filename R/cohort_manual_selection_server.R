@@ -38,7 +38,6 @@ cohort_manual_selection_server <- function(id){
       cohort_object <- shiny::reactive({
         shiny::req(group_object(), filter_object(), dataset_feature_tbl())
         Cohort$new(
-          feature_tbl = dataset_feature_tbl(),
           filter_object = filter_object(),
           group_object = group_object()
         )

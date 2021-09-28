@@ -14,7 +14,6 @@ Cohort <- R6::R6Class(
     filters = NULL,
     plot_colors = NULL,
     initialize = function(
-      feature_tbl,
       filter_object,
       group_object
     ){
@@ -42,6 +41,8 @@ Cohort <- R6::R6Class(
         iatlas.api.client::query_datasets() %>%
         dplyr::filter(.data$name == dataset_name) %>%
         dplyr::pull("display")
+
+      feature_tbl <- iatlas.api.client::query_features(cohorts = cohort)
 
       # set values ----
 
