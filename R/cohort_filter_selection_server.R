@@ -1,33 +1,23 @@
 cohort_filter_selection_server <- function(
   id,
-  dataset,
-  samples_tbl,
+  datasets,
   features_tbl
 ) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
 
-      samples <- shiny::reactive({
-        shiny::req(samples_tbl())
-        dplyr::pull(samples_tbl(),"sample_name")
-      })
-
 
       # group filters -----------------------------------------------------------
-      tag_group_filter_tbl <- shiny::reactive({
-        shiny::req(dataset())
-        iatlas.api.client::query_dataset_tags(dataset = dataset()) %>%
-          dplyr::select("display" = "tag_short_display", "name" = "tag_name")
-      })
-
       group_filter_list <- shiny::reactive({
-        shiny::req(tag_group_filter_tbl())
-        lst <-
-          dplyr::bind_rows(
-            tag_group_filter_tbl()
-          ) %>%
-          dplyr::select("display", "name") %>%
+        shiny::req(datasets())
+        iatlas.api.client::query_dataset_tags(dataset = datasets()) %>%
+          dplyr::group_by(.data$tag_name) %>%
+          dplyr::mutate(count = dplyr::n()) %>%
+          dplyr::ungroup() %>%
+          dplyr::filter(.data$count == length(datasets())) %>%
+          dplyr::select("tag_short_display", "tag_name") %>%
+          dplyr::arrange(.data$tag_name) %>%
           tibble::deframe(.)
       })
 
@@ -36,7 +26,7 @@ cohort_filter_selection_server <- function(
         purrr::partial(
           group_filter_element_server,
           group_named_list = group_filter_list,
-          dataset = dataset
+          datasets = datasets
         )
       })
 
@@ -46,29 +36,22 @@ cohort_filter_selection_server <- function(
         "group_filter",
         element_module = group_element_module_server,
         element_module_ui = group_element_module_ui,
-        remove_ui_event = shiny::reactive(dataset())
+        remove_ui_event = shiny::reactive(datasets())
       )
 
-      valid_group_filter_obj <- shiny::reactive({
+      cohort_group_filter_obj <- shiny::reactive({
         shiny::req(group_filter_output())
         group_filter_output() %>%
           shiny::reactiveValuesToList(.) %>%
-          get_valid_group_filters()
-      })
-
-      group_filter_samples <- shiny::reactive({
-        shiny::req(samples, dataset())
-        get_group_filtered_samples(
-          valid_group_filter_obj(),
-          samples(),
-          dataset()
-        )
+          purrr::discard(purrr::map_lgl(., is.null)) %>%
+          unname() %>%
+          CohortFilterList$new(type = "group")
       })
 
       # # numeric_filters -------------------------------------------------------
 
       feature_tbl <- shiny::reactive({
-        shiny::req(dataset(), features_tbl())
+        shiny::req(features_tbl())
         features_tbl() %>%
           dplyr::select("class", "display", "feature" = "name")
       })
@@ -88,7 +71,7 @@ cohort_filter_selection_server <- function(
         purrr::partial(
           numeric_filter_element_server,
           numeric_named_list = numeric_named_list,
-          dataset = dataset
+          datasets = datasets
         )
       })
 
@@ -98,47 +81,27 @@ cohort_filter_selection_server <- function(
         "numeric_filter",
         element_module = numeric_element_module_server,
         element_module_ui = numeric_element_module_ui,
-        remove_ui_event = shiny::reactive(dataset())
+        remove_ui_event = shiny::reactive(datasets())
       )
 
-      valid_numeric_filter_obj <- shiny::reactive({
+      cohort_numeric_filter_obj <- shiny::reactive({
         shiny::req(numeric_filter_output())
         numeric_filter_output() %>%
           shiny::reactiveValuesToList(.) %>%
-          get_valid_numeric_filters()
+          purrr::discard(purrr::map_lgl(., is.null)) %>%
+          unname() %>%
+          CohortFilterList$new(type = "numeric")
       })
 
-      numeric_filter_samples <- shiny::reactive({
-        shiny::req(samples)
-        get_numeric_filtered_samples(
-          valid_numeric_filter_obj(),
-          samples(),
-          dataset()
+      filter_object <- shiny::reactive({
+        shiny::req(cohort_group_filter_obj(), cohort_numeric_filter_obj())
+        CohortFilters$new(
+          numeric_filters = cohort_numeric_filter_obj(),
+          group_filters = cohort_group_filter_obj()
         )
       })
 
-      # return filter obj ----
-
-      selected_samples <- shiny::reactive({
-        shiny::req(numeric_filter_samples(), group_filter_samples())
-        intersect(numeric_filter_samples(), group_filter_samples())
-      })
-
-      output$samples_text <- shiny::renderText({
-        c("Number of current samples:", length(selected_samples()))
-      })
-
-      filter_obj <- shiny::reactive({
-        list(
-          "samples" = selected_samples(),
-          "filters" = list(
-            "numeric_filters" = valid_numeric_filter_obj(),
-            "tag_filters" = valid_group_filter_obj()
-          )
-        )
-      })
-
-      return(filter_obj)
+      return(filter_object)
     }
   )
 }

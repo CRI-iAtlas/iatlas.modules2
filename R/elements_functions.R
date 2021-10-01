@@ -1,8 +1,10 @@
 
-build_tag_filter_list <- function(parent_tag_name, dataset){
+build_tag_filter_list <- function(parent_tag_name, datasets){
   iatlas.api.client::query_tags(
-    cohorts = dataset,
+    cohorts = datasets,
     parent_tags = parent_tag_name
   ) %>%
-    dplyr::pull("tag_name")
+    dplyr::select("tag_short_display", "tag_name") %>%
+    dplyr::arrange(.data$tag_name) %>%
+    tibble::deframe(.)
 }

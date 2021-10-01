@@ -2,8 +2,6 @@ test_that("cohort_group_selection_server_immune_subtype", {
   shiny::testServer(
     cohort_group_selection_server,
     args = list(
-      "selected_dataset" = shiny::reactiveVal("TCGA"),
-      "default_group" = "Immune_Subtype",
       "features_tbl" = shiny::reactiveVal(get_tcga_features_tbl())
     ),
     {
@@ -15,7 +13,7 @@ test_that("cohort_group_selection_server_immune_subtype", {
       expect_named(available_groups_list())
       expect_type(output$select_group_ui, "list")
       expect_type(group_choice(), "character")
-      expect_equal(group_choice(), default_group)
+      expect_equal(group_choice(), default_group())
 
       session$setInputs("group_choice" = "Immune_Subtype")
       expect_equal(group_choice(), "Immune_Subtype")
@@ -23,14 +21,11 @@ test_that("cohort_group_selection_server_immune_subtype", {
       expect_false(display_immune_feature_bins_ui())
 
       group_object <- session$getReturned()()
-      expect_named(
-        group_object,
-        c("dataset", "group_name", "group_display", "group_type")
-      )
-      expect_equal(group_object$dataset, "TCGA")
+      expect_type(group_object, "environment")
+      expect_equal(class(group_object), c("TagGroup", "R6"))
+      expect_equal(group_object$dataset_names, "TCGA")
       expect_equal(group_object$group_name, "Immune_Subtype")
       expect_equal(group_object$group_display, "Immune Subtype")
-      expect_equal(group_object$group_type, "tag")
     }
   )
 })
@@ -39,8 +34,6 @@ test_that("cohort_group_selection_server_driver_mutation", {
   shiny::testServer(
     cohort_group_selection_server,
     args = list(
-      "selected_dataset" = shiny::reactiveVal("TCGA"),
-      "default_group" = "Immune_Subtype",
       "features_tbl" = shiny::reactiveVal(get_tcga_features_tbl())
     ),
     {
@@ -51,21 +44,12 @@ test_that("cohort_group_selection_server_driver_mutation", {
       expect_false(display_immune_feature_bins_ui())
 
       group_object <- session$getReturned()()
-      expect_named(
-        group_object,
-        c(
-          "dataset",
-          "group_name",
-          "group_display",
-          "group_type",
-          "mutation"
-        )
-      )
-      expect_equal(group_object$dataset, "TCGA")
-      expect_equal(group_object$group_name, "Driver Mutation")
-      expect_equal(group_object$group_display, "Driver Mutation")
-      expect_equal(group_object$group_type, "custom")
-      expect_equal(group_object$mutation, "ABL1:(NS)")
+      expect_type(group_object, "environment")
+      expect_equal(class(group_object), c("MutationStatusGroup", "R6"))
+      expect_equal(group_object$dataset_names, "TCGA")
+      expect_equal(group_object$group_name, "Mutation Status: ABL1:(NS)")
+      expect_equal(group_object$group_display, "Mutation Status: ABL1:(NS)")
+      expect_equal(group_object$mutation_name, "ABL1:(NS)")
     }
   )
 })
@@ -74,13 +58,11 @@ test_that("cohort_group_selection_server_immune_feature_bin", {
   shiny::testServer(
     cohort_group_selection_server,
     args = list(
-      "selected_dataset" = shiny::reactiveVal("TCGA"),
-      "default_group" = "Immune_Subtype",
       "features_tbl" = shiny::reactiveVal(get_tcga_features_tbl())
     ),
     {
       session$setInputs("group_choice" = "Immune Feature Bins")
-      session$setInputs("bin_immune_feature_choice" = "feature1")
+      session$setInputs("bin_immune_feature_choice" = "age_at_diagnosis")
       session$setInputs("bin_number_choice" = 2)
       expect_equal(group_choice(), "Immune Feature Bins")
       expect_false(display_driver_mutation_ui())
@@ -89,23 +71,14 @@ test_that("cohort_group_selection_server_immune_feature_bin", {
       expect_type(output$select_immune_feature_bins_group_ui, "list")
 
       group_object <- session$getReturned()()
-      expect_named(
-        group_object,
-        c(
-          "dataset",
-          "group_name",
-          "group_display",
-          "group_type",
-          "bin_immune_feature",
-          "bin_number"
-        )
-      )
-      expect_equal(group_object$dataset, "TCGA")
-      expect_equal(group_object$group_name, "Immune Feature Bins")
-      expect_equal(group_object$group_display, "Immune Feature Bins")
-      expect_equal(group_object$group_type, "custom")
-      expect_equal(group_object$bin_immune_feature, "feature1")
-      expect_equal(group_object$bin_number, 2)
+
+      expect_type(group_object, "environment")
+      expect_equal(class(group_object), c("FeatureBinGroup", "R6"))
+      expect_equal(group_object$dataset_names, "TCGA")
+      expect_equal(group_object$group_name, "Immune Feature Bins: Age At Diagnosis")
+      expect_equal(group_object$group_display, "Immune Feature Bins: Age At Diagnosis")
+      expect_equal(group_object$feature_name, "age_at_diagnosis")
+      expect_equal(group_object$feature_bins, 2)
     }
   )
 })
@@ -114,8 +87,6 @@ test_that("cohort_group_selection_server_tcga_clinical", {
   shiny::testServer(
     cohort_group_selection_server,
     args = list(
-      "selected_dataset" = shiny::reactiveVal("TCGA"),
-      "default_group" = "Immune_Subtype",
       "features_tbl" = shiny::reactiveVal(get_tcga_features_tbl())
     ),
     {
@@ -133,13 +104,11 @@ test_that("cohort_group_selection_server_tcga_clinical", {
       expect_false(display_immune_feature_bins_ui())
 
       group_object <- session$getReturned()()
-      expect_named(
-        group_object,
-        c("dataset", "group_name", "group_display", "group_type")
-      )
-      expect_equal(group_object$dataset, "TCGA")
+      expect_type(group_object, "environment")
+      expect_equal(class(group_object), c("TagGroup", "R6"))
+      expect_equal(group_object$dataset_names, "TCGA")
       expect_equal(group_object$group_name, "gender")
-      expect_equal(group_object$group_type, "tag")
+      expect_equal(group_object$group_display, "Gender")
     }
   )
 })
@@ -148,35 +117,59 @@ test_that("cohort_group_selection_server_pcawg_feature_bins", {
   shiny::testServer(
     cohort_group_selection_server,
     args = list(
-      "selected_dataset" = shiny::reactiveVal("PCAWG"),
-      "default_group" = "Immune_Subtype",
-      "features_tbl" = shiny::reactiveVal(get_pcawg_features_tbl())
+      "features_tbl" = shiny::reactiveVal(get_pcawg_features_tbl()),
+      "selected_datasets" = shiny::reactive("PCAWG")
     ),
     {
       session$setInputs("group_choice" = "Immune Feature Bins")
-      session$setInputs("bin_immune_feature_choice" = "feature1")
+      session$setInputs("bin_immune_feature_choice" = "age_at_diagnosis")
       session$setInputs("bin_number_choice" = 2)
       expect_equal(group_choice(), "Immune Feature Bins")
       expect_false(display_driver_mutation_ui())
       expect_true(display_immune_feature_bins_ui())
 
       group_object <- session$getReturned()()
-      expect_named(
-        group_object,
-        c(
-          "dataset",
-          "group_name",
-          "group_display",
-          "group_type",
-          "bin_immune_feature",
-          "bin_number"
-        )
-      )
-      expect_equal(group_object$dataset, "PCAWG")
-      expect_equal(group_object$group_name, "Immune Feature Bins")
-      expect_equal(group_object$group_type, "custom")
-      expect_equal(group_object$bin_immune_feature, "feature1")
-      expect_equal(group_object$bin_number, 2)
+      expect_type(group_object, "environment")
+      expect_equal(class(group_object), c("FeatureBinGroup", "R6"))
+      expect_equal(group_object$dataset_names, "PCAWG")
+      expect_equal(group_object$group_name, "Immune Feature Bins: Age At Diagnosis")
+      expect_equal(group_object$group_display, "Immune Feature Bins: Age At Diagnosis")
+      expect_equal(group_object$feature_name, "age_at_diagnosis")
+      expect_equal(group_object$feature_bins, 2)
+    }
+  )
+})
+
+test_that("cohort_group_selection_server_ici", {
+  shiny::testServer(
+    cohort_group_selection_server,
+    args = list(
+      "features_tbl" = shiny::reactiveVal(get_ici_features_tbl()),
+      "selected_datasets" = shiny::reactive(c("Gide_Cell_2019", "HugoLo_IPRES_2016")),
+      "default_group" = shiny::reactive("Responder")
+    ),
+    {
+      expect_type(tag_group_tbl(), "list")
+      expect_named(tag_group_tbl(), c("display", "name"))
+      expect_type(custom_group_tbl(), "list")
+      expect_named(custom_group_tbl(), c("display", "name"))
+      expect_type(available_groups_list(), "character")
+      expect_named(available_groups_list())
+      expect_type(output$select_group_ui, "list")
+      expect_type(group_choice(), "character")
+      expect_equal(group_choice(), default_group())
+
+      session$setInputs("group_choice" = "Responder")
+      expect_equal(group_choice(), "Responder")
+      expect_false(display_driver_mutation_ui())
+      expect_false(display_immune_feature_bins_ui())
+
+      group_object <- session$getReturned()()
+      expect_type(group_object, "environment")
+      expect_equal(class(group_object), c("TagGroup", "R6"))
+      expect_equal(group_object$dataset_names, c("Gide_Cell_2019", "HugoLo_IPRES_2016"))
+      expect_equal(group_object$group_name, "Responder")
+      expect_equal(group_object$group_display, "Responder")
     }
   )
 })

@@ -3,7 +3,7 @@ test_that("multivariate_driver_server", {
   shiny::testServer(
     multivariate_driver_server,
     args = list(
-      "cohort_obj" = shiny::reactiveVal(get_tcga_immune_subtype_cohort_obj_50())
+      "cohort_obj" = shiny::reactiveVal(get_tcga_immune_subtype_cohort_obj_small())
     ),
     {
       expect_type(output$response_options, "list")

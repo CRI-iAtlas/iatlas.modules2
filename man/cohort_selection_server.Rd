@@ -4,10 +4,22 @@
 \alias{cohort_selection_server}
 \title{Cohort Selection Server}
 \usage{
-cohort_selection_server(id, ...)
+cohort_selection_server(
+  id,
+  default_datasets = shiny::reactive("TCGA"),
+  default_group = shiny::reactive("Immune_Subtype"),
+  dataset_type = shiny::reactive("analysis"),
+  ...
+)
 }
 \arguments{
 \item{id}{A shiny ID}
+
+\item{default_datasets}{A Shiny reactive that return a list of dataset names}
+
+\item{default_group}{A Shiny reactive that returns the name of a group}
+
+\item{dataset_type}{A shiny reactive that returns one of c("analysis", "ici")}
 
 \item{...}{unused args}
 }

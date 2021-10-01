@@ -39,7 +39,7 @@ univariate_driver_server <- function(id, cohort_obj) {
 
       tags <- shiny::reactive({
         iatlas.api.client::query_tags(
-          cohorts = cohort_obj()$dataset,
+          cohorts = cohort_obj()$dataset_name,
           parent_tags = cohort_obj()$group_name
         ) %>%
           dplyr::pull("tag_name")
@@ -55,7 +55,7 @@ univariate_driver_server <- function(id, cohort_obj) {
 
         tbl <-
           iatlas.api.client::query_driver_results(
-            datasets = cohort_obj()$dataset,
+            datasets = cohort_obj()$dataset_name,
             tags = tags(),
             features = input$response_choice,
             min_num_wild_types = input$min_wt,
@@ -77,7 +77,7 @@ univariate_driver_server <- function(id, cohort_obj) {
 
       total_associations <- shiny::reactive({
         n_mutations <-
-          iatlas.api.client::query_cohort_mutations(cohorts = cohort_obj()$dataset) %>%
+          iatlas.api.client::query_cohort_mutations(cohorts = cohort_obj()$dataset_name) %>%
           nrow()
 
         n_tags <- length(tags())
@@ -168,11 +168,12 @@ univariate_driver_server <- function(id, cohort_obj) {
 
       violin_tbl <- shiny::reactive({
         shiny::req(selected_volcano_result(), input$response_choice)
-        feature_tbl <- iatlas.modules2::query_feature_values_with_cohort_object(
-          cohort_object = cohort_obj(),
+
+        feature_tbl <- cohort_obj()$get_feature_values(
           features = input$response_choice,
           groups = selected_volcano_result()$group
         )
+
         status_tbl <-
           iatlas.api.client::query_mutation_statuses(
             entrez = selected_volcano_result()$entrez,
@@ -184,6 +185,7 @@ univariate_driver_server <- function(id, cohort_obj) {
             "sample" = "sample_name",
             "status" = "mutation_status"
           )
+
         dplyr::inner_join(feature_tbl, status_tbl, by = "sample") %>%
           dplyr::mutate(
             "status" = forcats::fct_relevel(.data$status, "Wt", "Mut")

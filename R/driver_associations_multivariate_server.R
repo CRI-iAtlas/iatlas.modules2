@@ -12,6 +12,7 @@ multivariate_driver_server <- function(id, cohort_obj) {
       ns <- session$ns
 
       output$response_options <- shiny::renderUI({
+
         shiny::selectInput(
           inputId  = ns("response_choice"),
           label    = "Select or Search for Response Variable",
