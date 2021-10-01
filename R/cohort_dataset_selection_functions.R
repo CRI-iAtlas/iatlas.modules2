@@ -1,11 +1,11 @@
 #' Create Cohort Module String
 #'
-#' @param .dataset a string in the dataset column of the tibble
+#' @param .datasets a string(s) in the dataset column of the tibble
 #' @param tbl A tibble with columns dataset, and module
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
 #' @importFrom dplyr filter pull
-create_cohort_module_string <- function(.dataset, tbl = NULL){
+create_cohort_module_string <- function(.datasets, tbl = NULL){
     dataset_to_module_tbl <- dplyr::tribble(
         ~module,                  ~dataset,
         "Sample Group Overview",  "TCGA",
@@ -24,7 +24,7 @@ create_cohort_module_string <- function(.dataset, tbl = NULL){
     if (is.null(tbl)) tbl <- dataset_to_module_tbl
 
     modules <- tbl %>%
-        dplyr::filter(.data$dataset == .dataset) %>%
+        dplyr::filter(.data$dataset %in% .datasets) %>%
         dplyr::pull(.data$module)
     if (length(modules) == 0){
         return("No modules currently available for selected dataset")
@@ -33,7 +33,7 @@ create_cohort_module_string <- function(.dataset, tbl = NULL){
             paste0(collapse = ", ") %>%
             paste0(
                 "Modules available for dataset ",
-                .dataset,
+                .datasets,
                 ": ",
                 .
             )

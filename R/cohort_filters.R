@@ -20,7 +20,10 @@ CohortFilters <- R6::R6Class("CohortFilters", list(
   },
   get_sample_tbl = function(cohorts){
     samples    <- self$get_samples(cohorts)
-    sample_tbl <- iatlas.api.client::query_cohort_samples(cohorts = cohorts)
+    cohort_tbl <- iatlas.api.client::query_cohorts(cohorts = cohorts) %>%
+      dplyr::select("cohort_name" = "name", "dataset_name", "dataset_display")
+    sample_tbl <- iatlas.api.client::query_cohort_samples(cohorts = cohorts) %>%
+      dplyr::inner_join(cohort_tbl, by = "cohort_name")
     if(length(samples) > 0) {
       sample_tbl <- dplyr::filter(sample_tbl, .data$sample_name %in% samples)
     }

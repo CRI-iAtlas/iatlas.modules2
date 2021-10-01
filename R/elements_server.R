@@ -8,7 +8,7 @@
 #' @param reactive_values a shiny::reactiveValues() object
 #' @param module_id A unique value for this instance of the element being called
 #' @param numeric_named_list A named list
-#' @param dataset A string
+#' @param datasets A vector of strings
 #'
 #' @export
 numeric_filter_element_server <- function(
@@ -16,7 +16,7 @@ numeric_filter_element_server <- function(
   reactive_values,
   module_id,
   numeric_named_list,
-  dataset
+  datasets
 ) {
   shiny::moduleServer(
     id,
@@ -34,10 +34,10 @@ numeric_filter_element_server <- function(
       })
 
       features_tbl <- shiny::reactive({
-        shiny::req(dataset(), input$numeric_choice)
+        shiny::req(datasets(), input$numeric_choice)
         tbl <-
           iatlas.api.client::query_features_range(
-            cohorts = dataset(),
+            cohorts = datasets(),
             features = input$numeric_choice
           ) %>%
           dplyr::distinct()
@@ -93,8 +93,8 @@ numeric_filter_element_server <- function(
 #' @param id A shiny ID
 #' @param reactive_values a shiny::reactiveValues() object
 #' @param module_id A unique value for this instance of the element being called
+#' @param datasets A Shiny reactive that returns a list of dataset names
 #' @param group_named_list A named list
-#' @param dataset A string
 #'
 #' @export
 group_filter_element_server <- function(
@@ -102,7 +102,7 @@ group_filter_element_server <- function(
   reactive_values,
   module_id,
   group_named_list,
-  dataset
+  datasets
 ) {
   shiny::moduleServer(
     id,
@@ -115,13 +115,14 @@ group_filter_element_server <- function(
         shiny::selectInput(
           inputId = ns("parent_group_choice"),
           label = "Select or Search for Group",
-          choices = group_named_list()
+          choices = group_named_list(),
+          selected = names(group_named_list())[[1]]
         )
       })
 
       group_choices <- shiny::reactive({
-        shiny::req(input$parent_group_choice, dataset())
-        choices <- build_tag_filter_list(input$parent_group_choice, dataset())
+        shiny::req(input$parent_group_choice, datasets())
+        choices <- build_tag_filter_list(input$parent_group_choice, datasets())
       })
 
       output$checkbox_ui <- shiny::renderUI({

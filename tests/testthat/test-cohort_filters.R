@@ -38,13 +38,23 @@ test_that("CohortFilters", {
   expect_type(samples, "character")
 
   sample_tbl <- cf1$get_sample_tbl(cohorts = "PCAWG")
-  expect_named(sample_tbl, c("cohort_name", "sample_name", "tag_name"))
+  expect_named(sample_tbl, c("cohort_name", "sample_name", "tag_name", "dataset_name", "dataset_display"))
   expect_true(nrow(sample_tbl) > 0)
 
   sample_tbl <- cf1$get_sample_tbl(cohorts = "PCAWG_PCAWG_Study")
   expect_named(
     sample_tbl,
-    c("cohort_name", "sample_name", "tag_characteristics", "tag_color", "tag_long_display", "tag_name", "tag_short_display")
+    c(
+      "cohort_name",
+      "sample_name",
+      "tag_characteristics",
+      "tag_color",
+      "tag_long_display",
+      "tag_name",
+      "tag_short_display",
+      "dataset_name",
+      "dataset_display"
+    )
   )
   expect_true(nrow(sample_tbl) > 0)
 })
@@ -56,7 +66,15 @@ test_that("CohortFilterList1", {
   sample_tbl <- cgfs1$filter_sample_tbl(get_pcawg_study_samples_tbl(), "PCAWG_PCAWG_Study")
   expect_named(
     sample_tbl,
-    c("cohort_name", "sample_name", "tag_characteristics", "tag_color", "tag_long_display", "tag_name", "tag_short_display")
+    c(
+      "cohort_name",
+      "sample_name",
+      "tag_characteristics",
+      "tag_color",
+      "tag_long_display",
+      "tag_name",
+      "tag_short_display"
+      )
   )
   expect_true(nrow(sample_tbl) > 0)
 })
@@ -69,7 +87,15 @@ test_that("CohortFilterList2", {
   sample_tbl <- cgfs1$filter_sample_tbl(get_pcawg_study_samples_tbl(), "PCAWG_PCAWG_Study")
   expect_named(
     sample_tbl,
-    c("cohort_name", "sample_name", "tag_characteristics", "tag_color", "tag_long_display", "tag_name", "tag_short_display")
+    c(
+      "cohort_name",
+      "sample_name",
+      "tag_characteristics",
+      "tag_color",
+      "tag_long_display",
+      "tag_name",
+      "tag_short_display"
+      )
   )
   expect_true(nrow(sample_tbl) > 0)
 })

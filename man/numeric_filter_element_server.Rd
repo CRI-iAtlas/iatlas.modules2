@@ -9,7 +9,7 @@ numeric_filter_element_server(
   reactive_values,
   module_id,
   numeric_named_list,
-  dataset
+  datasets
 )
 }
 \arguments{
@@ -21,7 +21,7 @@ numeric_filter_element_server(
 
 \item{numeric_named_list}{A named list}
 
-\item{dataset}{A string}
+\item{datasets}{A vector of strings}
 }
 \description{
 Numeric Filter Element Server

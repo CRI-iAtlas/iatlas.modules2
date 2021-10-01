@@ -1,11 +1,17 @@
 #' Cohort Selection Server
 #'
 #' @param id A shiny ID
+#' @param default_datasets A Shiny reactive that return a list of dataset names
+#' @param default_group A Shiny reactive that returns the name of a group
+#' @param dataset_type A shiny reactive that returns one of c("analysis", "ici")
 #' @param ... unused args
 #'
 #' @export
 cohort_selection_server <- function(
   id,
+  default_datasets = shiny::reactive("TCGA"),
+  default_group    = shiny::reactive("Immune_Subtype"),
+  dataset_type     = shiny::reactive("analysis"),
   ...
 ){
   shiny::moduleServer(
@@ -13,7 +19,10 @@ cohort_selection_server <- function(
     function(input, output, session) {
 
       cohort_obj_manual <- cohort_manual_selection_server(
-        "cohort_manual_selection"
+        "cohort_manual_selection",
+        default_datasets = default_datasets,
+        default_group    = default_group,
+        dataset_type     = dataset_type
       )
 
       cohort_obj_upload <- cohort_upload_selection_server(
@@ -39,9 +48,10 @@ cohort_selection_server <- function(
         shiny::req(cohort_obj())
         cohort_obj()$group_tbl %>%
           dplyr::select(
-            "Sample Group" = .data$group,
-            "Group Name" = .data$name,
-            "Group Size" = .data$size,
+            "Name" = .data$short_name,
+            "Dataset" = .data$dataset_display,
+            "Description" = .data$long_name,
+            "Size" = .data$size,
             "Characteristics" = .data$characteristics,
             "Plot Color" = .data$color
           )

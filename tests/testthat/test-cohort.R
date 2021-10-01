@@ -72,20 +72,20 @@ test_that("tag cohort", {
   expect_type(feature_values, "list")
   expect_true(nrow(feature_values) > 0)
   expect_true(all(feature_values$feature_name == "B_cells_memory"))
-  expect_true(all(feature_values$sample %in% cohort$sample_tbl$sample))
+  expect_true(all(feature_values$sample %in% cohort$sample_tbl$sample_name))
 
   feature_values2 <- cohort$get_feature_values("B_cells_memory", groups = "C1")
   expect_type(feature_values2, "list")
   expect_true(nrow(feature_values2) > 0)
   expect_true(nrow(feature_values2) < nrow(feature_values))
   expect_true(all(feature_values2$feature_name == "B_cells_memory"))
-  expect_true(all(feature_values2$sample %in% cohort$sample_tbl$sample))
+  expect_true(all(feature_values2$sample %in% cohort$sample_tbl$sample_name))
 
   gene_values <- cohort$get_gene_values(entrez = 1)
   expect_type(gene_values, "list")
   expect_true(nrow(gene_values) > 0)
   expect_true(all(gene_values$entrez == 1))
-  expect_true(all(gene_values$sample %in% cohort$sample_tbl$sample))
+  expect_true(all(gene_values$sample %in% cohort$sample_tbl$sample_name))
 
 })
 

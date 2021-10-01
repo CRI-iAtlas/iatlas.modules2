@@ -3,14 +3,10 @@ test_that("cohort_filter_selection_server_pcawg", {
   shiny::testServer(
     cohort_filter_selection_server,
     args = list(
-      "dataset" = shiny::reactiveVal("PCAWG"),
+      "datasets" = shiny::reactiveVal("PCAWG"),
       "features_tbl" = shiny::reactiveVal(get_pcawg_features_tbl())
     ),
     {
-      expect_type(tag_group_filter_tbl(), "list")
-      expect_equal(nrow(tag_group_filter_tbl()), 3)
-      expect_named(tag_group_filter_tbl(), c("display", "name"))
-
       expect_type(group_filter_list(), "character")
       expect_equal(length(group_filter_list()), 3)
       expect_named(group_filter_list())
@@ -42,14 +38,10 @@ test_that("cohort_filter_selection_server_tcga", {
   shiny::testServer(
     cohort_filter_selection_server,
     args = list(
-      "dataset" = shiny::reactiveVal("TCGA"),
+      "datasets" = shiny::reactiveVal("TCGA"),
       "features_tbl" = shiny::reactiveVal(get_tcga_features_tbl())
     ),
     {
-
-      expect_type(tag_group_filter_tbl(), "list")
-      expect_equal(nrow(tag_group_filter_tbl()), 6)
-      expect_named(tag_group_filter_tbl(), c("display", "name"))
 
       expect_type(group_filter_list(), "character")
       expect_equal(length(group_filter_list()), 6)

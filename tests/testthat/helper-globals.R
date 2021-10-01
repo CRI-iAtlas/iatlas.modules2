@@ -1,12 +1,55 @@
 get_tcga_samples_tbl <- memoise::memoise(
   function(){
-    iatlas.api.client::query_cohort_samples(cohorts = "TCGA")
+    dplyr::inner_join(
+      iatlas.api.client::query_cohort_samples(cohorts = "TCGA"),
+      iatlas.api.client::query_cohorts(cohorts = "TCGA") %>%
+        dplyr::select("cohort_name" = "name", "dataset_name", "dataset_display"),
+      by = "cohort_name"
+    )
   }
 )
 
 get_tcga_study_samples_tbl <- memoise::memoise(
   function(){
-    iatlas.api.client::query_cohort_samples(cohorts = "TCGA_TCGA_Study")
+    dplyr::inner_join(
+      iatlas.api.client::query_cohort_samples(cohorts = "TCGA_TCGA_Study"),
+      iatlas.api.client::query_cohorts(cohorts = "TCGA_TCGA_Study") %>%
+        dplyr::select("cohort_name" = "name", "dataset_name", "dataset_display"),
+      by = "cohort_name"
+    )
+  }
+)
+
+get_tcga_immune_subtypes_samples_tbl <- memoise::memoise(
+  function(){
+    dplyr::inner_join(
+      iatlas.api.client::query_cohort_samples(cohorts = "TCGA_Immune_Subtype"),
+      iatlas.api.client::query_cohorts(cohorts = "TCGA_Immune_Subtype") %>%
+        dplyr::select("cohort_name" = "name", "dataset_name", "dataset_display"),
+      by = "cohort_name"
+    )
+  }
+)
+
+get_pcawg_gender_samples_tbl <- memoise::memoise(
+  function(){
+    dplyr::inner_join(
+      iatlas.api.client::query_cohort_samples(cohorts = "PCAWG_Gender"),
+      iatlas.api.client::query_cohorts(cohorts = "PCAWG_Gender") %>%
+        dplyr::select("cohort_name" = "name", "dataset_name", "dataset_display"),
+      by = "cohort_name"
+    )
+  }
+)
+
+get_ici_samples_tbl <- memoise::memoise(
+  function(){
+    dplyr::inner_join(
+      iatlas.api.client::query_cohort_samples(cohorts = c("Gide_Cell_2019_Responder", "HugoLo_IPRES_2016_Responder")),
+      iatlas.api.client::query_cohorts(cohorts = c("Gide_Cell_2019_Responder", "HugoLo_IPRES_2016_Responder")) %>%
+        dplyr::select("cohort_name" = "name", "dataset_name", "dataset_display"),
+      by = "cohort_name"
+    )
   }
 )
 
@@ -25,6 +68,12 @@ get_tcga_samples_50 <- memoise::memoise(
 get_tcga_features_tbl <- memoise::memoise(
   function(){
     iatlas.api.client::query_features(cohorts = "TCGA")
+  }
+)
+
+get_ici_features_tbl <- memoise::memoise(
+  function(){
+    iatlas.api.client::query_features(cohorts = c("Gide_Cell_2019_Responder", "HugoLo_IPRES_2016_Responder"))
   }
 )
 

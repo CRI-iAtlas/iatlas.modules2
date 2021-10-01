@@ -9,7 +9,7 @@ group_filter_element_server(
   reactive_values,
   module_id,
   group_named_list,
-  dataset
+  datasets
 )
 }
 \arguments{
@@ -21,7 +21,7 @@ group_filter_element_server(
 
 \item{group_named_list}{A named list}
 
-\item{dataset}{A string}
+\item{datasets}{A Shiny reactive that returns a list of dataset names}
 }
 \description{
 Group Filter Element Server

@@ -1,42 +1,45 @@
-cohort_manual_selection_server <- function(id){
+cohort_manual_selection_server <- function(
+  id,
+  default_datasets = shiny::reactive("TCGA"),
+  default_group    = shiny::reactive("Immune_Subtype"),
+  dataset_type     = shiny::reactive("analysis")
+){
   shiny::moduleServer(
     id,
     function(input, output, session) {
 
-      default_dataset <- "TCGA"
-      default_group   <- "Immune_Subtype"
-
-      selected_dataset <- cohort_dataset_selection_server(
+      selected_datasets <- cohort_dataset_selection_server(
         "dataset_selection",
-        default_dataset
+        default_datasets,
+        dataset_type
       )
 
-      dataset <- dedupe(shiny::reactive({
-        shiny::req(default_dataset)
-        if (is.null(selected_dataset())) return(default_dataset)
-        else return(selected_dataset())
+      datasets <- dedupe(shiny::reactive({
+        shiny::req(default_datasets())
+        if (is.null(selected_datasets())) return(default_datasets())
+        else return(selected_datasets())
       }))
 
       dataset_feature_tbl <- shiny::reactive({
-        shiny::req(dataset())
-        iatlas.api.client::query_features(cohorts = dataset())
+        shiny::req(datasets())
+        iatlas.api.client::query_features(cohorts = datasets())
       })
 
       group_object <- cohort_group_selection_server(
         "group_selection",
-        dataset,
-        default_group,
-        dataset_feature_tbl
+        features_tbl = dataset_feature_tbl,
+        selected_datasets = datasets,
+        default_group = default_group
       )
 
       filter_object <- cohort_filter_selection_server(
         "filter_selection",
-        dataset,
+        datasets,
         dataset_feature_tbl
       )
 
       cohort_object <- shiny::reactive({
-        shiny::req(group_object(), filter_object(), dataset_feature_tbl())
+        shiny::req(group_object(), filter_object())
         Cohort$new(
           filter_object = filter_object(),
           group_object = group_object()

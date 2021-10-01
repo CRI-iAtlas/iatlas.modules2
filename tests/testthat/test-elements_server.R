@@ -47,7 +47,7 @@ test_that("group_filter_element_server", {
 
       session$setInputs("parent_group_choice" = "Immune_Subtype")
       expect_type(group_choices(), "character")
-      expect_equal(group_choices(), c("C1", "C2", "C3", "C4", "C5", "C6"))
+      expect_equal(unname(group_choices()), c("C1", "C2", "C3", "C4", "C5", "C6"))
       expect_type(output$checkbox_ui, "list")
       session$setInputs("tag_choices" = "C1")
       expect_true(shiny::is.reactivevalues(session$getReturned()))

@@ -1,8 +1,8 @@
 cohort_group_selection_server <- function(
   id,
-  selected_dataset,
-  default_group,
-  features_tbl
+  features_tbl,
+  selected_datasets = shiny::reactive("TCGA"),
+  default_group = shiny::reactive("Immune_Subtype")
 ) {
   shiny::moduleServer(
     id,
@@ -12,15 +12,13 @@ cohort_group_selection_server <- function(
       # Select group type ----
 
       tag_group_tbl <- shiny::reactive({
-        shiny::req(selected_dataset())
-        selected_dataset() %>%
-          iatlas.api.client::query_dataset_tags() %>%
-          dplyr::select("display" = "tag_short_display", "name" = "tag_name")
+        shiny::req(selected_datasets())
+        build_tag_group_tbl(selected_datasets())
       })
 
       custom_group_tbl <- shiny::reactive({
-        shiny::req(selected_dataset())
-        build_custom_group_tbl(selected_dataset())
+        shiny::req(selected_datasets())
+        build_custom_group_tbl(selected_datasets())
       })
 
       available_groups_list <- shiny::reactive({
@@ -32,18 +30,21 @@ cohort_group_selection_server <- function(
       })
 
       output$select_group_ui <- shiny::renderUI({
-        shiny::req(available_groups_list(), default_group)
+        shiny::req(available_groups_list(), default_group())
+        if(!default_group() %in% available_groups_list()){
+          stop("default_group: ", default_group(), " not in: ", available_groups_list())
+        }
         shiny::selectInput(
           inputId = ns("group_choice"),
           label = shiny::strong("Select or Search for Grouping Variable"),
           choices = available_groups_list(),
-          selected = default_group
+          selected = default_group()
         )
       })
 
       group_choice <- dedupe(shiny::reactive({
-        shiny::req(default_group)
-        if (is.null(input$group_choice)) return(default_group)
+        shiny::req(default_group())
+        if (is.null(input$group_choice)) return(default_group())
         else return(input$group_choice)
       }))
 
@@ -120,12 +121,12 @@ cohort_group_selection_server <- function(
       # Group Object ----
 
       group_object <- shiny::reactive({
-        shiny::req(selected_dataset(), group_choice())
+        shiny::req(selected_datasets(), group_choice())
 
         if (group_choice() == "Driver Mutation") {
           shiny::req(input$driver_mutation_choice)
           group_object <- MutationStatusGroup$new(
-            dataset_name = selected_dataset(),
+            dataset_name = selected_datasets(),
             mutation_name = input$driver_mutation_choice
           )
 
@@ -135,14 +136,14 @@ cohort_group_selection_server <- function(
             input$bin_number_choice
           )
           group_object <- FeatureBinGroup$new(
-            dataset_name = selected_dataset(),
+            dataset_name = selected_datasets(),
             feature_name = input$bin_immune_feature_choice,
             feature_bins = input$bin_number_choice
           )
 
         } else {
           group_object <- TagGroup$new(
-            dataset_name = selected_dataset(),
+            dataset_name = selected_datasets(),
             group_name =  group_choice()
           )
         }

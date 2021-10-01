@@ -1,6 +1,7 @@
 cohort_dataset_selection_server <- function(
   id,
-  default_dataset = "TCGA"
+  default_datasets = shiny::reactive("TCGA"),
+  dataset_type     = shiny::reactive("analysis")
 ) {
   shiny::moduleServer(
     id,
@@ -8,28 +9,36 @@ cohort_dataset_selection_server <- function(
       ns <- session$ns
 
       choices <- shiny::reactive({
-        iatlas.api.client::query_datasets(types = "analysis") %>%
+        iatlas.api.client::query_datasets(types = dataset_type()) %>%
           dplyr::select("display", "name") %>%
           tibble::deframe(.)
       })
 
+      ui_func <- shiny::reactive({
+        shiny::req(dataset_type())
+        if(dataset_type() == "analysis") return(shiny::selectInput)
+        else return(shiny::checkboxGroupInput)
+      })
+
+
       output$dataset_selection_ui <- shiny::renderUI({
-        shiny::selectInput(
-          inputId  = ns("dataset_choice"),
-          label    = "Select or Search for Dataset",
+        shiny::req(ui_func(), choices(), default_datasets())
+        ui_func()(
+          inputId  = ns("dataset_choices"),
+          label    = "Select Datasets",
           choices  = choices(),
-          selected = default_dataset
+          selected = default_datasets()
         )
       })
 
       output$module_availibility_string <- shiny::renderText({
-        shiny::req(input$dataset_choice)
+        shiny::req(input$dataset_choices)
         create_cohort_module_string(
-          input$dataset_choice
+          input$dataset_choices
         )
       })
 
-      return(shiny::reactive(input$dataset_choice))
+      return(shiny::reactive(input$dataset_choices))
     }
   )
 }
