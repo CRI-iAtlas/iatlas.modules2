@@ -43,3 +43,5 @@ BugReports: https://github.com/CRI-iAtlas/iatlas.modules2/issues
 Remotes:
     CRI-iAtlas/iatlas.api.client@main,
     CRI-iAtlas/iatlas.modules@master
+Depends: 
+    R (>= 2.10)
