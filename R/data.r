@@ -1,6 +1,9 @@
 #' pcawg_immune_subtype_cohort_obj.
 "pcawg_immune_subtype_cohort_obj"
 
+#' tcga_immune_subtype_cohort_obj.
+"tcga_immune_subtype_cohort_obj"
+
 #' tcga_immune_subtype_cohort_obj_small.
 "tcga_immune_subtype_cohort_obj_small"
 
