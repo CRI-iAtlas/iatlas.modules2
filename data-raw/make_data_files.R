@@ -49,6 +49,10 @@ tag_group3 <- TagGroup$new(
   dataset_names = c("Gide_Cell_2019", "HugoLo_IPRES_2016"), group_name = "Responder"
 )
 
+tag_group4 <- TagGroup$new(
+  dataset_names = "TCGA", group_name = "TCGA_Study"
+)
+
 mutation_group <- MutationStatusGroup$new(
   dataset_names = "TCGA", mutation_name = "ABL1:(NS)"
 )
@@ -62,41 +66,41 @@ pcawg_immune_subtype_cohort_obj <- Cohort$new(
   "filter_object" = cf1,
   "group_object" = tag_group1
 )
-
 usethis::use_data(pcawg_immune_subtype_cohort_obj, overwrite = TRUE)
 
 tcga_immune_subtype_cohort_obj <- Cohort$new(
   "filter_object" = cf1,
   "group_object" = tag_group2
 )
-
 usethis::use_data(tcga_immune_subtype_cohort_obj, overwrite = TRUE)
 
 tcga_immune_subtype_cohort_obj_small <- Cohort$new(
   "filter_object" = cf2,
   "group_object" = tag_group2
 )
-
 usethis::use_data(tcga_immune_subtype_cohort_obj_small, overwrite = TRUE)
+
+tcga_tcga_study_cohort_obj <- Cohort$new(
+  "filter_object" = cf1,
+  "group_object" = tag_group4
+)
+usethis::use_data(tcga_tcga_study_cohort_obj, overwrite = TRUE)
 
 ici_responder_cohort_obj <- Cohort$new(
   "filter_object" = cf1,
   "group_object" = tag_group3
 )
-
 usethis::use_data(ici_responder_cohort_obj, overwrite = TRUE)
 
 tcga_mutation_cohort_obj_small <- Cohort$new(
   "filter_object" = cf2,
   "group_object" = mutation_group
 )
-
 usethis::use_data(tcga_mutation_cohort_obj_small, overwrite = TRUE)
 
 tcga_bin_cohort_obj_small <- Cohort$new(
   "filter_object" = cf2,
   "group_object" = bin_group
 )
-
 usethis::use_data(tcga_bin_cohort_obj_small, overwrite = TRUE)
 
