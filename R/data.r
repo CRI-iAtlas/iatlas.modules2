@@ -7,6 +7,9 @@
 #' tcga_immune_subtype_cohort_obj_small.
 "tcga_immune_subtype_cohort_obj_small"
 
+#' tcga_tcga_study_cohort_obj.
+"tcga_tcga_study_cohort_obj"
+
 #' ici_responder_cohort_obj.
 "ici_responder_cohort_obj"
 
