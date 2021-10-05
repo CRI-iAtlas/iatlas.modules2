@@ -65,6 +65,13 @@ pcawg_immune_subtype_cohort_obj <- Cohort$new(
 
 usethis::use_data(pcawg_immune_subtype_cohort_obj, overwrite = TRUE)
 
+tcga_immune_subtype_cohort_obj <- Cohort$new(
+  "filter_object" = cf1,
+  "group_object" = tag_group2
+)
+
+usethis::use_data(tcga_immune_subtype_cohort_obj, overwrite = TRUE)
+
 tcga_immune_subtype_cohort_obj_small <- Cohort$new(
   "filter_object" = cf2,
   "group_object" = tag_group2
