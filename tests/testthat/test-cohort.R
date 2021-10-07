@@ -1,3 +1,5 @@
+# objects ----
+
 cnf1 <- CohortNumericFilter$new(
   "name" = "B_cells_Aggregate2",
   "min" = 0,
@@ -46,6 +48,38 @@ bin_group <- FeatureBinGroup$new(
   dataset_name = "TCGA", feature_name = "B_cells_Aggregate2", feature_bins = 2
 )
 
+# expected_values ----
+
+expected_feature_value_names <- c(
+  'sample_name',
+  'feature_name',
+  'feature_display',
+  'feature_value',
+  'feature_order',
+  'feature_class',
+  'group_short_name',
+  'group_long_name',
+  'group_characteristics',
+  'group_color',
+  'dataset_name',
+  'dataset_display'
+)
+
+expected_gene_value_names <- c(
+  'sample_name',
+  'entrez',
+  'hgnc',
+  'rna_seq_expr',
+  'group_short_name',
+  'group_long_name',
+  'group_characteristics',
+  'group_color',
+  'dataset_name',
+  'dataset_display'
+)
+
+# tests ----
+
 test_that("tag cohort", {
   cohort <- Cohort$new(
     "filter_object" = cf1,
@@ -68,24 +102,29 @@ test_that("tag cohort", {
   expect_true(cohort$has_features("B_cells_memory"))
   expect_false(cohort$has_classes("not_a_feature"))
 
+
+
   feature_values <- cohort$get_feature_values("B_cells_memory")
   expect_type(feature_values, "list")
   expect_true(nrow(feature_values) > 0)
   expect_true(all(feature_values$feature_name == "B_cells_memory"))
-  expect_true(all(feature_values$sample %in% cohort$sample_tbl$sample_name))
+  expect_true(all(feature_values$sample_name %in% cohort$sample_tbl$sample_name))
+  expect_named(feature_values, expected_feature_value_names)
 
   feature_values2 <- cohort$get_feature_values("B_cells_memory", groups = "C1")
   expect_type(feature_values2, "list")
   expect_true(nrow(feature_values2) > 0)
   expect_true(nrow(feature_values2) < nrow(feature_values))
   expect_true(all(feature_values2$feature_name == "B_cells_memory"))
-  expect_true(all(feature_values2$sample %in% cohort$sample_tbl$sample_name))
+  expect_true(all(feature_values2$sample_name %in% cohort$sample_tbl$sample_name))
+  expect_named(feature_values2, expected_feature_value_names)
 
   gene_values <- cohort$get_gene_values(entrez = 1)
   expect_type(gene_values, "list")
   expect_true(nrow(gene_values) > 0)
   expect_true(all(gene_values$entrez == 1))
-  expect_true(all(gene_values$sample %in% cohort$sample_tbl$sample_name))
+  expect_true(all(gene_values$sample_name %in% cohort$sample_tbl$sample_name))
+  expect_named(gene_values, expected_gene_value_names)
 
 })
 
