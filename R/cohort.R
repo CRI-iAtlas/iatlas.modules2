@@ -97,14 +97,20 @@ Cohort <- R6::R6Class(
         feature_classes = feature_classes
       ) %>%
         dplyr::inner_join(self$sample_tbl, by = c("sample" = "sample_name")) %>%
+        dplyr::rename("sample_name" = "sample") %>%
         dplyr::select(-"dataset_name") %>%
         dplyr::inner_join(self$group_tbl, by = c("group_name" = "short_name")) %>%
-        dplyr::rename("short_name" = "group_name") %>%
+        dplyr::rename(
+          "group_short_name" = "group_name",
+          "group_long_name"  = "long_name",
+          "group_characteristics" = "characteristics",
+          "group_color" = "color"
+        ) %>%
         dplyr::select(-"size")
 
 
       if(!is.na(groups)){
-        tbl <- dplyr::filter(tbl, .data$short_name %in% groups)
+        tbl <- dplyr::filter(tbl, .data$group_short_name %in% groups)
       }
       return(tbl)
     },
@@ -116,9 +122,15 @@ Cohort <- R6::R6Class(
         entrez = entrez
       ) %>%
         dplyr::inner_join(self$sample_tbl, by = c("sample" = "sample_name")) %>%
+        dplyr::rename("sample_name" = "sample") %>%
         dplyr::select(-"dataset_name") %>%
         dplyr::inner_join(self$group_tbl, by = c("group_name" = "short_name")) %>%
-        dplyr::rename("short_name" = "group_name") %>%
+        dplyr::rename(
+          "group_short_name" = "group_name",
+          "group_long_name"  = "long_name",
+          "group_characteristics" = "characteristics",
+          "group_color" = "color"
+        ) %>%
         dplyr::select(-"size")
     }
   )
