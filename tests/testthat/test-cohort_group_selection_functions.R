@@ -1,7 +1,7 @@
 
 
 tag_group_tbl1 <- build_tag_group_tbl("PCAWG")
-tag_group_tbl2 <- build_tag_group_tbl(c("Gide_Cell_2019", "HugoLo_IPRES_2016"))
+tag_group_tbl2 <- build_tag_group_tbl(c("Gide_Cell_2019", "HugoLo_IPRES_2016")) %>%  print()
 
 custom_group_tbl1 <- build_custom_group_tbl("PCAWG")
 custom_group_tbl2 <- build_custom_group_tbl(c("Gide_Cell_2019", "HugoLo_IPRES_2016"))
