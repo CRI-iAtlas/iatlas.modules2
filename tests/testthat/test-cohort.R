@@ -61,6 +61,7 @@ expected_feature_value_names <- c(
   'group_long_name',
   'group_characteristics',
   'group_color',
+  "group_order",
   'dataset_name',
   'dataset_display'
 )
@@ -74,8 +75,20 @@ expected_gene_value_names <- c(
   'group_long_name',
   'group_characteristics',
   'group_color',
+  "group_order",
   'dataset_name',
   'dataset_display'
+)
+
+expected_group_tbl_names <- c(
+  "short_name",
+  "long_name",
+  "characteristics",
+  "color",
+  "size",
+  "order",
+  "dataset_name",
+  "dataset_display"
 )
 
 # tests ----
@@ -102,7 +115,7 @@ test_that("tag cohort", {
   expect_true(cohort$has_features("B_cells_memory"))
   expect_false(cohort$has_classes("not_a_feature"))
 
-
+  expect_type(cohort$group_tbl, "list")
 
   feature_values <- cohort$get_feature_values("B_cells_memory")
   expect_type(feature_values, "list")

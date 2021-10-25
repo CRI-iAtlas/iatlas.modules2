@@ -102,10 +102,10 @@
     },
     "bslib": {
       "Package": "bslib",
-      "Version": "0.3.0",
+      "Version": "0.3.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "074ebc936dbcecd7115ed8083643b550"
+      "Hash": "56ae7e1987b340186a8a5a157c2ec358"
     },
     "cachem": {
       "Package": "cachem",
@@ -417,28 +417,28 @@
     },
     "iatlas.api.client": {
       "Package": "iatlas.api.client",
-      "Version": "0.26.3",
+      "Version": "0.26.4",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.api.client",
       "RemoteRef": "main",
-      "RemoteSha": "4547b91b857256f28df5742a9e94058c8b6a2cfe",
+      "RemoteSha": "91d16d7f0f0141b2d3b9671ef83204566130ecdc",
       "RemoteHost": "api.github.com",
-      "Hash": "2af189315e41d46220034996cac24b65"
+      "Hash": "7c06c2bf1c9680d06e3e8d2ea8a33a7b"
     },
     "iatlas.modules": {
       "Package": "iatlas.modules",
-      "Version": "0.5.5",
+      "Version": "0.5.6",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.modules",
       "RemoteRef": "master",
-      "RemoteSha": "284cd01dc0cc7fc793f092a162f2d511eeb57f2b",
+      "RemoteSha": "109287fcb9ddb8e44dd0187ca0782855210b55eb",
       "RemoteHost": "api.github.com",
-      "Remotes": "CRI-iAtlas/iatlas.api.client@main",
-      "Hash": "fd4f2c89e47796e65f0ea48a115d4374"
+      "Remotes": "CRI-iAtlas/iatlas.api.client@main, CRI-iAtlas/iatlas.modules2@master",
+      "Hash": "a63cf7a34fcf6a698af199742a5dbd7b"
     },
     "ini": {
       "Package": "ini",
@@ -533,10 +533,10 @@
     },
     "mgcv": {
       "Package": "mgcv",
-      "Version": "1.8-37",
+      "Version": "1.8-38",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "42ee1ee3259845fd07819f58022a3532"
+      "Hash": "be3c61ffbb1e3d3b3df214d192ac5444"
     },
     "mime": {
       "Package": "mime",
@@ -568,10 +568,10 @@
     },
     "pillar": {
       "Package": "pillar",
-      "Version": "1.6.3",
+      "Version": "1.6.4",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "3323bc1a0988d63b5c65771ba0d3935d"
+      "Hash": "60200b6aa32314ac457d3efbb5ccbd98"
     },
     "pkgbuild": {
       "Package": "pkgbuild",
@@ -596,17 +596,17 @@
     },
     "pkgload": {
       "Package": "pkgload",
-      "Version": "1.2.2",
+      "Version": "1.2.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "53139eedf68b98eecd5289664969c3f2"
+      "Hash": "302276471121c41f47380243b82d5882"
     },
     "plotly": {
       "Package": "plotly",
-      "Version": "4.9.4.1",
+      "Version": "4.10.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "af4b92cb3828aa30002e2f945c49c2d7"
+      "Hash": "fbb11e44d057996ca5fe40d959cacfb0"
     },
     "praise": {
       "Package": "praise",
@@ -708,10 +708,10 @@
     },
     "rlang": {
       "Package": "rlang",
-      "Version": "0.4.11",
+      "Version": "0.4.12",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "515f341d3affe0de9e4a7f762efb0456"
+      "Hash": "0879f5388fe6e4d56d7ef0b7ccb031e5"
     },
     "roxygen2": {
       "Package": "roxygen2",
@@ -869,10 +869,10 @@
     },
     "usethis": {
       "Package": "usethis",
-      "Version": "2.0.1",
+      "Version": "2.1.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "360e904f9e623286e1a0c6ca0a98c5f6"
+      "Hash": "8c152095c84a49268d6daa7d277703d1"
     },
     "utf8": {
       "Package": "utf8",
@@ -890,10 +890,10 @@
     },
     "viridis": {
       "Package": "viridis",
-      "Version": "0.6.1",
+      "Version": "0.6.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "424d1285b7372d39806abb19467e4df4"
+      "Hash": "ee96aee95a7a563e5496f8991e9fde4b"
     },
     "viridisLite": {
       "Package": "viridisLite",
@@ -932,10 +932,10 @@
     },
     "xfun": {
       "Package": "xfun",
-      "Version": "0.26",
+      "Version": "0.27",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "a270216f7ffda25e53298293046d1d05"
+      "Hash": "12b69332f085d350fc1f2ea6cca58397"
     },
     "xml2": {
       "Package": "xml2",

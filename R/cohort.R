@@ -104,7 +104,8 @@ Cohort <- R6::R6Class(
           "group_short_name" = "group_name",
           "group_long_name"  = "long_name",
           "group_characteristics" = "characteristics",
-          "group_color" = "color"
+          "group_color" = "color",
+          "group_order" = "order"
         ) %>%
         dplyr::select(-"size")
 
@@ -129,7 +130,8 @@ Cohort <- R6::R6Class(
           "group_short_name" = "group_name",
           "group_long_name"  = "long_name",
           "group_characteristics" = "characteristics",
-          "group_color" = "color"
+          "group_color" = "color",
+          "group_order" = "order"
         ) %>%
         dplyr::select(-"size")
     }

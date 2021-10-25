@@ -4,7 +4,16 @@ test_get_tables <- function(group_obj, samples_tbl){
   expect_named(tables$sample_tbl, c("sample_name", "group_name", "dataset_name"))
   expect_named(
     tables$group_tbl,
-    c("short_name", "long_name", "characteristics", "color", "size", "dataset_name", "dataset_display")
+    c(
+      "short_name",
+      "long_name",
+      "characteristics",
+      "color",
+      "size",
+      "order",
+      "dataset_name",
+      "dataset_display"
+    )
   )
 }
 

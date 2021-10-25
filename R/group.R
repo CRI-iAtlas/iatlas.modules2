@@ -52,6 +52,7 @@ TagGroup <- R6::R6Class(
           "long_name" = "tag_long_display",
           "characteristics" = "tag_characteristics",
           "color" = "tag_color",
+          "order" = "tag_order",
           "sample_name",
           "dataset_name",
           "dataset_display"
@@ -63,7 +64,16 @@ TagGroup <- R6::R6Class(
         dplyr::ungroup() %>%
         dplyr::arrange(.data$short_name) %>%
         add_plot_colors_to_tbl(.) %>%
-        dplyr::select("short_name", "long_name", "characteristics", "color", "size", "dataset_name", "dataset_display")
+        dplyr::select(
+          "short_name",
+          "long_name",
+          "characteristics",
+          "color",
+          "size",
+          "order",
+          "dataset_name",
+          "dataset_display"
+        )
 
       sample_tbl <- sample_tbl %>%
         dplyr::select("sample_name", "group_name" = "short_name", "dataset_name") %>%
@@ -115,7 +125,8 @@ FeatureBinGroup <- R6::R6Class(
         dplyr::mutate(
           "short_name" = self$group_name,
           "long_name" = self$feature_name,
-          "characteristics" = "Immune feature bin range"
+          "characteristics" = "Immune feature bin range",
+          "order" = NA
         ) %>%
         dplyr::arrange(.data$group_name) %>%
         add_plot_colors_to_tbl() %>%
@@ -125,6 +136,7 @@ FeatureBinGroup <- R6::R6Class(
           "characteristics",
           "color",
           "size",
+          "order",
           "dataset_name",
           "dataset_display"
         )
@@ -171,7 +183,8 @@ MutationStatusGroup <- R6::R6Class(
         dplyr::mutate(
           "short_name" = self$group_name,
           "long_name" = self$group_name,
-          "characteristics" = "Mutation Status"
+          "characteristics" = "Mutation Status",
+          "order" = NA
         ) %>%
         dplyr::arrange(.data$group_name) %>%
         add_plot_colors_to_tbl() %>%
@@ -181,6 +194,7 @@ MutationStatusGroup <- R6::R6Class(
           "characteristics",
           "color",
           "size",
+          "order",
           "dataset_name",
           "dataset_display"
         )
