@@ -26,7 +26,7 @@ test_that("build_custom_group_tbl", {
   expect_named(custom_group_tbl1, c("display", "name"))
   expect_true(nrow(custom_group_tbl1) ==  1)
   expect_named(custom_group_tbl2, c("display", "name"))
-  expect_true(nrow(custom_group_tbl2) == 0)
+  expect_true(nrow(custom_group_tbl2) == 1)
 })
 
 test_that("build_cohort_group_list", {
