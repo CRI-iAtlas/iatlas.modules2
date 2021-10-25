@@ -15,11 +15,17 @@ build_tag_group_tbl <- function(datasets){
 
 
 build_custom_group_tbl <- function(datasets){
-  dplyr::tribble(
-    ~name,                 ~dataset, ~type,
-    "Immune Feature Bins", "TCGA",    "custom",
-    "Driver Mutation",     "TCGA",    "custom",
-    "Immune Feature Bins", "PCAWG",   "custom",
+  dplyr::bind_rows(
+    dplyr::tribble(
+      ~name,                 ~dataset,
+      "Immune Feature Bins", "TCGA",
+      "Driver Mutation",     "TCGA",
+      "Immune Feature Bins", "PCAWG",
+    ),
+    dplyr::tibble(
+      "name" = "Immune Feature Bins",
+      "dataset" = iatlas.api.client::query_datasets(types = "ici")$name
+    )
   ) %>%
     dplyr::filter(.data$dataset %in% datasets) %>%
     dplyr::group_by(.data$name) %>%
