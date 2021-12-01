@@ -38,8 +38,13 @@ univariate_driver_server <- function(id, cohort_obj) {
       })
 
       tags <- shiny::reactive({
+        shiny::req(
+          !is.null(cohort_obj()$dataset_names),
+          !is.null(cohort_obj()$group_name)
+        )
+
         iatlas.api.client::query_tags(
-          cohorts = cohort_obj()$dataset_name,
+          cohorts = cohort_obj()$dataset_names,
           parent_tags = cohort_obj()$group_name
         ) %>%
           dplyr::pull("tag_name")
@@ -55,7 +60,7 @@ univariate_driver_server <- function(id, cohort_obj) {
 
         tbl <-
           iatlas.api.client::query_driver_results(
-            datasets = cohort_obj()$dataset_name,
+            datasets = cohort_obj()$dataset_names,
             tags = tags(),
             features = input$response_choice,
             min_num_wild_types = input$min_wt,
@@ -77,7 +82,9 @@ univariate_driver_server <- function(id, cohort_obj) {
 
       total_associations <- shiny::reactive({
         n_mutations <-
-          iatlas.api.client::query_cohort_mutations(cohorts = cohort_obj()$dataset_name) %>%
+          iatlas.api.client::query_cohort_mutations(
+            cohorts = cohort_obj()$dataset_names
+          ) %>%
           nrow()
 
         n_tags <- length(tags())
