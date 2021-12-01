@@ -5,14 +5,14 @@ build_md_tag_covariate_tbl <- function(cohort_obj, cov_obj){
     purrr::map(
       parent_tags,
       ~iatlas.api.client::query_tag_samples(
-        cohorts = cohort_obj$dataset_name,
+        cohorts = cohort_obj$dataset_names,
         parent_tags = .x
       )
     ) %>%
     purrr::map2(parent_tags, ~dplyr::mutate(.x, "parent_tag" = .y)) %>%
     dplyr::bind_rows() %>%
     dplyr::select("sample" = "sample_name", "parent_tag", "tag_name") %>%
-    dplyr::filter(.data$sample %in% cohort_obj$sample_tbl$sample) %>%
+    dplyr::filter(.data$sample %in% cohort_obj$sample_tbl$sample_name) %>%
     tidyr::pivot_wider(
       ., names_from = "parent_tag", values_from = "tag_name"
     ) %>%
@@ -24,7 +24,7 @@ build_md_feature_covariate_tbl <- function(cohort_obj, cov_obj){
   if (is.null(features)) return(NULL)
   tbl <-
     cohort_obj$get_feature_values(features) %>%
-    dplyr::select("sample", "feature_name", "feature_value") %>%
+    dplyr::select("sample" = "sample_name", "feature_name", "feature_value") %>%
     tidyr::pivot_wider(
       ., names_from = "feature_name", values_from = "feature_value"
     ) %>%
@@ -47,14 +47,14 @@ build_md_covariate_tbl <- function(cohort_obj, cov_obj){
 build_md_response_tbl <- function(cohort_obj, feature){
   tbl <-
     cohort_obj$get_feature_values(feature) %>%
-    dplyr::select("sample", "response" = "feature_value")
+    dplyr::select("sample" = "sample_name", "response" = "feature_value")
 }
 
 combine_md_tbls <- function(resp_tbl, status_tbl, sample_tbl, cov_tbl, mode){
   tbl <-
     list(
       dplyr::select(resp_tbl, "sample", "response"),
-      dplyr::select(sample_tbl, "sample", "group"),
+      dplyr::select(sample_tbl, "sample" = "sample_name", "group" = "group_name"),
       dplyr::select(status_tbl, "sample", "mutation", "status"),
       cov_tbl
     ) %>%
