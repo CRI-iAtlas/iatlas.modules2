@@ -38,9 +38,15 @@ univariate_driver_server <- function(id, cohort_obj) {
       })
 
       tags <- shiny::reactive({
+
         shiny::req(
           !is.null(cohort_obj()$dataset_names),
-          !is.null(cohort_obj()$group_name)
+          is.character(cohort_obj()$dataset_names),
+          length(cohort_obj()$dataset_names) != 0,
+
+          !is.null(cohort_obj()$group_name),
+          is.character(cohort_obj()$group_name),
+          length(cohort_obj()$group_name) == 1,
         )
 
         iatlas.api.client::query_tags(
@@ -146,6 +152,10 @@ univariate_driver_server <- function(id, cohort_obj) {
           source = "univariate_volcano_plot"
         )
 
+        if(is.null(eventdata) & !is.null(input$mock_event_data)){
+          eventdata <- input$mock_event_data
+        }
+
         # plot not clicked on yet
         shiny::validate(shiny::need(
           !is.null(eventdata),
@@ -176,24 +186,32 @@ univariate_driver_server <- function(id, cohort_obj) {
       violin_tbl <- shiny::reactive({
         shiny::req(selected_volcano_result(), input$response_choice)
 
+        shiny::req(
+          !is.null(cohort_obj()$sample_tbl),
+          "sample_name" %in% names(cohort_obj()$sample_tbl),
+          is.character(cohort_obj()$sample_tbl$sample_name),
+          length(cohort_obj()$sample_tbl$sample_name) != 0
+        )
+
         feature_tbl <- cohort_obj()$get_feature_values(
           features = input$response_choice,
           groups = selected_volcano_result()$group
-        )
+        ) %>%
+          dplyr::select("sample_name", "feature_value", "group_short_name")
 
         status_tbl <-
           iatlas.api.client::query_mutation_statuses(
             entrez = selected_volcano_result()$entrez,
             codes = selected_volcano_result()$mutation_code,
             types = "driver_mutation",
-            samples = cohort_obj()$sample_tbl$sample
+            samples = cohort_obj()$sample_tbl$sample_name
           ) %>%
           dplyr::select(
-            "sample" = "sample_name",
+            "sample_name",
             "status" = "mutation_status"
           )
 
-        dplyr::inner_join(feature_tbl, status_tbl, by = "sample") %>%
+        dplyr::inner_join(feature_tbl, status_tbl, by = "sample_name") %>%
           dplyr::mutate(
             "status" = forcats::fct_relevel(.data$status, "Wt", "Mut")
           ) %>%
