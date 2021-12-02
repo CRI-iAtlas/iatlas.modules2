@@ -38,9 +38,15 @@ univariate_driver_server <- function(id, cohort_obj) {
       })
 
       tags <- shiny::reactive({
+
         shiny::req(
           !is.null(cohort_obj()$dataset_names),
           !is.null(cohort_obj()$group_name)
+        )
+
+        assertthat::assert_that(
+          is.character(cohort_obj()$dataset_names),
+          length(cohort_obj()$dataset_names) != 0
         )
 
         iatlas.api.client::query_tags(
