@@ -162,6 +162,20 @@ test_that("mutation cohort", {
 
   expect_true(cohort$has_features("B_cells_memory"))
   expect_false(cohort$has_classes("not_a_feature"))
+
+  feature_values <- cohort$get_feature_values("B_cells_memory")
+  expect_type(feature_values, "list")
+  expect_true(nrow(feature_values) > 0)
+  expect_true(all(feature_values$feature_name == "B_cells_memory"))
+  expect_true(all(feature_values$sample_name %in% cohort$sample_tbl$sample_name))
+  expect_named(feature_values, expected_feature_value_names)
+
+  gene_values <- cohort$get_gene_values(entrez = 2)
+  expect_type(gene_values, "list")
+  expect_true(nrow(gene_values) > 0)
+  expect_true(all(gene_values$entrez == 2))
+  expect_true(all(gene_values$sample_name %in% cohort$sample_tbl$sample_name))
+  expect_named(gene_values, expected_gene_value_names)
 })
 
 test_that("feature bin cohort", {
@@ -184,5 +198,19 @@ test_that("feature bin cohort", {
 
   expect_true(cohort$has_features("B_cells_memory"))
   expect_false(cohort$has_classes("not_a_feature"))
+
+  feature_values <- cohort$get_feature_values("B_cells_memory")
+  expect_type(feature_values, "list")
+  expect_true(nrow(feature_values) > 0)
+  expect_true(all(feature_values$feature_name == "B_cells_memory"))
+  expect_true(all(feature_values$sample_name %in% cohort$sample_tbl$sample_name))
+  expect_named(feature_values, expected_feature_value_names)
+
+  gene_values <- cohort$get_gene_values(entrez = 2)
+  expect_type(gene_values, "list")
+  expect_true(nrow(gene_values) > 0)
+  expect_true(all(gene_values$entrez == 2))
+  expect_true(all(gene_values$sample_name %in% cohort$sample_tbl$sample_name))
+  expect_named(gene_values, expected_gene_value_names)
 })
 

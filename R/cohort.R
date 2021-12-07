@@ -91,11 +91,12 @@ Cohort <- R6::R6Class(
     get_feature_values = function(
       features = NA, feature_classes = NA, groups = NA
     ){
-      tbl <- iatlas.api.client::query_feature_values(
-        cohorts = self$cohort_names,
-        features = features,
-        feature_classes = feature_classes
-      ) %>%
+      tbl <-
+        iatlas.api.client::query_feature_values(
+          cohorts = self$cohort_names,
+          features = features,
+          feature_classes = feature_classes
+        ) %>%
         dplyr::inner_join(self$sample_tbl, by = c("sample" = "sample_name")) %>%
         dplyr::rename("sample_name" = "sample") %>%
         dplyr::select(-"dataset_name") %>%

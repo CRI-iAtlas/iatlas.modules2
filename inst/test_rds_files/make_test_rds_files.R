@@ -38,39 +38,76 @@ cf2 <- CohortFilters$new(
 )
 
 tag_group1 <- TagGroup$new(
-  dataset_name = "PCAWG", group_name = "Immune_Subtype"
+  dataset_names = "PCAWG", group_name = "Immune_Subtype"
 )
 
 tag_group2 <- TagGroup$new(
-  dataset_name = "TCGA", group_name = "Immune_Subtype"
+  dataset_names = "TCGA", group_name = "Immune_Subtype"
+)
+
+tag_group3 <- TagGroup$new(
+  dataset_names = c("Gide_Cell_2019", "HugoLo_IPRES_2016"), group_name = "Responder"
+)
+
+tag_group4 <- TagGroup$new(
+  dataset_names = "TCGA", group_name = "TCGA_Study"
 )
 
 mutation_group <- MutationStatusGroup$new(
-  dataset_name = "TCGA", mutation_name = "ABL1:(NS)"
+  dataset_names = "TCGA", mutation_name = "ABL1:(NS)"
 )
+
 bin_group <- FeatureBinGroup$new(
-  dataset_name = "TCGA", feature_name = "B_cells_Aggregate2", feature_bins = 2
+  dataset_names = "TCGA", feature_name = "B_cells_Aggregate2", feature_bins = 2
 )
 
 
-pcawg_immune_subtype_cohort_obj <- Cohort$new(
-  "filter_object" = cf1,
-  "group_object" = tag_group1
+objects <- list(
+  "pcawg_immune_subtype_cohort_obj" = Cohort$new(
+    "filter_object" = cf1,
+    "group_object" = tag_group1
+  ),
+
+  "tcga_immune_subtype_cohort_obj" = Cohort$new(
+    "filter_object" = cf1,
+    "group_object" = tag_group2
+  ),
+
+  "tcga_immune_subtype_cohort_obj_small" = Cohort$new(
+    "filter_object" = cf2,
+    "group_object" = tag_group2
+  ),
+
+  "tcga_tcga_study_cohort_obj" = Cohort$new(
+    "filter_object" = cf1,
+    "group_object" = tag_group4
+  ),
+
+  "ici_responder_cohort_obj" = Cohort$new(
+    "filter_object" = cf1,
+    "group_object" = tag_group3
+  ),
+
+  "tcga_mutation_cohort_obj_small" = Cohort$new(
+    "filter_object" = cf2,
+    "group_object" = mutation_group
+  ),
+
+  "tcga_bin_cohort_obj_small" = Cohort$new(
+    "filter_object" = cf2,
+    "group_object" = bin_group
+  )
 )
 
-saveRDS(
-  pcawg_immune_subtype_cohort_obj,
-  "inst/test_rds_files/pcawg_immune_subtype_cohort_obj.rds",
-  version = 2
+files <- stringr::str_c(
+  "inst/test_rds_files/",
+  names(objects),
+  ".rds"
 )
 
-tcga_immune_subtype_cohort_obj_small <- Cohort$new(
-  "filter_object" = cf2,
-  "group_object" = tag_group2
-)
-
-saveRDS(
-  tcga_immune_subtype_cohort_obj_small,
-  "inst/test_rds_files/tcga_immune_subtype_cohort_obj_small.rds",
+purrr::walk2(
+  objects,
+  files,
+  saveRDS,
   version = 2
 )
