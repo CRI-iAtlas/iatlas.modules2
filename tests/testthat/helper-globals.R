@@ -102,26 +102,34 @@ get_tcga_immune_subtype_cohort_obj <- memoise::memoise(
   }
 )
 
-get_pcawg_feature_bin_cohort_obj <- memoise::memoise(
-  function(){
-    read_rds_file("pcawg_feature_bin_cohort_obj.rds")
-  }
-)
-
-get_tcga_feature_bin_cohort_obj <- memoise::memoise(
-  function(){
-    read_rds_file("tcga_feature_bin_cohort_obj.rds")
-  }
-)
-
 get_tcga_immune_subtype_cohort_obj_small <- memoise::memoise(
   function(){
     read_rds_file("tcga_immune_subtype_cohort_obj_small.rds")
   }
 )
 
-get_tcga_feature_bin_cohort_obj_50 <- memoise::memoise(
+get_tcga_tcga_study_cohort_obj <- memoise::memoise(
   function(){
-    read_rds_file("tcga_feature_bin_cohort_obj_50.rds")
+    read_rds_file("tcga_tcga_study_cohort_obj.rds")
   }
 )
+
+get_ici_responder_cohort_obj <- memoise::memoise(
+  function(){
+    read_rds_file("ici_responder_cohort_obj.rds")
+  }
+)
+get_tcga_mutation_cohort_obj_small <- memoise::memoise(
+  function(){
+    read_rds_file("tcga_mutation_cohort_obj_small.rds")
+  }
+)
+get_tcga_bin_cohort_obj_small <- memoise::memoise(
+  function(){
+    read_rds_file("tcga_bin_cohort_obj_small.rds")
+  }
+)
+
+
+
+

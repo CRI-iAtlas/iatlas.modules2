@@ -15,6 +15,8 @@ test_get_tables <- function(group_obj, samples_tbl){
       "dataset_display"
     )
   )
+  expect_true(all(tables$group_tbl$short_name %in% tables$sample_tbl$group_name))
+  expect_true(all(tables$sample_tbl$group_name %in% tables$group_tbl$short_name))
 }
 
 test_that("TagGroup TCGA Immune_Subtype", {

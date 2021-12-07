@@ -88,12 +88,13 @@ TagGroup <- R6::R6Class(
 FeatureBinGroup <- R6::R6Class(
   classname = "FeatureBinGroup",
   public = list(
-    dataset_names = NULL,
-    cohort_names  = NULL,
-    group_name    = NULL,
-    group_display = NULL,
-    feature_name  = NULL,
-    feature_bins  = NULL,
+    dataset_names   = NULL,
+    cohort_names    = NULL,
+    group_name      = NULL,
+    group_display   = NULL,
+    feature_name    = NULL,
+    feature_display = NULL,
+    feature_bins    = NULL,
     initialize = function(dataset_names, feature_name, feature_bins){
 
       feature_display <-
@@ -102,12 +103,13 @@ FeatureBinGroup <- R6::R6Class(
 
       group_name  = stringr::str_c("Immune Feature Bins: ", feature_display)
 
-      self$dataset_names  <- dataset_names
-      self$cohort_names   <- dataset_names
-      self$group_name     <- group_name
-      self$group_display  <- group_name
-      self$feature_name   <- feature_name
-      self$feature_bins   <- feature_bins
+      self$dataset_names   <- dataset_names
+      self$cohort_names    <- dataset_names
+      self$group_name      <- group_name
+      self$group_display   <- group_name
+      self$feature_name    <- feature_name
+      self$feature_display <- feature_display
+      self$feature_bins    <- feature_bins
     },
     get_tables = function(sample_tbl){
 
@@ -118,13 +120,14 @@ FeatureBinGroup <- R6::R6Class(
         dplyr::inner_join(sample_tbl, by = c("sample" = "sample_name")) %>%
         dplyr::select("sample_name" = "sample", "group_name", "dataset_name", "dataset_display")
 
-
       group_tbl <- sample_tbl %>%
         dplyr::group_by(dplyr::across(c(-"sample_name"))) %>%
         dplyr::summarise(size = dplyr::n(), .groups = "drop") %>%
         dplyr::mutate(
-          "short_name" = self$group_name,
-          "long_name" = self$feature_name,
+          "short_name" = .data$group_name,
+          "long_name" =  stringr::str_c(
+            self$feature_display, ", Bin: ", .data$group_name
+          ),
           "characteristics" = "Immune feature bin range",
           "order" = NA
         ) %>%
@@ -181,7 +184,7 @@ MutationStatusGroup <- R6::R6Class(
         dplyr::group_by(dplyr::across(c(-"sample_name"))) %>%
         dplyr::summarise(size = dplyr::n(), .groups = "drop") %>%
         dplyr::mutate(
-          "short_name" = self$group_name,
+          "short_name" = .data$group_name,
           "long_name" = self$group_name,
           "characteristics" = "Mutation Status",
           "order" = NA
