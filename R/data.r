@@ -18,3 +18,6 @@
 
 #' tcga_bin_cohort_obj_small.
 "tcga_bin_cohort_obj_small"
+
+#' upload_cohort_obj.
+"upload_cohort_obj"

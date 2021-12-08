@@ -61,7 +61,6 @@ bin_group <- FeatureBinGroup$new(
   dataset_names = "TCGA", feature_name = "B_cells_Aggregate2", feature_bins = 2
 )
 
-
 objects <- list(
   "pcawg_immune_subtype_cohort_obj" = Cohort$new(
     "filter_object" = cf1,
@@ -96,6 +95,14 @@ objects <- list(
   "tcga_bin_cohort_obj_small" = Cohort$new(
     "filter_object" = cf2,
     "group_object" = bin_group
+  ),
+
+  "upload_cohort_obj" = UploadCohort$new(
+    "upload_tbl" =  readr::read_csv(file.path(
+      system.file("csv", package = "iatlas.modules2"),
+      "test_user_group.csv"
+    )),
+    "group_name" = "COAD"
   )
 )
 

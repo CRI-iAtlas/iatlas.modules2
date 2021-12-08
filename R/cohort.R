@@ -1,4 +1,3 @@
-
 Cohort <- R6::R6Class(
   classname = "Cohort",
   public = list(
@@ -138,3 +137,187 @@ Cohort <- R6::R6Class(
     }
   )
 )
+
+UploadCohort <- R6::R6Class(
+  classname = "UploadCohort",
+  public = list(
+    dataset_names    = NULL,
+    dataset_displays = NULL,
+    group_type       = NULL,
+    cohort_names     = NULL,
+    group_tbl        = NULL,
+    group_name       = NULL,
+    group_display    = NULL,
+    sample_tbl       = NULL,
+    feature_tbl      = NULL,
+    filters          = NULL,
+    plot_colors      = NULL,
+    initialize = function(upload_tbl, group_name){
+
+      if(typeof(group_name) != "character"){
+        stop("group_name must be of type character")
+      }
+
+      if(!tibble::is_tibble(upload_tbl)){
+        stop("upload_tbl must be a tibble::tibble()")
+      }
+
+      if(ncol(upload_tbl) < 2){
+        stop("upload_tbl must have at least two columns")
+      }
+
+      if(nrow(upload_tbl) < 5){
+        stop("upload_tbl must have at least 5 rows")
+      }
+
+      if(colnames(upload_tbl)[[1]] != "sample_name"){
+        stop("first column of upload_tbl must be named 'sample_name'")
+      }
+
+      if(!group_name %in% colnames(upload_tbl)){
+        stop("group_name must be a column in upload_tbl")
+      }
+
+      dataset_sample_tbl <- iatlas.api.client::query_dataset_samples(
+        samples = upload_tbl$sample_name
+      )
+
+      dataset_tbl <- dataset_sample_tbl %>%
+        dplyr::select("dataset_name", "dataset_display") %>%
+        dplyr::distinct() %>%
+        dplyr::arrange(.data$dataset_name)
+
+      group_sample_tbl <- upload_tbl %>%
+        dplyr::select(
+          "sample_name",
+          "short_name" = {{group_name}},
+        ) %>%
+        dplyr::mutate(
+          "long_name" = .data$short_name,
+          "characteristics" = "",
+          "order" = NA_integer_,
+        ) %>%
+        dplyr::inner_join(dataset_sample_tbl, by = "sample_name")
+
+      sample_tbl <- group_sample_tbl %>%
+        dplyr::select(
+          "sample_name",
+          "group_name" = "short_name",
+          "dataset_name"
+        )
+
+      group_tbl <- group_sample_tbl %>%
+        dplyr::group_by_at(dplyr::vars(-.data$sample_name)) %>%
+        dplyr::summarise("size" = dplyr::n()) %>%
+        dplyr::ungroup() %>%
+        add_plot_colors_to_tbl() %>%
+        dplyr::select(
+          "short_name",
+          "long_name",
+          "characteristics",
+          "color",
+          "size",
+          "order",
+          "dataset_name",
+          "dataset_display"
+        )
+
+      feature_tbl <- iatlas.api.client::query_features(
+        cohorts = dataset_tbl$dataset_name
+      )
+
+      plot_colors <- group_tbl %>%
+        dplyr::select("short_name", "color") %>%
+        tibble::deframe(.)
+
+      # set values ----
+
+      self$dataset_names    <- dataset_tbl$dataset_name
+      self$dataset_displays <- dataset_tbl$dataset_display
+      self$group_type       <- "upload"
+      self$cohort_names     <- dataset_tbl$dataset_name
+      self$group_tbl        <- group_tbl
+      self$group_name       <- group_name
+      self$group_display    <- group_name
+      self$sample_tbl       <- sample_tbl
+      self$plot_colors      <- plot_colors
+      self$feature_tbl      <- feature_tbl
+      self$filters          <- NULL
+    },
+    get_feature_class_list = function(){
+      self$feature_tbl %>%
+        dplyr::pull("class") %>%
+        unique() %>%
+        sort()
+    },
+    get_feature_list = function(){
+      self$feature_tbl %>%
+        dplyr::pull("name") %>%
+        unique() %>%
+        sort()
+    },
+    has_classes = function(classes, all_classes = T){
+      cohort_classes <- self$get_feature_class_list()
+      if(all_classes) has_function <- base::all
+      else has_function <- base::any
+      has_function(classes %in% cohort_classes)
+    },
+    has_features = function(features, all_features = T){
+      cohort_features <- self$get_feature_list()
+      if(all_features) has_function <- base::all
+      else has_function <- base::any
+      has_function(features %in% cohort_features)
+    },
+
+    get_feature_values = function(
+      features = NA, feature_classes = NA, groups = NA
+    ){
+      tbl <-
+        iatlas.api.client::query_feature_values(
+          cohorts = self$cohort_names,
+          features = features,
+          feature_classes = feature_classes
+        ) %>%
+        dplyr::inner_join(self$sample_tbl, by = c("sample" = "sample_name")) %>%
+        dplyr::rename("sample_name" = "sample") %>%
+        dplyr::select(-"dataset_name") %>%
+        dplyr::inner_join(self$group_tbl, by = c("group_name" = "short_name")) %>%
+        dplyr::rename(
+          "group_short_name" = "group_name",
+          "group_long_name"  = "long_name",
+          "group_characteristics" = "characteristics",
+          "group_color" = "color",
+          "group_order" = "order"
+        ) %>%
+        dplyr::select(-"size")
+
+
+      if(!is.na(groups)){
+        tbl <- dplyr::filter(tbl, .data$group_short_name %in% groups)
+      }
+      return(tbl)
+    },
+    get_gene_values = function(entrez = NA, gene_types = NA){
+      iatlas.api.client::query_gene_expression(
+        cohorts = self$cohort_names,
+        gene_types = gene_types,
+        entrez = entrez
+      ) %>%
+        dplyr::inner_join(self$sample_tbl, by = c("sample" = "sample_name")) %>%
+        dplyr::rename("sample_name" = "sample") %>%
+        dplyr::select(-"dataset_name") %>%
+        dplyr::inner_join(self$group_tbl, by = c("group_name" = "short_name")) %>%
+        dplyr::rename(
+          "group_short_name" = "group_name",
+          "group_long_name"  = "long_name",
+          "group_characteristics" = "characteristics",
+          "group_color" = "color",
+          "group_order" = "order"
+        ) %>%
+        dplyr::select(-"size")
+    }
+  )
+)
+
+
+
