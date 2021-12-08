@@ -85,6 +85,14 @@ get_pcawg_features_tbl <- memoise::memoise(
 
 # ----
 
+get_user_group_tbl <- memoise::memoise(
+  function(){
+    dir  <- system.file("csv", package = "iatlas.modules2")
+    readr::read_csv(file.path(dir, "test_user_group.csv"))
+  }
+)
+
+
 read_rds_file <- function(file){
   test_file_dir  <- system.file("test_rds_files", package = "iatlas.modules2")
   readRDS(file.path(test_file_dir, file))
