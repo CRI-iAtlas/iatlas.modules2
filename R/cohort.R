@@ -195,7 +195,6 @@ UploadCohort <- R6::R6Class(
         dplyr::mutate(
           "long_name" = .data$short_name,
           "characteristics" = "",
-          "color" = NA_character_,
           "order" = NA_integer_,
         ) %>%
         dplyr::inner_join(dataset_sample_tbl, by = "sample_name")
@@ -211,6 +210,7 @@ UploadCohort <- R6::R6Class(
         dplyr::group_by_at(dplyr::vars(-.data$sample_name)) %>%
         dplyr::summarise("size" = dplyr::n()) %>%
         dplyr::ungroup() %>%
+        add_plot_colors_to_tbl() %>%
         dplyr::select(
           "short_name",
           "long_name",

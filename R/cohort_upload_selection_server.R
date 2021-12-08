@@ -7,11 +7,19 @@ cohort_upload_selection_server <- function(id){
 
       user_group_tbl <- shiny::reactive({
 
+        if(!is.null(input$mock_upload_file)){
+          upload_file <- input$mock_upload_file
+        } else if (!is.null(input$file$datapath)){
+          upload_file <- input$file$datapath
+        } else {
+          upload_file <- NULL
+        }
         shiny::validate(shiny::need(
-          input$file$datapath,
+          upload_file,
           "Use above uploader to upload group csv",
         ))
-        result <- try(readr::read_csv(input$file$datapath))
+
+        result <- try(readr::read_csv(upload_file))
         if (tibble::is_tibble(result)) {
           return(result)
         } else {
@@ -49,33 +57,9 @@ cohort_upload_selection_server <- function(id){
 
         shiny::req(user_group_tbl(), input$user_group_choice)
 
-        sample_tbl <- user_group_tbl() %>%
-          dplyr::select("sample" = 1, "group" = input$user_group_choice)
-
-        group_tbl <- sample_tbl %>%
-          dplyr::group_by(.data$group) %>%
-          dplyr::summarise("size" = dplyr::n(), .groups = "drop") %>%
-          dplyr::mutate("name" = "", "characteristics" = "") %>%
-          dplyr::arrange(.data$group) %>%
-          add_plot_colors_to_tbl()
-
-        feature_tbl <- iatlas.api.client::query_features(
-          samples = sample_tbl$sample
-        )
-
-        plot_colors <- group_tbl %>%
-          dplyr::select("group") %>%
-          dplyr::mutate("color" = viridisLite::viridis(dplyr::n())) %>%
-          tibble::deframe(.)
-
-        list(
-          "sample_tbl"  = sample_tbl,
-          "group_tbl"   = group_tbl,
-          "group_name"  = input$user_group_choice,
-          "group_type"  = "User Defined Group",
-          "feature_tbl" = feature_tbl,
-          "plot_colors" = plot_colors,
-          "dataset"     = NA
+        UploadCohort$new(
+          "upload_tbl" = user_group_tbl(),
+          "group_name" = input$user_group_choice
         )
       })
 

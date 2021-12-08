@@ -237,6 +237,8 @@ test_that("upload cohort", {
   expect_equal(colnames(cohort$sample_tbl), expected_sample_tbl_names)
   expect_equal(colnames(cohort$group_tbl), expected_group_tbl_names)
 
+  expect_named(cohort$plot_colors, c("NO", "YES"))
+  expect_equal(unname(cohort$plot_colors), c("#440154FF", "#FDE725FF"))
 
   class_list <- cohort$get_feature_class_list()
   expect_type(class_list, "character")
