@@ -18,6 +18,20 @@ cohort_selection_server <- function(
     id,
     function(input, output, session) {
 
+      display_cohort_mode_choice <- shiny::reactive({
+        dataset_type() == "analysis"
+      })
+
+      output$display_cohort_mode_choice <- shiny::reactive({
+        display_cohort_mode_choice()
+      })
+
+      shiny::outputOptions(
+        output,
+        "display_cohort_mode_choice",
+        suspendWhenHidden = FALSE
+      )
+
       cohort_obj_manual <- cohort_manual_selection_server(
         "cohort_manual_selection",
         default_datasets = default_datasets,
@@ -30,11 +44,13 @@ cohort_selection_server <- function(
       )
 
       cohort_obj <- shiny::reactive({
-        shiny::req(input$cohort_mode_choice)
-        if (input$cohort_mode_choice == "Cohort Selection") {
+        if(is.null(input$cohort_mode_choice)) cohort_mode <- "Cohort Selection"
+        else cohort_mode <- input$cohort_mode_choice
+
+        if (cohort_mode == "Cohort Selection") {
           shiny::req(cohort_obj_manual())
           return(cohort_obj_manual())
-        } else if (input$cohort_mode_choice == "Cohort Upload") {
+        } else if (cohort_mode == "Cohort Upload") {
           shiny::req(cohort_obj_upload())
           return(cohort_obj_upload())
         } else {
