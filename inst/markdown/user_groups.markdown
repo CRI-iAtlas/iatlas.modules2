@@ -4,7 +4,7 @@
 <table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
  <thead>
   <tr>
-   <th style="text-align:left;"> sample </th>
+   <th style="text-align:left;"> Sample </th>
    <th style="text-align:left;"> Alternate Cancer Subtyping </th>
    <th style="text-align:left;"> Gender </th>
    <th style="text-align:left;"> Molecular Alteration </th>
@@ -43,16 +43,22 @@
 </tbody>
 </table>
 
-## Columns
-The first column needs to contain (12-digit) TCGA participant barcode IDs. Subsequent columns (one or more) contain sample groupings that you can later select for analysis. For example in the above, the third column contains gender, and the values in that column can thus be used to compare immune response in cancer in women to that in men.
+## Sample column
+One column must be named Sample. This column will contain the identifiers for the samples to include.
 
-## Headers
-The first column can have any heading. Column headings that follow will be appear as the labels of the group selection dropdown menus in iAtlas.
+#### TCGA
+The Sample column needs to contain (12-digit) TCGA participant barcode IDs. (ie. 'TCGA-02-0011')
+
+#### PCAWG
+The sample column need to contain the donor ID. (ie. 'DO1328')
+
+## Other columns
+Other columns (one or more) contain sample groupings that you can later select for analysis. For example in the above, the third column contains gender, and the values in that column can thus be used to compare immune response in cancer in women to that in men.
 
 ## Rows
-Rows can be supplied for any subset of TCGA samples. Rows will be filtered out if they have an `NA` value for the selected group. For example, if `Molecular Alteration` is selected, the bottom row will be removed.
+Rows can be supplied for any subset of TCGA or PCAWG samples. Rows will be filtered out if they have an `NA` value for the selected group. For example, if `Molecular Alteration` is selected, the bottom row will be removed.
 
 ## Example files
-[Example1](https://raw.githubusercontent.com/CRI-iAtlas/shiny-iatlas/develop/data/example_user_group.csv)
+[Example1](https://raw.githubusercontent.com/CRI-iAtlas/iatlas-app/main/inst/examples/example_user_group.csv)
 
-[Example2](https://raw.githubusercontent.com/CRI-iAtlas/shiny-iatlas/develop/data/example_user_group2.csv)
+[Example2](https://raw.githubusercontent.com/CRI-iAtlas/iatlas-app/main/inst/examples/example_user_group2.csv)

@@ -170,8 +170,8 @@ UploadCohort <- R6::R6Class(
         stop("upload_tbl must have at least 5 rows")
       }
 
-      if(colnames(upload_tbl)[[1]] != "sample_name"){
-        stop("first column of upload_tbl must be named 'sample_name'")
+      if(!"Sample" %in% colnames(upload_tbl)){
+        stop("'Sample' must be in columns of upload_tbl")
       }
 
       if(!group_name %in% colnames(upload_tbl)){
@@ -179,7 +179,7 @@ UploadCohort <- R6::R6Class(
       }
 
       dataset_sample_tbl <- iatlas.api.client::query_dataset_samples(
-        samples = upload_tbl$sample_name
+        samples = upload_tbl$Sample
       )
 
       dataset_tbl <- dataset_sample_tbl %>%
@@ -189,7 +189,7 @@ UploadCohort <- R6::R6Class(
 
       group_sample_tbl <- upload_tbl %>%
         dplyr::select(
-          "sample_name",
+          "sample_name" = "Sample",
           "short_name" = {{group_name}},
         ) %>%
         dplyr::mutate(

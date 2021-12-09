@@ -44,8 +44,9 @@ cohort_group_selection_server <- function(
 
       group_choice <- dedupe(shiny::reactive({
         shiny::req(default_group())
-        if (is.null(input$group_choice)) return(default_group())
-        else return(input$group_choice)
+        if (is.null(input$group_choice)) group_choice <- default_group()
+        else group_choice <- input$group_choice
+        return(group_choice)
       }))
 
       # Driver Mutations ----

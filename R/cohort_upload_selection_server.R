@@ -20,11 +20,28 @@ cohort_upload_selection_server <- function(id){
         ))
 
         result <- try(readr::read_csv(upload_file))
-        if (tibble::is_tibble(result)) {
-          return(result)
-        } else {
-          return(NA)
-        }
+
+        shiny::validate(shiny::need(
+          tibble::is_tibble(result),
+          "Unable to read in uploaded file.."
+        ))
+
+        shiny::validate(shiny::need(
+          ncol(result) > 1,
+          "Uploaded file must have at least two columns."
+        ))
+
+        shiny::validate(shiny::need(
+          nrow(result) > 4,
+          "Uploaded file must have at least 5 rows."
+        ))
+
+        shiny::validate(shiny::need(
+          "Sample" %in% colnames(result),
+          "Uploaded file must have column named 'Sample'"
+        ))
+
+        return(result)
       })
 
       shiny::observeEvent(input$filehelp, {
