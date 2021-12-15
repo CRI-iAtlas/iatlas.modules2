@@ -1,2 +1,1 @@
-This module is used to create your own custom cohort, or upload your own. Plots in other modules will reflect the samples chosen, and way they are grouped.
-
+Use this module to create your own custom cohort and to specify how cancer genomics samples are grouped and used for contrasts in iAtlas. You can also upload a file to specify the cohort and sample groups. When you are done, cohort and sample group selection will be saved, and used throughout iAtlas. **You can refer back to this module at any time to review or modify your choices.** A summary of your cohort and sample groups is shown at the bottom of this page.

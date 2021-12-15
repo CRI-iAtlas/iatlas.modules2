@@ -1,7 +1,1 @@
-Filter the samples from the slected dataset below.
-
-Click on the add group filter button to add a filter that is catgeorical, then select from the possible values the samples kept will have.
-
-Click on the add numeric filter button to add a filter that is a range of values, then select the range the samples kept will have.
-
-Click on the remove button to remove the selected filter.
+If you wish, you can focus your study on tumor samples of interest to you by using filters.  Multiple filters can be used.  There is a separate way to add filters based on available sample categories (**Add group filter**) and to add filters based on numerical data range (**Add numeric filter**).  Click the **Remove** button at any time to remove any specified filter. Proceed to the next step: **Select or Search for Grouping Variable** when you are done.
