@@ -55,8 +55,8 @@ cohort_selection_ui <- function(id) {
       data_table_ui(
         ns("sg_table"),
         message_html = shiny::p(paste0(
-          "This displays attributes and annotations of ",
-          "your choice of groups."
+          "This table shows counts, attributes, and annotations of ",
+          "your choice of sample groups."
         ))
       )
     )
