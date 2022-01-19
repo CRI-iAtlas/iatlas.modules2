@@ -6,6 +6,7 @@ server <- function(input, output, session) {
     default_datasets = shiny::reactive(c("Gide_Cell_2019", "HugoLo_IPRES_2016")),
     default_group    = shiny::reactive("Responder"),
     dataset_type     = shiny::reactive("ici"),
+    display_module_availibility_string = shiny::reactive(F)
   )
 
   output$cohort_text_output <- shiny::renderText({
