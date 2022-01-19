@@ -5,11 +5,11 @@ test_that("Create Cohort Module String", {
     )
     expect_equal(
         create_cohort_module_string("DS1", tbl1),
-        "Modules available for dataset DS1: M1, M2, M3, M4, M5"
+        "Specific analysis modules (displayed after you make your selection) are available for each dataset. Modules available for dataset DS1: M1, M2, M3, M4, M5"
     )
     expect_equal(
         create_cohort_module_string("DS2", tbl1),
-        "Modules available for dataset DS2: M1, M2, M3"
+        "Specific analysis modules (displayed after you make your selection) are available for each dataset. Modules available for dataset DS2: M1, M2, M3"
     )
     expect_equal(
         create_cohort_module_string("DS1"),

@@ -30,8 +30,9 @@ create_cohort_module_string <- function(.datasets, tbl = NULL){
         return("No modules currently available for selected dataset")
     } else {
         msg <- modules %>%
-            paste0(collapse = ", ") %>%
-            paste0(
+            stringr::str_c(collapse = ", ") %>%
+            stringr::str_c(
+                "Specific analysis modules (displayed after you make your selection) are available for each dataset. ",
                 "Modules available for dataset ",
                 .datasets,
                 ": ",
