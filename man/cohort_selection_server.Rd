@@ -9,6 +9,7 @@ cohort_selection_server(
   default_datasets = shiny::reactive("TCGA"),
   default_group = shiny::reactive("Immune_Subtype"),
   dataset_type = shiny::reactive("analysis"),
+  display_module_availibility_string = shiny::reactive(T),
   ...
 )
 }
@@ -20,6 +21,9 @@ cohort_selection_server(
 \item{default_group}{A Shiny reactive that returns the name of a group}
 
 \item{dataset_type}{A shiny reactive that returns one of c("analysis", "ici")}
+
+\item{display_module_availibility_string}{A shiny reactive that returns a
+logical}
 
 \item{...}{unused args}
 }

@@ -4,6 +4,8 @@
 #' @param default_datasets A Shiny reactive that return a list of dataset names
 #' @param default_group A Shiny reactive that returns the name of a group
 #' @param dataset_type A shiny reactive that returns one of c("analysis", "ici")
+#' @param display_module_availibility_string A shiny reactive that returns a
+#' logical
 #' @param ... unused args
 #'
 #' @export
@@ -12,6 +14,7 @@ cohort_selection_server <- function(
   default_datasets = shiny::reactive("TCGA"),
   default_group    = shiny::reactive("Immune_Subtype"),
   dataset_type     = shiny::reactive("analysis"),
+  display_module_availibility_string = shiny::reactive(T),
   ...
 ){
   shiny::moduleServer(
@@ -36,7 +39,8 @@ cohort_selection_server <- function(
         "cohort_manual_selection",
         default_datasets = default_datasets,
         default_group    = default_group,
-        dataset_type     = dataset_type
+        dataset_type     = dataset_type,
+        display_module_availibility_string = display_module_availibility_string
       )
 
       cohort_obj_upload <- cohort_upload_selection_server(

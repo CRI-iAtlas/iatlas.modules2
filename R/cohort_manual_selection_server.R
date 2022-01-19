@@ -2,7 +2,8 @@ cohort_manual_selection_server <- function(
   id,
   default_datasets = shiny::reactive("TCGA"),
   default_group    = shiny::reactive("Immune_Subtype"),
-  dataset_type     = shiny::reactive("analysis")
+  dataset_type     = shiny::reactive("analysis"),
+  display_module_availibility_string = shiny::reactive(T)
 ){
   shiny::moduleServer(
     id,
@@ -11,7 +12,8 @@ cohort_manual_selection_server <- function(
       selected_datasets <- cohort_dataset_selection_server(
         "dataset_selection",
         default_datasets,
-        dataset_type
+        dataset_type,
+        display_module_availibility_string = display_module_availibility_string
       )
 
       datasets <- dedupe(shiny::reactive({

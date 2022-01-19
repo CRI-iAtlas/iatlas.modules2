@@ -6,7 +6,11 @@ cohort_dataset_selection_ui <- function(id) {
     iatlas.modules::messageBox(
       width = 12,
       shiny::includeMarkdown(get_markdown_path("cohort_dataset_selection")),
-      shiny::textOutput(ns("module_availibility_string"))
+      shiny::conditionalPanel(
+        shiny::textOutput(ns("module_availibility_string")),
+        condition = "output.display_module_availibility_string",
+        ns = ns
+      )
     ),
     shiny::fluidRow(
       iatlas.modules::optionsBox(

@@ -1,7 +1,8 @@
 cohort_dataset_selection_server <- function(
   id,
   default_datasets = shiny::reactive("TCGA"),
-  dataset_type     = shiny::reactive("analysis")
+  dataset_type     = shiny::reactive("analysis"),
+  display_module_availibility_string = shiny::reactive(T)
 ) {
   shiny::moduleServer(
     id,
@@ -30,6 +31,17 @@ cohort_dataset_selection_server <- function(
           selected = default_datasets()
         )
       })
+
+      # This is so that the conditional panel can see the various shiny::reactives
+      output$display_module_availibility_string <- shiny::reactive({
+        display_module_availibility_string()
+      })
+
+      shiny::outputOptions(
+        output,
+        "display_module_availibility_string",
+        suspendWhenHidden = FALSE
+      )
 
       output$module_availibility_string <- shiny::renderText({
         shiny::req(input$dataset_choices)
