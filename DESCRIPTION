@@ -1,7 +1,7 @@
-Package: iatlas.modules2
+Package: iatlasModules2
 Title: iAatlas Modules2
 Type: Package
-Version: 0.4.8
+Version: 0.5.0
 Date: 2021-1-30
 Author: Andrew Lamb
 Maintainer: Andrew Lamb <Andrew.Lamb@sagebase.org>
@@ -39,8 +39,8 @@ Imports:
     utils,
     viridis (>= 0.5),
     viridisLite
-URL: https://github.com/CRI-iAtlas/iatlas.modules2
-BugReports: https://github.com/CRI-iAtlas/iatlas.modules2/issues
+URL: https://github.com/CRI-iAtlas/iatlasModules2
+BugReports: https://github.com/CRI-iAtlas/iatlasModules2/issues
 Remotes:
     CRI-iAtlas/iatlas.api.client@main,
     CRI-iAtlas/iatlas.modules@master

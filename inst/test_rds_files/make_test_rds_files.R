@@ -99,7 +99,7 @@ objects <- list(
 
   "upload_cohort_obj" = UploadCohort$new(
     "upload_tbl" =  readr::read_csv(file.path(
-      system.file("csv", package = "iatlas.modules2"),
+      system.file("csv", package = "iatlasModules2"),
       "test_user_group.csv"
     )),
     "group_name" = "COAD"

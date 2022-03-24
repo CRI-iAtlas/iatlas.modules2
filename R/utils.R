@@ -9,7 +9,7 @@ utils::globalVariables(c("val", "<<-", "label"))
 #' @param folder A string, the file's folder
 #' @param package A string, the package the file is in
 get_system_path_file <- function(
-  prefix, extension, folder, package = "iatlas.modules2"
+  prefix, extension, folder, package = "iatlasModules2"
 ){
   file_name <- stringr::str_c(prefix, extension)
   file.path(system.file(folder, package = package), file_name)

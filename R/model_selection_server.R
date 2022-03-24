@@ -103,7 +103,7 @@ model_selection_server <- function(
         categorical_model_covariate_element_ui
       )
 
-      categorical_covariate_output <- iatlas.modules2::insert_remove_element_server(
+      categorical_covariate_output <- insert_remove_element_server(
         "select_categorical_covariate",
         element_module = categorical_covariate_module,
         element_module_ui = categorical_covariate_module_ui
