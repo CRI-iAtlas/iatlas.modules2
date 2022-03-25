@@ -3,13 +3,13 @@ cohort_filter_selection_ui <- function(id) {
   ns <- shiny::NS(id)
 
   shiny::tagList(
-    iatlas.modules::messageBox(
+    iatlasModules::messageBox(
       width = 12,
       shiny::includeMarkdown(get_markdown_path("cohort_filter_selection")),
       shiny::textOutput(ns("samples_text"))
     ),
     shiny::fluidRow(
-      iatlas.modules::optionsBox(
+      iatlasModules::optionsBox(
         width = 12,
         shiny::column(
           width = 12,
@@ -19,7 +19,7 @@ cohort_filter_selection_ui <- function(id) {
           )
         )
       ),
-      iatlas.modules::optionsBox(
+      iatlasModules::optionsBox(
         width = 12,
         shiny::column(
           width = 12,

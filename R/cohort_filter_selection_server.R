@@ -11,7 +11,7 @@ cohort_filter_selection_server <- function(
       # group filters -----------------------------------------------------------
       group_filter_list <- shiny::reactive({
         shiny::req(datasets())
-        iatlas.api.client::query_dataset_tags(dataset = datasets()) %>%
+        iatlasGraphqlClient::query_dataset_tags(dataset = datasets()) %>%
           dplyr::group_by(.data$tag_name) %>%
           dplyr::mutate(count = dplyr::n()) %>%
           dplyr::ungroup() %>%
@@ -60,7 +60,7 @@ cohort_filter_selection_server <- function(
         shiny::req(feature_tbl())
         lst <-
           dplyr::bind_rows(feature_tbl()) %>%
-          iatlas.modules::create_nested_named_list(
+          iatlasModules::create_nested_named_list(
             names_col1 = "class",
             names_col2 = "display",
             values_col = "feature"

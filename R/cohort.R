@@ -40,11 +40,11 @@ Cohort <- R6::R6Class(
         tibble::deframe(.)
 
       dataset_displays <-
-        iatlas.api.client::query_datasets() %>%
+        iatlasGraphqlClient::query_datasets() %>%
         dplyr::filter(.data$name %in% dataset_names) %>%
         dplyr::pull("display")
 
-      feature_tbl <- iatlas.api.client::query_features(cohorts = cohort_names)
+      feature_tbl <- iatlasGraphqlClient::query_features(cohorts = cohort_names)
 
       # set values ----
 
@@ -91,7 +91,7 @@ Cohort <- R6::R6Class(
       features = NA, feature_classes = NA, groups = NA
     ){
       tbl <-
-        iatlas.api.client::query_feature_values(
+        iatlasGraphqlClient::query_feature_values(
           cohorts = self$cohort_names,
           features = features,
           feature_classes = feature_classes
@@ -117,7 +117,7 @@ Cohort <- R6::R6Class(
     },
 
     get_gene_values = function(entrez = NA, gene_types = NA){
-      iatlas.api.client::query_gene_expression(
+      iatlasGraphqlClient::query_gene_expression(
         cohorts = self$cohort_names,
         gene_types = gene_types,
         entrez = entrez
@@ -178,7 +178,7 @@ UploadCohort <- R6::R6Class(
         stop("group_name must be a column in upload_tbl")
       }
 
-      dataset_sample_tbl <- iatlas.api.client::query_dataset_samples(
+      dataset_sample_tbl <- iatlasGraphqlClient::query_dataset_samples(
         samples = upload_tbl$Sample
       )
 
@@ -222,7 +222,7 @@ UploadCohort <- R6::R6Class(
           "dataset_display"
         )
 
-      feature_tbl <- iatlas.api.client::query_features(
+      feature_tbl <- iatlasGraphqlClient::query_features(
         cohorts = dataset_tbl$dataset_name
       )
 
@@ -273,7 +273,7 @@ UploadCohort <- R6::R6Class(
       features = NA, feature_classes = NA, groups = NA
     ){
       tbl <-
-        iatlas.api.client::query_feature_values(
+        iatlasGraphqlClient::query_feature_values(
           cohorts = self$cohort_names,
           features = features,
           feature_classes = feature_classes
@@ -298,7 +298,7 @@ UploadCohort <- R6::R6Class(
       return(tbl)
     },
     get_gene_values = function(entrez = NA, gene_types = NA){
-      iatlas.api.client::query_gene_expression(
+      iatlasGraphqlClient::query_gene_expression(
         cohorts = self$cohort_names,
         gene_types = gene_types,
         entrez = entrez
