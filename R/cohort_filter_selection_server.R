@@ -11,7 +11,7 @@ cohort_filter_selection_server <- function(
       # group filters -----------------------------------------------------------
       group_filter_list <- shiny::reactive({
         shiny::req(datasets())
-        iatlas.api.client::query_dataset_tags(dataset = datasets()) %>%
+        iatlasGraphqlClient::query_dataset_tags(dataset = datasets()) %>%
           dplyr::group_by(.data$tag_name) %>%
           dplyr::mutate(count = dplyr::n()) %>%
           dplyr::ungroup() %>%

@@ -8,12 +8,12 @@ multivariate_driver_ui <- function(id){
   ns <- shiny::NS(id)
 
   shiny::tagList(
-    iatlas.modules::messageBox(
+    iatlasModules::messageBox(
       width = 12,
       shiny::includeMarkdown(get_markdown_path("driver_multi"))
     ),
     shiny::fluidRow(
-      iatlas.modules::optionsBox(
+      iatlasModules::optionsBox(
         width = 12,
         shiny::column(
           width = 3,
@@ -50,7 +50,7 @@ multivariate_driver_ui <- function(id){
     ),
     model_selection_ui(ns("module1")),
     shiny::fluidRow(
-      iatlas.modules::optionsBox(
+      iatlasModules::optionsBox(
         width = 12,
         shiny::column(
           width = 6,
@@ -63,29 +63,29 @@ multivariate_driver_ui <- function(id){
       )
     ),
     shiny::fluidRow(
-      iatlas.modules::messageBox(
+      iatlasModules::messageBox(
         width = 12,
         shiny::p(shiny::textOutput(ns("result_text")))
       )
     ),
     shiny::fluidRow(
-      iatlas.modules::plotBox(
+      iatlasModules::plotBox(
         width = 12,
         "volcano_plot" %>%
           ns() %>%
           plotly::plotlyOutput(.) %>%
           shinycssloaders::withSpinner(.),
-        iatlas.modules::plotly_ui(ns("volcano_plot"))
+        iatlasModules::plotly_ui(ns("volcano_plot"))
       )
     ),
     shiny::fluidRow(
-      iatlas.modules::plotBox(
+      iatlasModules::plotBox(
         width = 12,
         "violin_plot" %>%
           ns() %>%
           plotly::plotlyOutput(.) %>%
           shinycssloaders::withSpinner(.),
-        iatlas.modules::plotly_ui(ns("violin_plot"))
+        iatlasModules::plotly_ui(ns("violin_plot"))
       )
     )
   )

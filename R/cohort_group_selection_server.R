@@ -68,7 +68,7 @@ cohort_group_selection_server <- function(
       )
 
       mutation_tbl <- shiny::reactive({
-        iatlas.api.client::query_mutations(type = "driver_mutation")
+        iatlasGraphqlClient::query_mutations(type = "driver_mutation")
       })
 
       output$select_driver_mutation_group_ui <- shiny::renderUI({
@@ -102,7 +102,7 @@ cohort_group_selection_server <- function(
         shiny::req(group_choice() == "Immune Feature Bins", features_tbl())
         features_tbl() %>%
           dplyr::select("class", "display", "name") %>%
-          iatlas.modules::create_nested_named_list(
+          iatlasModules::create_nested_named_list(
             names_col1 = "class",
             names_col2 = "display",
             values_col = "name"

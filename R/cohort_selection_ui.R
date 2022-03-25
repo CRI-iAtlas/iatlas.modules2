@@ -9,22 +9,22 @@ cohort_selection_ui <- function(id) {
 
   shiny::tagList(
 
-    iatlas.modules::titleBox("iAtlas Explorer - Cohort Selection"),
-    iatlas.modules::textBox(
+    iatlasModules::titleBox("iAtlas Explorer - Cohort Selection"),
+    iatlasModules::textBox(
       width = 12,
       shiny::includeMarkdown(get_markdown_path("cohort_selection1"))
     ),
 
-    iatlas.modules::sectionBox(
+    iatlasModules::sectionBox(
       title = "Cohort Selection",
       shiny::conditionalPanel(
         condition = "output.display_cohort_mode_choice",
         shiny::fluidRow(
-          iatlas.modules::messageBox(
+          iatlasModules::messageBox(
             width = 12,
             shiny::includeMarkdown(get_markdown_path("cohort_selection2")),
           ),
-          iatlas.modules::optionsBox(
+          iatlasModules::optionsBox(
             width = 12,
             shiny::column(
               width = 12,
@@ -50,7 +50,7 @@ cohort_selection_ui <- function(id) {
       )
     ),
 
-    iatlas.modules::sectionBox(
+    iatlasModules::sectionBox(
       title = "Group Key",
       data_table_ui(
         ns("sg_table"),

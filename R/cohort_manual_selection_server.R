@@ -24,7 +24,7 @@ cohort_manual_selection_server <- function(
 
       dataset_feature_tbl <- shiny::reactive({
         shiny::req(datasets())
-        iatlas.api.client::query_features(cohorts = datasets())
+        iatlasGraphqlClient::query_features(cohorts = datasets())
       })
 
       group_object <- cohort_group_selection_server(

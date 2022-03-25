@@ -20,7 +20,7 @@ CohortFilters <- R6::R6Class("CohortFilters", list(
   },
   get_sample_tbl = function(cohorts){
     samples    <- self$get_samples(cohorts)
-    sample_tbl <- iatlas.api.client::query_cohort_samples(cohorts = cohorts)
+    sample_tbl <- iatlasGraphqlClient::query_cohort_samples(cohorts = cohorts)
     if(length(samples) > 0) {
       sample_tbl <- dplyr::filter(sample_tbl, .data$sample_name %in% samples)
     }
@@ -79,7 +79,7 @@ CohortNumericFilter <- R6::R6Class("CohortNumericFilter", list(
   },
   get_samples = function(cohorts){
     samples <-
-      iatlas.api.client::query_feature_values(
+      iatlasGraphqlClient::query_feature_values(
         cohorts = cohorts,
         features = self$name,
         max_value = self$max,
@@ -101,7 +101,7 @@ CohortGroupFilter <- R6::R6Class("CohortGroupFilter", list(
   },
   get_samples = function(cohorts){
     samples <-
-      iatlas.api.client::query_tag_samples(
+      iatlasGraphqlClient::query_tag_samples(
         cohorts = cohorts, tags = self$values
       ) %>%
       dplyr::pull("sample_name")

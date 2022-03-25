@@ -3,11 +3,11 @@ cohort_group_selection_ui <- function(id) {
   ns <- shiny::NS(id)
 
   shiny::fluidRow(
-    iatlas.modules::messageBox(
+    iatlasModules::messageBox(
       width = 12,
       shiny::includeMarkdown(get_markdown_path("cohort_group_selection")),
     ),
-    iatlas.modules::optionsBox(
+    iatlasModules::optionsBox(
       width = 12,
       shiny::column(
         width = 12,
