@@ -60,7 +60,7 @@ cohort_filter_selection_server <- function(
         shiny::req(feature_tbl())
         lst <-
           dplyr::bind_rows(feature_tbl()) %>%
-          iatlas.modules::create_nested_named_list(
+          iatlasModules::create_nested_named_list(
             names_col1 = "class",
             names_col2 = "display",
             values_col = "feature"
