@@ -8,12 +8,12 @@ univariate_driver_ui <- function(id){
   ns <- shiny::NS(id)
 
   shiny::tagList(
-    iatlasModules::messageBox(
+    iatlas.modules::messageBox(
       width = 12,
       shiny::includeMarkdown(get_markdown_path("driver_single"))
     ),
     shiny::fluidRow(
-      iatlasModules::optionsBox(
+      iatlas.modules::optionsBox(
         width = 12,
         shiny::column(
           width = 4,
@@ -40,29 +40,29 @@ univariate_driver_ui <- function(id){
       )
     ),
     shiny::fluidRow(
-      iatlasModules::messageBox(
+      iatlas.modules::messageBox(
         width = 12,
         shiny::p(shiny::textOutput(ns("result_text")))
       )
     ),
     shiny::fluidRow(
-      iatlasModules::plotBox(
+      iatlas.modules::plotBox(
         width = 12,
         "volcano_plot" %>%
           ns() %>%
           plotly::plotlyOutput(.) %>%
           shinycssloaders::withSpinner(.),
-        iatlasModules::plotly_ui(ns("volcano_plot"))
+        iatlas.modules::plotly_ui(ns("volcano_plot"))
       )
     ),
     shiny::fluidRow(
-      iatlasModules::plotBox(
+      iatlas.modules::plotBox(
         width = 12,
         "violin_plot" %>%
           ns() %>%
           plotly::plotlyOutput(.) %>%
           shinycssloaders::withSpinner(.),
-        iatlasModules::plotly_ui(ns("violin_plot"))
+        iatlas.modules::plotly_ui(ns("violin_plot"))
       )
     )
   )

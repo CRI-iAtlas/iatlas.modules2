@@ -21,7 +21,7 @@ TagGroup <- R6::R6Class(
       }
 
       group_display <- group_name %>%
-        iatlasGraphqlClient::query_tags(tags = .) %>%
+        iatlas.api.client::query_tags(tags = .) %>%
         dplyr::pull("tag_short_display")
 
       if(length(group_display) == 0) {
@@ -29,7 +29,7 @@ TagGroup <- R6::R6Class(
       }
 
       cohort_names <-
-        iatlasGraphqlClient::query_cohorts(
+        iatlas.api.client::query_cohorts(
           datasets = dataset_names,
           tags = group_name
         ) %>%
@@ -98,7 +98,7 @@ FeatureBinGroup <- R6::R6Class(
     initialize = function(dataset_names, feature_name, feature_bins){
 
       feature_display <-
-        iatlasGraphqlClient::query_features(features = feature_name) %>%
+        iatlas.api.client::query_features(features = feature_name) %>%
         dplyr::pull("display")
 
       group_name  = stringr::str_c("Immune Feature Bins: ", feature_display)
@@ -113,7 +113,7 @@ FeatureBinGroup <- R6::R6Class(
     },
     get_tables = function(sample_tbl){
 
-      sample_tbl <- iatlasGraphqlClient::query_feature_values(
+      sample_tbl <- iatlas.api.client::query_feature_values(
         features = self$feature_name, cohorts = self$dataset_names
       ) %>%
         dplyr::mutate("group_name" = as.character(cut(.data$feature_value, self$feature_bins))) %>%
@@ -172,7 +172,7 @@ MutationStatusGroup <- R6::R6Class(
     get_tables = function(sample_tbl){
 
       sample_tbl <-
-        iatlasGraphqlClient::query_mutation_statuses(
+        iatlas.api.client::query_mutation_statuses(
           mutations = self$mutation_name,
           cohorts = self$cohort_names
         ) %>%

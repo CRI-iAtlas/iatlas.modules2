@@ -1,5 +1,5 @@
 build_tag_group_tbl <- function(datasets){
-  tbl <- iatlasGraphqlClient::query_cohorts(datasets = datasets)
+  tbl <- iatlas.api.client::query_cohorts(datasets = datasets)
   if(!"tag_name" %in% names(tbl)) {
     return(dplyr::tibble("display" = character(), "name" = character()))
   }
@@ -24,7 +24,7 @@ build_custom_group_tbl <- function(datasets){
     ),
     dplyr::tibble(
       "name" = "Immune Feature Bins",
-      "dataset" = iatlasGraphqlClient::query_datasets(types = "ici")$name
+      "dataset" = iatlas.api.client::query_datasets(types = "ici")$name
     )
   ) %>%
     dplyr::filter(.data$dataset %in% datasets) %>%

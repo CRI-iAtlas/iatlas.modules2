@@ -36,7 +36,7 @@ numeric_filter_element_server <- function(
       features_tbl <- shiny::reactive({
         shiny::req(datasets(), input$numeric_choice)
         tbl <-
-          iatlasGraphqlClient::query_features_range(
+          iatlas.api.client::query_features_range(
             cohorts = datasets(),
             features = input$numeric_choice
           ) %>%

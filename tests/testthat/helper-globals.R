@@ -1,31 +1,31 @@
 get_tcga_samples_tbl <- memoise::memoise(
   function(){
-    iatlasGraphqlClient::query_cohort_samples(cohorts = "TCGA")
+    iatlas.api.client::query_cohort_samples(cohorts = "TCGA")
   }
 )
 
 get_tcga_study_samples_tbl <- memoise::memoise(
   function(){
-    iatlasGraphqlClient::query_cohort_samples(cohorts = "TCGA_TCGA_Study")
+    iatlas.api.client::query_cohort_samples(cohorts = "TCGA_TCGA_Study")
   }
 )
 
 get_tcga_immune_subtypes_samples_tbl <- memoise::memoise(
   function(){
-    iatlasGraphqlClient::query_cohort_samples(cohorts = "TCGA_Immune_Subtype")
+    iatlas.api.client::query_cohort_samples(cohorts = "TCGA_Immune_Subtype")
   }
 )
 
 get_pcawg_gender_samples_tbl <- memoise::memoise(
   function(){
-    iatlasGraphqlClient::query_cohort_samples(cohorts = "PCAWG_Gender")
+    iatlas.api.client::query_cohort_samples(cohorts = "PCAWG_Gender")
   }
 )
 
 get_ici_samples_tbl <- memoise::memoise(
   function(){
     cohorts <-  c("Gide_Cell_2019_Responder", "HugoLo_IPRES_2016_Responder")
-    iatlasGraphqlClient::query_cohort_samples(cohorts = cohorts)
+    iatlas.api.client::query_cohort_samples(cohorts = cohorts)
   }
 )
 
@@ -43,25 +43,25 @@ get_tcga_samples_50 <- memoise::memoise(
 
 get_tcga_features_tbl <- memoise::memoise(
   function(){
-    iatlasGraphqlClient::query_features(cohorts = "TCGA")
+    iatlas.api.client::query_features(cohorts = "TCGA")
   }
 )
 
 get_ici_features_tbl <- memoise::memoise(
   function(){
-    iatlasGraphqlClient::query_features(cohorts = c("Gide_Cell_2019_Responder", "HugoLo_IPRES_2016_Responder"))
+    iatlas.api.client::query_features(cohorts = c("Gide_Cell_2019_Responder", "HugoLo_IPRES_2016_Responder"))
   }
 )
 
 get_pcawg_samples_tbl <- memoise::memoise(
   function(){
-    iatlasGraphqlClient::query_cohort_samples(cohorts = "PCAWG")
+    iatlas.api.client::query_cohort_samples(cohorts = "PCAWG")
   }
 )
 
 get_pcawg_study_samples_tbl <- memoise::memoise(
   function(){
-    iatlasGraphqlClient::query_cohort_samples(cohorts = "PCAWG_PCAWG_Study")
+    iatlas.api.client::query_cohort_samples(cohorts = "PCAWG_PCAWG_Study")
   }
 )
 
@@ -79,7 +79,7 @@ get_pcawg_samples_50 <- memoise::memoise(
 
 get_pcawg_features_tbl <- memoise::memoise(
   function(){
-    iatlasGraphqlClient::query_features(cohorts = "PCAWG")
+    iatlas.api.client::query_features(cohorts = "PCAWG")
   }
 )
 
@@ -87,14 +87,14 @@ get_pcawg_features_tbl <- memoise::memoise(
 
 get_user_group_tbl <- memoise::memoise(
   function(){
-    dir  <- system.file("csv", package = "iatlasModules2")
+    dir  <- system.file("csv", package = "iatlas.modules2")
     readr::read_csv(file.path(dir, "test_user_group.csv"))
   }
 )
 
 
 read_rds_file <- function(file){
-  test_file_dir  <- system.file("test_rds_files", package = "iatlasModules2")
+  test_file_dir  <- system.file("test_rds_files", package = "iatlas.modules2")
   readRDS(file.path(test_file_dir, file))
 }
 

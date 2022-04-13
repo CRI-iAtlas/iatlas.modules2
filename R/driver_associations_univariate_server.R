@@ -12,7 +12,7 @@ univariate_driver_server <- function(id, cohort_obj) {
       ns <- session$ns
 
       response_option_list <- shiny::reactive({
-        iatlasModules::create_nested_named_list(
+        iatlas.modules::create_nested_named_list(
           cohort_obj()$feature_tbl,
           names_col1 = "class",
           names_col2 = "display",
@@ -49,7 +49,7 @@ univariate_driver_server <- function(id, cohort_obj) {
           length(cohort_obj()$group_name) == 1,
         )
 
-        iatlasGraphqlClient::query_tags(
+        iatlas.api.client::query_tags(
           cohorts = cohort_obj()$dataset_names,
           parent_tags = cohort_obj()$group_name
         ) %>%
@@ -65,7 +65,7 @@ univariate_driver_server <- function(id, cohort_obj) {
         )
 
         tbl <-
-          iatlasGraphqlClient::query_driver_results(
+          iatlas.api.client::query_driver_results(
             datasets = cohort_obj()$dataset_names,
             tags = tags(),
             features = input$response_choice,
@@ -88,7 +88,7 @@ univariate_driver_server <- function(id, cohort_obj) {
 
       total_associations <- shiny::reactive({
         n_mutations <-
-          iatlasGraphqlClient::query_cohort_mutations(
+          iatlas.api.client::query_cohort_mutations(
             cohorts = cohort_obj()$dataset_names
           ) %>%
           nrow()
@@ -124,7 +124,7 @@ univariate_driver_server <- function(id, cohort_obj) {
           )
         ))
 
-        iatlasModules::plotly_scatter(
+        iatlas.modules::plotly_scatter(
           volcano_plot_tbl(),
           x_col       = "log10_fold_change",
           y_col       = "log10_p_value",
@@ -139,7 +139,7 @@ univariate_driver_server <- function(id, cohort_obj) {
         )
       })
 
-      iatlasModules::plotly_server(
+      iatlas.modules::plotly_server(
         id = "volcano_plot",
         plot_data = volcano_plot_tbl
       )
@@ -165,7 +165,7 @@ univariate_driver_server <- function(id, cohort_obj) {
           )
         ))
 
-        clicked_label <- iatlasModules::get_values_from_eventdata(eventdata, "key")
+        clicked_label <- iatlas.modules::get_values_from_eventdata(eventdata, "key")
 
         result <-  dplyr::filter(
           volcano_plot_tbl(),
@@ -200,7 +200,7 @@ univariate_driver_server <- function(id, cohort_obj) {
           dplyr::select("sample_name", "feature_value", "group_short_name")
 
         status_tbl <-
-          iatlasGraphqlClient::query_mutation_statuses(
+          iatlas.api.client::query_mutation_statuses(
             entrez = selected_volcano_result()$entrez,
             codes = selected_volcano_result()$mutation_code,
             types = "driver_mutation",
@@ -231,7 +231,7 @@ univariate_driver_server <- function(id, cohort_obj) {
           "Parameters have changed, press the calculate boutton."
         ))
 
-        iatlasModules::plotly_violin(
+        iatlas.modules::plotly_violin(
           violin_tbl(),
           xlab = stringr::str_c(
             selected_volcano_result()$label, " Mutation Status"
@@ -250,7 +250,7 @@ univariate_driver_server <- function(id, cohort_obj) {
         )
       })
 
-      iatlasModules::plotly_server(
+      iatlas.modules::plotly_server(
         id = "violin_plot",
         plot_data = violin_tbl
       )

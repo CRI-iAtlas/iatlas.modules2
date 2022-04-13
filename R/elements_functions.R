@@ -1,6 +1,6 @@
 
 build_tag_filter_list <- function(parent_tag_name, datasets){
-  iatlasGraphqlClient::query_tags(
+  iatlas.api.client::query_tags(
     cohorts = datasets,
     parent_tags = parent_tag_name
   ) %>%

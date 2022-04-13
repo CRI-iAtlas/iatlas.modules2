@@ -3,7 +3,7 @@ test_that("cohort_upload_selection_server", {
     cohort_upload_selection_server,
     {
       session$setInputs("mock_upload_file" = file.path(
-        system.file("csv", package = "iatlasModules2"),
+        system.file("csv", package = "iatlas.modules2"),
         "test_user_group.csv"
       ))
       session$setInputs("user_group_choice" = "COAD")

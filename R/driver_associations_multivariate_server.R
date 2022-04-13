@@ -17,7 +17,7 @@ multivariate_driver_server <- function(id, cohort_obj) {
           inputId  = ns("response_choice"),
           label    = "Select or Search for Response Variable",
           selected = "leukocyte_fraction",
-          choices  = iatlasModules::create_nested_named_list(
+          choices  = iatlas.modules::create_nested_named_list(
             cohort_obj()$feature_tbl,
             names_col1 = "class",
             names_col2 = "display",
@@ -76,7 +76,7 @@ multivariate_driver_server <- function(id, cohort_obj) {
       })
 
       status_tbl <- shiny::reactive({
-        iatlasGraphqlClient::query_mutation_statuses(
+        iatlas.api.client::query_mutation_statuses(
           samples = cohort_obj()$sample_tbl$sample
         ) %>%
           dplyr::select(
@@ -128,7 +128,7 @@ multivariate_driver_server <- function(id, cohort_obj) {
 
       total_associations <- shiny::reactive({
         n_mutations <-
-          iatlasGraphqlClient::query_mutations(
+          iatlas.api.client::query_mutations(
             datasets = "TCGA", types = "driver_mutation"
           ) %>%
           nrow()
@@ -165,7 +165,7 @@ multivariate_driver_server <- function(id, cohort_obj) {
             "results."
           )
         ))
-        iatlasModules::plotly_scatter(
+        iatlas.modules::plotly_scatter(
           volcano_plot_tbl(),
           x_col     = "log10_fold_change",
           y_col     = "log10_p_value",
@@ -180,7 +180,7 @@ multivariate_driver_server <- function(id, cohort_obj) {
         )
       })
 
-      iatlasModules::plotly_server(
+      iatlas.modules::plotly_server(
         id = "volcano_plot",
         plot_data = volcano_plot_tbl
       )
@@ -202,7 +202,7 @@ multivariate_driver_server <- function(id, cohort_obj) {
           )
         ))
 
-        clicked_label <- iatlasModules::get_values_from_eventdata(eventdata, "key")
+        clicked_label <- iatlas.modules::get_values_from_eventdata(eventdata, "key")
 
         result <-  dplyr::filter(
           volcano_plot_tbl(),
@@ -240,7 +240,7 @@ multivariate_driver_server <- function(id, cohort_obj) {
           "Parameters have changed, press the calculate boutton."
         ))
 
-        iatlasModules::plotly_violin(
+        iatlas.modules::plotly_violin(
           violin_tbl(),
           xlab = stringr::str_c(
             selected_volcano_result()$label, " Mutation Status"
@@ -254,7 +254,7 @@ multivariate_driver_server <- function(id, cohort_obj) {
         )
       })
 
-      iatlasModules::plotly_server(
+      iatlas.modules::plotly_server(
         id = "violin_plot",
         plot_data = violin_tbl
       )
