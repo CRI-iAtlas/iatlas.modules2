@@ -10,7 +10,7 @@ cohort_dataset_selection_server <- function(
       ns <- session$ns
 
       choices <- shiny::reactive({
-        iatlas.api.client::query_datasets(types = dataset_type()) %>%
+        iatlasGraphQLClient::query_datasets(types = dataset_type()) %>%
           dplyr::select("display", "name") %>%
           tibble::deframe(.)
       })

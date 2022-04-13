@@ -76,7 +76,7 @@ multivariate_driver_server <- function(id, cohort_obj) {
       })
 
       status_tbl <- shiny::reactive({
-        iatlas.api.client::query_mutation_statuses(
+        iatlasGraphQLClient::query_mutation_statuses(
           samples = cohort_obj()$sample_tbl$sample
         ) %>%
           dplyr::select(
@@ -128,7 +128,7 @@ multivariate_driver_server <- function(id, cohort_obj) {
 
       total_associations <- shiny::reactive({
         n_mutations <-
-          iatlas.api.client::query_mutations(
+          iatlasGraphQLClient::query_mutations(
             datasets = "TCGA", types = "driver_mutation"
           ) %>%
           nrow()

@@ -68,7 +68,7 @@ cohort_group_selection_server <- function(
       )
 
       mutation_tbl <- shiny::reactive({
-        iatlas.api.client::query_mutations(type = "driver_mutation")
+        iatlasGraphQLClient::query_mutations(type = "driver_mutation")
       })
 
       output$select_driver_mutation_group_ui <- shiny::renderUI({

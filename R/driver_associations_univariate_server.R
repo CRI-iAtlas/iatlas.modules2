@@ -49,7 +49,7 @@ univariate_driver_server <- function(id, cohort_obj) {
           length(cohort_obj()$group_name) == 1,
         )
 
-        iatlas.api.client::query_tags(
+        iatlasGraphQLClient::query_tags(
           cohorts = cohort_obj()$dataset_names,
           parent_tags = cohort_obj()$group_name
         ) %>%
@@ -65,7 +65,7 @@ univariate_driver_server <- function(id, cohort_obj) {
         )
 
         tbl <-
-          iatlas.api.client::query_driver_results(
+          iatlasGraphQLClient::query_driver_results(
             datasets = cohort_obj()$dataset_names,
             tags = tags(),
             features = input$response_choice,
@@ -88,7 +88,7 @@ univariate_driver_server <- function(id, cohort_obj) {
 
       total_associations <- shiny::reactive({
         n_mutations <-
-          iatlas.api.client::query_cohort_mutations(
+          iatlasGraphQLClient::query_cohort_mutations(
             cohorts = cohort_obj()$dataset_names
           ) %>%
           nrow()
@@ -200,7 +200,7 @@ univariate_driver_server <- function(id, cohort_obj) {
           dplyr::select("sample_name", "feature_value", "group_short_name")
 
         status_tbl <-
-          iatlas.api.client::query_mutation_statuses(
+          iatlasGraphQLClient::query_mutation_statuses(
             entrez = selected_volcano_result()$entrez,
             codes = selected_volcano_result()$mutation_code,
             types = "driver_mutation",

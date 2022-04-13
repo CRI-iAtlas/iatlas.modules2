@@ -22,7 +22,7 @@ Imports:
     DT,
     dplyr (>= 1.0),
     forcats (>= 0.5),
-    iatlas.api.client,
+    iatlasGraphQLClient,
     iatlas.modules,
     magrittr (>= 2.0),
     plotly(>= 4.9),
@@ -42,7 +42,7 @@ Imports:
 URL: https://github.com/CRI-iAtlas/iatlas.modules2
 BugReports: https://github.com/CRI-iAtlas/iatlas.modules2/issues
 Remotes:
-    CRI-iAtlas/iatlas.api.client@main,
+    CRI-iAtlas/iatlasGraphQLClient@main,
     CRI-iAtlas/iatlas.modules@master
 Depends: 
     R (>= 2.10)

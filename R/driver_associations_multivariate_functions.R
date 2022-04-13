@@ -4,7 +4,7 @@ build_md_tag_covariate_tbl <- function(cohort_obj, cov_obj){
   tbl <-
     purrr::map(
       parent_tags,
-      ~iatlas.api.client::query_tag_samples(
+      ~iatlasGraphQLClient::query_tag_samples(
         cohorts = cohort_obj$dataset_names,
         parent_tags = .x
       )

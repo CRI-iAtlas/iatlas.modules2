@@ -637,31 +637,6 @@
         "openssl"
       ]
     },
-    "iatlas.api.client": {
-      "Package": "iatlas.api.client",
-      "Version": "0.29.0",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteUsername": "CRI-iAtlas",
-      "RemoteRepo": "iatlas.api.client",
-      "RemoteRef": "main",
-      "RemoteSha": "3a919b12e4afbd41ae6b23f756c8aebd2ce76d29",
-      "RemoteHost": "api.github.com",
-      "Hash": "fe91864da09cdacdb3cbac7617b9f4e1",
-      "Requirements": [
-        "assertthat",
-        "dplyr",
-        "ghql",
-        "jsonlite",
-        "magrittr",
-        "purrr",
-        "rlang",
-        "snakecase",
-        "stringr",
-        "tibble",
-        "tidyr"
-      ]
-    },
     "iatlas.modules": {
       "Package": "iatlas.modules",
       "Version": "0.9.0",
@@ -694,6 +669,31 @@
         "tidyr",
         "tidyselect",
         "viridis"
+      ]
+    },
+    "iatlasGraphQLClient": {
+      "Package": "iatlasGraphQLClient",
+      "Version": "0.1.0",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "CRI-iAtlas",
+      "RemoteRepo": "iatlasGraphQLClient",
+      "RemoteRef": "main",
+      "RemoteSha": "d97a8b7c4162ee0f31f717ff4b2e7c61ae77edca",
+      "Hash": "92d3a568c2fbd8b97267dc67a5f4a9c1",
+      "Requirements": [
+        "assertthat",
+        "dplyr",
+        "ghql",
+        "jsonlite",
+        "magrittr",
+        "purrr",
+        "rlang",
+        "snakecase",
+        "stringr",
+        "tibble",
+        "tidyr"
       ]
     },
     "ini": {
