@@ -10,26 +10,50 @@ cohort_dataset_selection_server <- function(
       ns <- session$ns
 
       choices <- shiny::reactive({
-        iatlasGraphQLClient::query_datasets(types = dataset_type()) %>%
+        options <- iatlasGraphQLClient::query_datasets(types = dataset_type()) %>%
           dplyr::select("display", "name") %>%
           tibble::deframe(.)
+        if(dataset_type() == "analysis") return(options)
+        else return(create_ici_options(options))
       })
-
-      ui_func <- shiny::reactive({
-        shiny::req(dataset_type())
-        if(dataset_type() == "analysis") return(shiny::selectInput)
-        else return(shiny::checkboxGroupInput)
-      })
-
 
       output$dataset_selection_ui <- shiny::renderUI({
-        shiny::req(ui_func(), choices(), default_datasets())
-        ui_func()(
-          inputId  = ns("dataset_choices"),
-          label    = "Select Datasets",
-          choices  = choices(),
-          selected = default_datasets()
-        )
+        shiny::req(choices(), default_datasets())
+        
+        if(dataset_type() == "analysis"){
+          shiny::selectInput(
+            inputId  = ns("dataset_choices"),
+            label    = "Select Datasets",
+            choices  = choices(),
+            selected = default_datasets()
+          )
+        }else{
+          shiny::fluidRow(
+            shiny::column(
+              width = 6,
+              shiny::checkboxGroupInput(
+                inputId  = ns("dataset_choices"),
+                label    = "Select Datasets - RNA-Seq data",
+                choices  = choices()[[1]], #list RNA-seq datasets
+                selected = default_datasets()
+              )
+            ),
+            shiny::column(
+              width = 6,
+              shiny::checkboxGroupInput(
+                inputId  = ns("dataset_choices_ns"),
+                label    = "Select Datasets - Nanostring data (only Immunomodulators module)",
+                choices  = choices()[[2]], #list nanostring datasets
+                selected = default_datasets()
+              )
+            )
+          )
+        }
+      })
+      
+      dataset_selection <- shiny::reactive({
+        if(dataset_type() == "analysis") return(input$dataset_choices)
+        else return(c(input$dataset_choices, input$dataset_choices_ns))
       })
 
       # This is so that the conditional panel can see the various shiny::reactives
@@ -50,7 +74,7 @@ cohort_dataset_selection_server <- function(
         )
       })
 
-      return(shiny::reactive(input$dataset_choices))
+      return(shiny::reactive(sort(dataset_selection())))
     }
   )
 }

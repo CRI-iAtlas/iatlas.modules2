@@ -42,3 +42,15 @@ create_cohort_module_string <- function(.datasets, tbl = NULL){
     }
 
 }
+
+create_ici_options <- function(.datasets){
+    nanostring_ds <- c("Chen_CanDisc_2016", "Melero_GBM_2019", "Prat_CanRes_2017")
+    rnaseq_nano_ds <- "Prins_GBM_2019"
+    
+    return(
+        list(
+            'RNA-Seq' = .datasets[!(.datasets %in% nanostring_ds)],
+            'Nanostring' = .datasets[.datasets %in% c(nanostring_ds, rnaseq_nano_ds)]
+        )
+    )
+}
