@@ -42,3 +42,16 @@ create_cohort_module_string <- function(.datasets, tbl = NULL){
     }
 
 }
+
+#Create a list of ICI datasets based on whether the data is RNA-Seq or Nanostring. Needs to be updated if more Nanostring data is added
+create_ici_options <- function(.datasets){
+    nanostring_ds <- c("Chen_CanDisc_2016", "Melero_GBM_2019", "Prat_CanRes_2017")
+    rnaseq_nano_ds <- "Prins_GBM_2019" #this dataset has both RNA-Seq and Nanostring data available
+    
+    return(
+        list(
+            'RNA-Seq' = .datasets[!(.datasets %in% nanostring_ds)],
+            'Nanostring' = .datasets[.datasets %in% c(nanostring_ds, rnaseq_nano_ds)]
+        )
+    )
+}

@@ -1,1 +1,1 @@
-First, select a cancer genomics dataset from the dropdown below.
+First, select data of interest from the options below.
