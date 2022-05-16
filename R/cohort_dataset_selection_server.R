@@ -14,7 +14,7 @@ cohort_dataset_selection_server <- function(
           dplyr::select("display", "name") %>%
           tibble::deframe(.)
         if(dataset_type() == "analysis") return(options)
-        else return(create_ici_options(options))
+        else return(create_ici_options(options)) #for the ICI Cohort Selection, we have RNA-Seq and Nanostring data. This function returns a list organizing them. 
       })
 
       output$dataset_selection_ui <- shiny::renderUI({
@@ -27,7 +27,7 @@ cohort_dataset_selection_server <- function(
             choices  = choices(),
             selected = default_datasets()
           )
-        }else{
+        }else{ #ICI Cohort selection will have two dataset columns, one for RNA-Seq and the other for Nanostring datasets
           shiny::fluidRow(
             shiny::column(
               width = 6,
@@ -53,7 +53,7 @@ cohort_dataset_selection_server <- function(
       
       dataset_selection <- shiny::reactive({
         if(dataset_type() == "analysis") return(input$dataset_choices)
-        else return(c(input$dataset_choices, input$dataset_choices_ns))
+        else return(c(input$dataset_choices, input$dataset_choices_ns)) #ICI Cohort selection can have RNA-Seq and Nanostring ds selected
       })
 
       # This is so that the conditional panel can see the various shiny::reactives
