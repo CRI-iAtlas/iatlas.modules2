@@ -8,6 +8,14 @@ server <- function(input, output, session) {
     dataset_type     = shiny::reactive("ici"),
     display_module_availibility_string = shiny::reactive(F)
   )
+  
+  cohort_object3 <- cohort_selection_server(
+      "scrna_cohort_selection_module",
+      default_datasets = shiny::reactive(c("MSK", "Vanderbilt")),
+      default_group    = shiny::reactive("Responder"),
+      dataset_type     = shiny::reactive("scrna"),
+      display_module_availibility_string = shiny::reactive(F)
+  )
 
   output$cohort_text_output <- shiny::renderText({
     shiny::req(cohort_object())
