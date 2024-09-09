@@ -5,6 +5,7 @@ ui <- function() {
       shiny::tabPanel("Start", shiny::textOutput("cohort_text_output")),
       shiny::tabPanel("Cohort Selection", cohort_selection_ui("cohort_selection_module")),
       shiny::tabPanel("ICI Cohort Selection", cohort_selection_ui("ici_cohort_selection_module")),
+      shiny::tabPanel("SC Cohort Selection", cohort_selection_ui("sc_cohort_selection_module")),
       shiny::tabPanel("Driver Associations", univariate_driver_ui("driver_module"))
     )
   )

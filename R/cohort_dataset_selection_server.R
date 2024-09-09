@@ -19,6 +19,15 @@ cohort_dataset_selection_server <- function(
 
       output$dataset_selection_ui <- shiny::renderUI({
         shiny::req(choices(), default_datasets())
+          
+        label <- shiny::reactive(
+            switch (
+             dataset_type(),
+             "analysis" = "RNA-seq data",
+             "ici" = "RNA-seq data",
+             "scrna" = "single-cell RNA-seq data"
+            )
+        )
         
         if(dataset_type() == "analysis"){
           shiny::selectInput(
@@ -27,26 +36,28 @@ cohort_dataset_selection_server <- function(
             choices  = choices(),
             selected = default_datasets()
           )
-        }else{ #ICI Cohort selection will have two dataset columns, one for RNA-Seq and the other for Nanostring datasets
+        }else{ 
           shiny::fluidRow(
             shiny::column(
               width = 6,
               shiny::checkboxGroupInput(
                 inputId  = ns("dataset_choices"),
-                label    = "Select Datasets - RNA-Seq data",
-                choices  = choices()[[1]], #list RNA-seq datasets
+                label    = paste0("Select Datasets - ", label()),
+                choices  = choices()[[1]], #list datasets
                 selected = default_datasets()
               )
             ),
-            shiny::column(
-              width = 6,
-              shiny::checkboxGroupInput(
-                inputId  = ns("dataset_choices_ns"),
-                label    = "Select Datasets - Nanostring data (only Immunomodulators module)",
-                choices  = choices()[[2]], #list nanostring datasets
-                selected = default_datasets()
-              )
-            )
+            if(dataset_type() == "ici"){ #ICI Cohort selection will have two dataset columns, one for RNA-Seq and the other for Nanostring datasets
+                shiny::column(
+                  width = 6,
+                  shiny::checkboxGroupInput(
+                    inputId  = ns("dataset_choices_ns"),
+                    label    = "Select Datasets - Nanostring data (only Immunomodulators module)",
+                    choices  = choices()[[2]], #list nanostring datasets
+                    selected = default_datasets()
+                  )
+                )
+            }
           )
         }
       })
