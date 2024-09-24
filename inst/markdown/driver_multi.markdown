@@ -2,7 +2,7 @@ This section displays mulit-variable models of the form:
 
 Response ~ Mutation Status + transformation(Covariate1) ... + transformation(CovariateN)
 
-Across group mode: sampels are not spliut by group, instead pvalues are calculated across all groups.
+Across group mode: samples are not split by group, instead pvalues are calculated across all groups.
 By group mode: This works identically to the single variable models above.
 
 Add covriates by clicking the two add covariate functions. 
