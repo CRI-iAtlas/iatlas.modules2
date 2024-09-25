@@ -13,7 +13,8 @@ cohort_dataset_selection_server <- function(
         options <- iatlasGraphQLClient::query_datasets(types = dataset_type()) %>%
           dplyr::select("display", "name") %>%
           tibble::deframe(.)
-        if(dataset_type() == "analysis") return(options)
+       
+        if(dataset_type() %in% c("analysis", "scrna")) return(options)
         else return(create_ici_options(options)) #for the ICI Cohort Selection, we have RNA-Seq and Nanostring data. This function returns a list organizing them. 
       })
 
@@ -36,7 +37,14 @@ cohort_dataset_selection_server <- function(
             choices  = choices(),
             selected = default_datasets()
           )
-        }else{ 
+        }else if(dataset_type() == "scrna"){
+            shiny::checkboxGroupInput(
+                inputId  = ns("dataset_choices"),
+                label    = "Select Datasets",
+                choices  = choices(), #list scRNA-seq datasets
+                selected = default_datasets()
+            )
+        }else{ #ICI Cohort selection will have two dataset columns, one for RNA-Seq and the other for Nanostring datasets
           shiny::fluidRow(
             shiny::column(
               width = 6,
@@ -63,7 +71,7 @@ cohort_dataset_selection_server <- function(
       })
       
       dataset_selection <- shiny::reactive({
-        if(dataset_type() == "analysis") return(input$dataset_choices)
+        if(dataset_type() %in% c("analysis", "scrna")) return(input$dataset_choices)
         else return(c(input$dataset_choices, input$dataset_choices_ns)) #ICI Cohort selection can have RNA-Seq and Nanostring ds selected
       })
 
