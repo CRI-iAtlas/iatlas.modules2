@@ -136,8 +136,6 @@ group_filter_element_server <- function(
       })
       
       shiny::observeEvent(input$selectAll, {
-          print(group_choices())
-          
           if(isFALSE(input$selectAll)){
               shiny::updateCheckboxGroupInput(
                   session,
