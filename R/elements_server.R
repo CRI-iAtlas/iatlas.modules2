@@ -134,6 +134,28 @@ group_filter_element_server <- function(
           inline = T
         )
       })
+      
+      shiny::observeEvent(input$selectAll, {
+          print(group_choices())
+          
+          if(isFALSE(input$selectAll)){
+              shiny::updateCheckboxGroupInput(
+                  session,
+                  "group_choices",
+                  choices =  group_choices(),
+                  selected = NULL,
+                  inline = T
+              )
+          }else{
+              shiny::updateCheckboxGroupInput(
+                  session,
+                  "group_choices",
+                  choices =  group_choices(),
+                  selected = group_choices(),
+                  inline = T
+              )
+          }
+      })
 
       update_reactive <- shiny::reactive({
         shiny::req(input$parent_group_choice, input$group_choices)
