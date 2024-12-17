@@ -22,7 +22,8 @@ group_filter_element_ui <- function(id){
     ns <- shiny::NS(id)
     shiny::tagList(
         shiny::uiOutput(ns("select_ui")),
-        shiny::uiOutput(ns("checkbox_ui"))
+        shiny::uiOutput(ns("checkbox_ui")),
+        shiny::checkboxInput(ns('selectAll'), 'Select/Deselect All')
     )
 }
 
