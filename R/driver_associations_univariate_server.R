@@ -46,7 +46,7 @@ univariate_driver_server <- function(id, cohort_obj) {
 
           !is.null(cohort_obj()$group_name),
           is.character(cohort_obj()$group_name),
-          length(cohort_obj()$group_name) == 1,
+          length(cohort_obj()$group_name) == 1
         )
 
         iatlasGraphQLClient::query_tags(
